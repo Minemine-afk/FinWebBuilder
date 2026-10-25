@@ -3,7 +3,7 @@ import { callCostSgd, SGD_PER_USD, summariseBuildLog } from "@/lib/pricing";
 import type { BuildLogEntry } from "@/lib/spec";
 
 const entry = (over: Partial<BuildLogEntry>): BuildLogEntry => ({
-  round: "First build", label: "step", model: "claude-sonnet-5-5", input: 0, output: 0, cacheRead: 0, cacheWrite: 0, searches: 0, fetches: 0, ...over,
+  round: "First build", label: "step", model: "claude-sonnet-5-5", input: 0, output: 0, cacheRead: 0, cacheWrite: 0, searches: 0, fetches: 0, billing: "api", ...over,
 });
 
 describe("callCostSgd", () => {

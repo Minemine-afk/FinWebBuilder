@@ -43,6 +43,7 @@ export class Agent {
       cacheWrite: u.cache_creation_input_tokens ?? 0,
       searches: u.server_tool_use?.web_search_requests ?? 0,
       fetches: u.server_tool_use?.web_fetch_requests ?? 0,
+      billing: "api",
       at: new Date().toISOString(),
     });
     if (msg.stop_reason === "refusal") throw new Error(`The model declined step "${label}".`);

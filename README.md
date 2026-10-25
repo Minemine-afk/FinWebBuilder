@@ -5,7 +5,7 @@ Cost-comparison calculators that build themselves. Type a topic, and a research 
 ## How it works
 
 1. The **Build or refine** box on the home page sends the request (with a passcode) to `app/api/build`, which starts the `Build calculator` GitHub Actions workflow.
-2. The workflow runs `agent/run.ts`, which calls the Claude API:
+2. The workflow runs `agent/run.ts`, which calls the Claude API (or, on a Claude subscription, Claude Code with the same plan-research-check steps, see Setup):
    - **Opus 5.5** plans the calculator's structure and checks the finished numbers.
    - **Sonnet 5.5** searches the web, reads pages and extracts prices.
    - An option that is hard to price, or a price Sonnet can't confirm, is researched again on Opus.
@@ -18,10 +18,10 @@ Pages are served from `app/c/[slug]/route.ts`, which fills `templates/calculator
 
 ## Setup
 
-**GitHub (Settings → Secrets and variables → Actions)**
+**GitHub (Settings → Secrets and variables → Actions)**: add one of these secrets.
 
-- Secret `ANTHROPIC_API_KEY`: an API key from the Claude Console. The agent can't use a Claude chat subscription.
-- Optional variable `MAX_SPEND_SGD`: stops a run once its estimated cost passes this (default 25).
+- `CLAUDE_CODE_OAUTH_TOKEN`, to run on a Claude Pro or Max subscription: run `claude setup-token` in Claude Code on your computer and save the token it prints. Each build then runs Claude Code through the [Claude Code GitHub Action](https://code.claude.com/docs/en/github-actions): Opus leads, and the `price-researcher` sub-agent (`.claude/agents/`) does the reading on Sonnet. Runs count against your plan's usage limits rather than being billed, and the page's cost section shows what the run would have cost on the API. The token is tied to your account, so keep the builder passcode-protected.
+- `ANTHROPIC_API_KEY`, to pay per use: an API key from the Claude Console. This runs the API agent in `agent/` with per-step Sonnet/Opus routing and a spending cap (optional variable `MAX_SPEND_SGD`, default 25). When both secrets are set, the API key is used.
 - Settings → Actions → General → Workflow permissions: allow GitHub Actions to create pull requests.
 
 **Hosting (Vercel → Project → Settings → Environment Variables)**

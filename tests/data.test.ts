@@ -17,7 +17,7 @@ describe("seed calculators", () => {
     }
   });
   it("shows the cost table when a build log exists", () => {
-    const spec = { ...all[0], buildLog: [{ round: "First build", label: "Plan the calculator", model: "claude-opus-5-5", input: 10_000, output: 2_000, cacheRead: 0, cacheWrite: 0, searches: 0, fetches: 0 }] };
+    const spec = { ...all[0], buildLog: [{ round: "First build", label: "Plan the calculator", model: "claude-opus-5-5", input: 10_000, output: 2_000, cacheRead: 0, cacheWrite: 0, searches: 0, fetches: 0, billing: "api" as const }] };
     const html = renderCalculatorHtml(spec);
     expect(html).toContain("Plan the calculator");
     expect(html).toContain("Opus 5.5");

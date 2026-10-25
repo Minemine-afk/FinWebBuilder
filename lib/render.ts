@@ -28,7 +28,8 @@ export function buildCostSection(spec: Spec): string {
   const { rounds, totalSgd } = summariseBuildLog(spec.buildLog);
   let rows = "";
   for (const r of rounds) {
-    rows += `<tbody><tr><td colspan="6"><strong>${esc(r.round)}</strong></td></tr>`;
+    const plan = r.entries.some((e) => e.billing === "subscription") ? " (Claude subscription)" : "";
+    rows += `<tbody><tr><td colspan="6"><strong>${esc(r.round)}${plan}</strong></td></tr>`;
     for (const e of r.entries) {
       const tokensIn = e.input + e.cacheRead + e.cacheWrite;
       rows += `<tr><td>${esc(e.label)}</td><td>${esc(modelName(e.model))}</td><td>${num(tokensIn)}</td><td>${num(e.output)}</td><td>${num(e.searches)}</td><td>${formatSgd(e.costSgd)}</td></tr>`;
@@ -36,7 +37,11 @@ export function buildCostSection(spec: Spec): string {
     rows += `<tr><td colspan="5">${esc(r.round)} subtotal</td><td>${formatSgd(r.subtotalSgd)}</td></tr>`;
     rows += `<tr class="mute"><td colspan="5">Running total</td><td>${formatSgd(r.runningTotalSgd)}</td></tr></tbody>`;
   }
-  return `${head}<p class="mute">Estimated from the token counts and web searches the API reported for each step, priced at the published rates converted to SGD (S$${SGD_PER_USD.toFixed(2)} per US$1). It is not an invoice and leaves out hosting.</p>
+  const onPlan = spec.buildLog.some((e) => e.billing === "subscription");
+  const planNote = onPlan
+    ? " Rounds run on a Claude subscription were covered by the plan, so their figures show what the same work would have cost on the API."
+    : "";
+  return `${head}<p class="mute">Estimated from the token counts and web searches reported for each step, priced at the published API rates converted to SGD (S$${SGD_PER_USD.toFixed(2)} per US$1). It is not an invoice and leaves out hosting.${planNote}</p>
 <div class="scroll"><table><thead><tr><th>Step</th><th>Model</th><th>Tokens in</th><th>Tokens out</th><th>Searches</th><th>Cost</th></tr></thead>${rows}
 <tfoot><tr><td colspan="5">Total AI cost so far</td><td>${formatSgd(totalSgd)}</td></tr></tfoot></table></div></section>`;
 }

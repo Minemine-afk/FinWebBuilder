@@ -25,10 +25,12 @@ export function listCalculators(): Spec[] {
     .sort((a, b) => (b.updated ?? "").localeCompare(a.updated ?? "") || a.title.localeCompare(b.title));
 }
 
-/** Saves a calculator, keeping a copy of the version it replaces in data/history/<slug>/v<N>.json. */
-export function writeCalculator(spec: Spec) {
+/**
+ * Saves a calculator, keeping a copy of the version it replaces in data/history/<slug>/v<N>.json.
+ * Pass `previous` when the file on disk has already been overwritten (the subscription run edits it in place).
+ */
+export function writeCalculator(spec: Spec, previous: Spec | null = readCalculator(spec.id)) {
   const parsed = SpecSchema.parse(spec);
-  const previous = readCalculator(parsed.id);
   if (previous) {
     const dir = path.join(HISTORY_DIR, parsed.id);
     fs.mkdirSync(dir, { recursive: true });

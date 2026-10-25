@@ -55,6 +55,8 @@ export const BuildLogEntrySchema = z.object({
   cacheWrite: z.number().int().nonnegative().default(0),
   searches: z.number().int().nonnegative().default(0),
   fetches: z.number().int().nonnegative().default(0),
+  /** "subscription": ran on a Claude plan, so the cost is what it would have been on the API, not a charge. */
+  billing: z.enum(["api", "subscription"]).default("api"),
   at: z.string().optional(),
 });
 
