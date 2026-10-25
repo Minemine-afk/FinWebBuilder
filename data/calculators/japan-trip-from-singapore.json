@@ -1,0 +1,156 @@
+{
+  "id": "japan-trip-from-singapore",
+  "title": "Japan trip from Singapore",
+  "subject": "trip",
+  "currency": "SGD",
+  "periodLabel": "Trip",
+  "scope": "Per person, from Changi: flights, hotel, local transport, attractions, and food and extras, for a short Tokyo trip or a week across Japan. Mid-points of the ranges ShopBack Singapore published for 2026.",
+  "limits": "Shopping is not included. Flight prices vary by date and the two sources disagree on them. Check live fares.",
+  "minStartYear": 2026,
+  "defaultGrowth": 0.03,
+  "components": [
+    {
+      "id": "transport",
+      "label": "Flights and local transport",
+      "kind": "oneoff"
+    },
+    {
+      "id": "stay",
+      "label": "Accommodation",
+      "kind": "oneoff"
+    },
+    {
+      "id": "tickets",
+      "label": "Attractions and activities",
+      "kind": "oneoff"
+    },
+    {
+      "id": "spending",
+      "label": "Food and extras",
+      "kind": "recurring"
+    }
+  ],
+  "groups": [
+    {
+      "id": "t",
+      "label": "5 days in Tokyo"
+    },
+    {
+      "id": "w",
+      "label": "7 days across Japan"
+    }
+  ],
+  "items": [
+    {
+      "id": "tokyo-5d-budget",
+      "group": "t",
+      "name": "Tokyo, 5 days",
+      "option": "Budget",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "transport": 675,
+          "stay": 320,
+          "tickets": 95,
+          "spending": 175
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.shopback.sg/blog/travel/tokyo-5day-budget",
+        "verified": "2026-10-25",
+        "type": "secondary"
+      },
+      "notes": "Flights 500 to 700, 4 nights at about 60 to 100, metro and Narita Express 60 to 90, food 130 to 220. Mid-points of ShopBack's Jul 2026 ranges."
+    },
+    {
+      "id": "tokyo-5d-mid",
+      "group": "t",
+      "name": "Tokyo, 5 days",
+      "option": "Mid-range",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "transport": 965,
+          "stay": 640,
+          "tickets": 215,
+          "spending": 325
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.shopback.sg/blog/travel/tokyo-5day-budget",
+        "verified": "2026-10-25",
+        "type": "secondary"
+      },
+      "notes": "Flights 700 to 1,000, 4 nights at about 120 to 200, transport 90 to 140, food 250 to 400. Mid-points of ShopBack's Jul 2026 ranges."
+    },
+    {
+      "id": "japan-7d-budget",
+      "group": "w",
+      "name": "Tokyo and Osaka, 7 days",
+      "option": "Budget",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "transport": 420,
+          "stay": 570,
+          "tickets": 115,
+          "spending": 240
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.shopback.sg/blog/travel/japan-7day-budget",
+        "verified": "2026-10-25",
+        "type": "secondary"
+      },
+      "notes": "Flights 280 to 380, 6 nights, trains 60 to 120, food 150 to 250, SIM and misc 30 to 50. Mid-points of ShopBack's 2026 ranges."
+    },
+    {
+      "id": "japan-7d-mid",
+      "group": "w",
+      "name": "Tokyo and Kyoto, 7 days",
+      "option": "Mid-range",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "transport": 740,
+          "stay": 1200,
+          "tickets": 275,
+          "spending": 465
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.shopback.sg/blog/travel/japan-7day-budget",
+        "verified": "2026-10-25",
+        "type": "secondary"
+      },
+      "notes": "Flights 380 to 550, 6 nights, JR Pass and trains 200 to 350, food 300 to 500, SIM and misc 50 to 80. Mid-points of ShopBack's 2026 ranges."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "tokyo-5d-budget",
+      "tokyo-5d-mid",
+      "japan-7d-mid"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-10-25",
+  "builtBy": "Built by hand with Claude in a chat on 25 Oct 2026, before the research agent existed.",
+  "buildLog": []
+}

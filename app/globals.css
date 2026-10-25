@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/* Blue-and-white theme, with a navy version for dark mode. */
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --surface: #ffffff;
+  --sidebar: #eff5ff;
+  --border: #d6e2f5;
+  --foreground: #0b1f3a;
+  --muted: #4a5b78;
+  --accent: #1d4ed8;
+  --accent-strong: #1e3a8a;
+  --accent-fill: #1d4ed8; /* filled buttons: white text passes 4.5:1 */
+  --on-accent: #ffffff;
+  --on-accent-muted: #c7d7f5;
+  --chip: #e3ecfb;
+  /* Chart series, validated with the dataviz palette checker (light surface). */
+  --series-1: #1d4ed8; /* tuition */
+  --series-2: #38bdf8; /* compulsory fees */
+  --series-3: #4338ca; /* one-off fees */
+  --series-4: #0d9488; /* living costs */
+  --series-5: #c2410c; /* expected tuition price rises */
+  --warn-bg: #fff4d6;
+  --warn-fg: #6b4a00;
+  /* Savings planner: your own money, beside interest in --series-4. */
+  --you: #8fa3c4;
+  /* Interest as text (headline, chart label): darker than the bar so it passes 4.5:1 on white. */
+  --interest-text: #0f766e;
+  --good-bg: #dcf5ec;
+  --good-fg: #065f46;
+  /* Behind pop-ups: always a darkening, never the light foreground of dark mode. */
+  --backdrop: rgba(11, 31, 58, 0.5);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: #0a1628;
+    --surface: #10213d;
+    --sidebar: #0d1c35;
+    --border: #1f3558;
+    --foreground: #f2f6fc;
+    --muted: #a9b8d0;
+    --accent: #4f8df5;
+    --accent-strong: #0f2a5c;
+    --accent-fill: #2563eb;
+    --on-accent: #ffffff;
+    --on-accent-muted: #b4c6e6;
+    --chip: #1a3056;
+    /* Validated against the navy surface #10213d. */
+    --series-1: #3478f0;
+    --series-2: #13a8b8;
+    --series-3: #8e70f2;
+    --series-4: #2fa36b;
+    --series-5: #f08a3c;
+    --warn-bg: #3a2e0a;
+    --warn-fg: #ffd98a;
+    --you: #5f7699;
+    --interest-text: #3fbf80;
+    --good-bg: #0e3a2c;
+    --good-fg: #8ce0bd;
+    --backdrop: rgba(0, 0, 0, 0.65);
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-sidebar: var(--sidebar);
+  --color-border: var(--border);
+  --color-foreground: var(--foreground);
+  --color-backdrop: var(--backdrop);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-fill: var(--accent-fill);
+  --color-on-accent: var(--on-accent);
+  --color-on-accent-muted: var(--on-accent-muted);
+  --color-chip: var(--chip);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-series-3: var(--series-3);
+  --color-series-4: var(--series-4);
+  --color-series-5: var(--series-5);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-fg: var(--warn-fg);
+  --color-you: var(--you);
+  --color-interest-text: var(--interest-text);
+  --color-good-bg: var(--good-bg);
+  --color-good-fg: var(--good-fg);
+  --font-sans: var(--font-geist-sans);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Native checkboxes and number inputs in the theme blue. */
+input[type="checkbox"] {
+  accent-color: var(--accent);
+}
+
+/* Horizontal page padding that also clears the notch in landscape / installed mode. */
+.safe-x {
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+}
+
+/* iOS Safari zooms into any focused field under 16px; keep fields at 16px on phones
+   (landscape included) and other touch screens. */
+@media (max-width: 767px), (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Comfortable checkbox size for touch. */
+input[type="checkbox"] {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+}
+
+/*
+ * Open dropdown lists take their colours from the select itself; a select with
+ * a transparent background shows light text on a white list in dark mode on
+ * some browsers (Chrome on Windows), so give the options the theme colours.
+ */
+select option,
+select optgroup {
+  background-color: var(--surface);
+  color: var(--foreground);
+}

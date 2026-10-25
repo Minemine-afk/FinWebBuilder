@@ -1,0 +1,76 @@
+name: Build calculator
+
+# Started from the site's builder box (app/api/build) or by hand from the Actions tab.
+# A new topic is published straight to main. A refinement opens a pull request; merging it is accepting it.
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "New calculator topic (leave empty to refine)"
+        required: false
+      slug:
+        description: "Calculator to refine, e.g. ev-vs-petrol-car"
+        required: false
+      prompt:
+        description: "What should change"
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: build-calculator
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run the research agent
+        id: agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MAX_SPEND_SGD: ${{ vars.MAX_SPEND_SGD || '25' }}
+          TOPIC: ${{ inputs.topic }}
+          SLUG: ${{ inputs.slug }}
+          PROMPT: ${{ inputs.prompt }}
+        run: |
+          if [ -n "$TOPIC" ]; then
+            npx tsx agent/run.ts --topic "$TOPIC"
+          else
+            npx tsx agent/run.ts --slug "$SLUG" --prompt "$PROMPT"
+          fi
+      - name: Check the site still builds
+        run: npm run build
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TOPIC: ${{ inputs.topic }}
+          PROMPT: ${{ inputs.prompt }}
+          SLUG: ${{ steps.agent.outputs.slug }}
+          SUMMARY: ${{ steps.agent.outputs.summary }}
+        run: |
+          git config user.name "finwebbuilder-agent"
+          git config user.email "finwebbuilder-agent@users.noreply.github.com"
+          git add data
+          if [ -n "$TOPIC" ]; then
+            git commit -m "Add calculator: $SLUG" -m "$SUMMARY"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          else
+            branch="refine/$SLUG-$GITHUB_RUN_ID"
+            git switch -c "$branch"
+            git commit -m "Refine $SLUG: $PROMPT" -m "$SUMMARY"
+            git push origin "$branch"
+            gh pr create --base "$GITHUB_REF_NAME" --head "$branch" \
+              --title "Refine $SLUG" \
+              --body "$(printf 'Request: %s\n\n%s\n\nMerge to publish this version, or close to discard it.' "$PROMPT" "$SUMMARY")"
+          fi
