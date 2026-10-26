@@ -1,8 +1,8 @@
-import { githubConfig, recentRuns } from "@/lib/github";
+import { githubConfig, activeRuns } from "@/lib/github";
 
-/** What the builder is doing now and has done lately, for the progress panel. Shows only run titles and steps. */
+/** The builds running now, for the progress panel. Shows only each run's title and current step. */
 export async function GET() {
   const cfg = githubConfig();
   if (!cfg) return Response.json({ runs: [] });
-  return Response.json({ runs: await recentRuns(cfg) }, { headers: { "cache-control": "no-store" } });
+  return Response.json({ runs: await activeRuns(cfg) }, { headers: { "cache-control": "no-store" } });
 }

@@ -111,21 +111,17 @@ export function describeRun(run: ApiRun, job: ApiJob | undefined): RunSummary {
 
 const WORKFLOW_NAMES = new Set(["Build calculator", "Remove calculator"]);
 
-/** The most recent build and removal runs, with the current step of any still going. */
-export async function recentRuns(cfg: { repo: string; token: string }, sinceMs = 6 * 60 * 60 * 1000): Promise<RunSummary[]> {
+/** The build and removal runs still going, with the current step of each. */
+export async function activeRuns(cfg: { repo: string; token: string }): Promise<RunSummary[]> {
   const headers = githubHeaders(cfg.token);
   const res = await fetch(`https://api.github.com/repos/${cfg.repo}/actions/runs?event=workflow_dispatch&per_page=12`, { headers, cache: "no-store" });
   if (!res.ok) return [];
   const data = (await res.json()) as { workflow_runs: ApiRun[] };
-  const cutoff = Date.now() - sinceMs;
-  const runs = data.workflow_runs.filter((r) => WORKFLOW_NAMES.has(r.name ?? "") && Date.parse(r.created_at) >= cutoff).slice(0, 6);
+  const runs = data.workflow_runs.filter((r) => WORKFLOW_NAMES.has(r.name ?? "") && r.status !== "completed");
   return Promise.all(
     runs.map(async (run) => {
-      let job: ApiJob | undefined;
-      if (run.status !== "completed") {
-        const jobs = await fetch(`https://api.github.com/repos/${cfg.repo}/actions/runs/${run.id}/jobs`, { headers, cache: "no-store" });
-        if (jobs.ok) job = ((await jobs.json()) as { jobs: ApiJob[] }).jobs[0];
-      }
+      const jobs = await fetch(`https://api.github.com/repos/${cfg.repo}/actions/runs/${run.id}/jobs`, { headers, cache: "no-store" });
+      const job = jobs.ok ? ((await jobs.json()) as { jobs: ApiJob[] }).jobs[0] : undefined;
       return describeRun(run, job);
     }),
   );
