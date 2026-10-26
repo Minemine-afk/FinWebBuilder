@@ -1,0 +1,116 @@
+name: Build calculator
+
+# Started from the site's builder box (app/api/build) or by hand from the Actions tab.
+# A new topic is published straight to main. A refinement opens a pull request; merging it is accepting it.
+#
+# Two ways to pay for the research:
+# - ANTHROPIC_API_KEY secret set: the API agent in agent/ runs (billed per use, per-step Sonnet/Opus routing).
+# - Only CLAUDE_CODE_OAUTH_TOKEN set (from `claude setup-token`): Claude Code runs on your Claude subscription.
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "New calculator topic (leave empty to refine)"
+        required: false
+      slug:
+        description: "Calculator to refine, e.g. ev-vs-petrol-car"
+        required: false
+      prompt:
+        description: "What should change"
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: build-calculator
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      USE_API: ${{ secrets.ANTHROPIC_API_KEY != '' }}
+      USE_SUBSCRIPTION: ${{ secrets.ANTHROPIC_API_KEY == '' && secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
+      TOPIC: ${{ inputs.topic }}
+      SLUG: ${{ inputs.slug }}
+      PROMPT: ${{ inputs.prompt }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: Check a credential is set
+        if: env.USE_API != 'true' && env.USE_SUBSCRIPTION != 'true'
+        run: |
+          echo "::error::Add the ANTHROPIC_API_KEY or CLAUDE_CODE_OAUTH_TOKEN repository secret first."
+          exit 1
+
+      # --- API key path ---
+      - name: Run the research agent (API)
+        id: agent
+        if: env.USE_API == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MAX_SPEND_SGD: ${{ vars.MAX_SPEND_SGD || '25' }}
+        run: |
+          if [ -n "$TOPIC" ]; then
+            npx tsx agent/run.ts --topic "$TOPIC"
+          else
+            npx tsx agent/run.ts --slug "$SLUG" --prompt "$PROMPT"
+          fi
+
+      # --- Subscription path ---
+      - name: Prepare the subscription run
+        id: prep
+        if: env.USE_SUBSCRIPTION == 'true'
+        run: npx tsx agent/subscription.ts prepare
+      - name: Research with Claude Code (subscription)
+        id: claude
+        if: env.USE_SUBSCRIPTION == 'true'
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
+          prompt: ${{ steps.prep.outputs.prompt }}
+          claude_args: |
+            --model claude-opus-5-5
+            --max-turns 120
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Agent,Task,Bash(npx tsx agent/subscription.ts validate:*)"
+      - name: Record the subscription run
+        id: record
+        if: env.USE_SUBSCRIPTION == 'true'
+        env:
+          EXECUTION_FILE: ${{ steps.claude.outputs.execution_file }}
+        run: npx tsx agent/subscription.ts record
+
+      - name: Check the site still builds
+        run: npm run build
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEW_SLUG: ${{ steps.agent.outputs.slug || steps.record.outputs.slug }}
+          SUMMARY: ${{ steps.agent.outputs.summary || steps.record.outputs.summary }}
+        run: |
+          git config user.name "finwebbuilder-agent"
+          git config user.email "finwebbuilder-agent@users.noreply.github.com"
+          git add data
+          if [ -n "$TOPIC" ]; then
+            git commit -m "Add calculator: $NEW_SLUG" -m "$SUMMARY"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          else
+            branch="refine/$NEW_SLUG-$GITHUB_RUN_ID"
+            git switch -c "$branch"
+            git commit -m "Refine $NEW_SLUG: $PROMPT" -m "$SUMMARY"
+            git push origin "$branch"
+            gh pr create --base "$GITHUB_REF_NAME" --head "$branch" \
+              --title "Refine $NEW_SLUG" \
+              --body "$(printf 'Request: %s\n\n%s\n\nMerge to publish this version, or close to discard it.' "$PROMPT" "$SUMMARY")"
+          fi

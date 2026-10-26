@@ -1,0 +1,164 @@
+{
+  "id": "dog-vs-cat",
+  "title": "Dog vs cat ownership",
+  "subject": "pet",
+  "currency": "SGD",
+  "periodLabel": "Year with your pet",
+  "scope": "What it costs to bring home and keep a pet in Singapore: setting up in year one, then food, medical care and insurance each year, with optional grooming and boarding. Adopted pets, HDB-approved breeds. Figures are mid-points of ranges published by Singapore sources in 2024 to 2026, not a quote.",
+  "limits": "Emergency surgery (S$3,000 to 12,000), breeder prices and special diets are not included. Check licence fees with NParks.",
+  "minStartYear": 2026,
+  "defaultGrowth": 0.03,
+  "components": [
+    {
+      "id": "start",
+      "label": "Getting started",
+      "kind": "oneoff"
+    },
+    {
+      "id": "supplies",
+      "label": "Food and supplies",
+      "kind": "recurring"
+    },
+    {
+      "id": "medical",
+      "label": "Medical and insurance",
+      "kind": "recurring"
+    }
+  ],
+  "extras": {
+    "label": "Optional services",
+    "unit": "month",
+    "categories": [
+      {
+        "id": "care",
+        "label": "Grooming"
+      },
+      {
+        "id": "activities",
+        "label": "Boarding, walking and toys"
+      }
+    ],
+    "note": "Monthly estimates. Frugal is 20% less, Comfortable 30% more."
+  },
+  "groups": [
+    {
+      "id": "cats",
+      "label": "Cats",
+      "growth": 0.03
+    },
+    {
+      "id": "dogs",
+      "label": "Dogs",
+      "growth": 0.03
+    }
+  ],
+  "items": [
+    {
+      "id": "cat",
+      "group": "cats",
+      "name": "Cat",
+      "option": "Adopted, indoor",
+      "currency": "SGD",
+      "duration": 15,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "start": 750,
+          "supplies": 1450,
+          "medical": 600
+        }
+      },
+      "history": [],
+      "extras": {
+        "year": 2026,
+        "months": 12,
+        "monthly": {
+          "care": 50,
+          "activities": 15
+        }
+      },
+      "source": {
+        "url": "https://dollarsandsense.sg/cost-guide-on-keeping-cat-singapore/",
+        "verified": "2026-10-25",
+        "type": "secondary"
+      },
+      "notes": "Start: adoption 150, sterilisation 250, microchip 70, vaccines 110, setup 170. Supplies: dry food about 80 and litter about 40 a month. Medical: booster 90, check-up 50, parasite control 100, insurance about 350 (S$210 to 640 quoted, Income and Etiqa 2026). About 15-year lifespan."
+    },
+    {
+      "id": "small-dog",
+      "group": "dogs",
+      "name": "Small dog",
+      "option": "Adopted, e.g. toy poodle",
+      "currency": "SGD",
+      "duration": 14,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "start": 1900,
+          "supplies": 1500,
+          "medical": 850
+        }
+      },
+      "history": [],
+      "extras": {
+        "year": 2026,
+        "months": 12,
+        "monthly": {
+          "care": 60,
+          "activities": 40
+        }
+      },
+      "source": {
+        "url": "https://dollarsandsense.sg/much-cost-keep-dog-singapore/",
+        "verified": "2026-10-25",
+        "type": "secondary"
+      },
+      "notes": "Start: adoption 400, sterilisation 450, microchip 70, vaccines 135, setup 250, puppy training 580. Supplies: food about 100 a month plus toys and gear. Medical: boosters 100, check-up 50, parasite control 120, insurance about 500, vet cab fares and licence."
+    },
+    {
+      "id": "large-dog",
+      "group": "dogs",
+      "name": "Large dog",
+      "option": "Adopted, e.g. HDB-approved mixed breed",
+      "currency": "SGD",
+      "duration": 11,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "start": 2250,
+          "supplies": 2400,
+          "medical": 1300
+        }
+      },
+      "history": [],
+      "extras": {
+        "year": 2026,
+        "months": 12,
+        "monthly": {
+          "care": 100,
+          "activities": 60
+        }
+      },
+      "source": {
+        "url": "https://dollarsandsense.sg/much-cost-keep-dog-singapore/",
+        "verified": "2026-10-25",
+        "type": "estimate"
+      },
+      "notes": "Estimate scaled up from small-dog sources: larger food bill (about 180 a month), higher sterilisation and insurance (up to S$975 a year quoted for dogs). No Singapore source breaks costs down by dog size."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "cat",
+      "small-dog",
+      "large-dog"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-10-25",
+  "builtBy": "Built by hand with Claude in a chat on 25 Oct 2026, before the research agent existed.",
+  "buildLog": []
+}
