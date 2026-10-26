@@ -4,9 +4,9 @@ import { useState } from "react";
 
 type Status = { kind: "idle" } | { kind: "sending" } | { kind: "done"; runsUrl: string; message: string } | { kind: "error"; message: string };
 
-async function send(body: Record<string, string>): Promise<Status> {
+async function send(body: Record<string, string>, endpoint = "/api/build"): Promise<Status> {
   try {
-    const res = await fetch("/api/build", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+    const res = await fetch(endpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     const data = await res.json();
     if (!res.ok) return { kind: "error", message: data.error ?? "Something went wrong." };
     return { kind: "done", runsUrl: data.runsUrl, message: "" };
@@ -40,12 +40,14 @@ export function BuilderForms({ calculators }: { calculators: { id: string; title
   const [prompt, setPrompt] = useState("");
   const [buildStatus, setBuildStatus] = useState<Status>({ kind: "idle" });
   const [refineStatus, setRefineStatus] = useState<Status>({ kind: "idle" });
+  const [removeSlug, setRemoveSlug] = useState("");
+  const [removeStatus, setRemoveStatus] = useState<Status>({ kind: "idle" });
 
   return (
     <section className="mt-12 rounded-xl border border-border bg-sidebar p-6" aria-labelledby="builder-heading">
       <h2 id="builder-heading" className="text-xl font-semibold">Build or refine a calculator</h2>
       <p className="mt-1 text-sm text-muted">
-        The research agent searches the web for current prices. A new calculator goes live in about 5 to 10 minutes. A refinement is sent for review and goes live when it is accepted.
+        The research agent searches the web for current prices. A new calculator or a refinement goes live on its own in about 5 to 10 minutes, with no approval step.
       </p>
       <label className="mt-4 block max-w-xs text-sm font-medium">
         Passcode
@@ -75,7 +77,7 @@ export function BuilderForms({ calculators }: { calculators: { id: string; title
             e.preventDefault();
             setRefineStatus({ kind: "sending" });
             const s = await send({ mode: "refine", passcode, slug, prompt });
-            setRefineStatus(s.kind === "done" ? { ...s, message: "Working on it. The change will appear for review." } : s);
+            setRefineStatus(s.kind === "done" ? { ...s, message: "Working on it. The change goes live when it is done." } : s);
           }}
         >
           <h3 className="font-semibold">Refine a calculator</h3>
@@ -95,6 +97,31 @@ export function BuilderForms({ calculators }: { calculators: { id: string; title
           <StatusLine status={refineStatus} />
         </form>
       </div>
+
+      <form
+        className="mt-8 max-w-md border-t border-border pt-6"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const title = calculators.find((c) => c.id === removeSlug)?.title;
+          if (!title || !window.confirm(`Remove "${title}" from the site? It can be restored from the repository history, but not from this page.`)) return;
+          setRemoveStatus({ kind: "sending" });
+          const s = await send({ passcode, slug: removeSlug }, "/api/remove");
+          setRemoveStatus(s.kind === "done" ? { ...s, message: `Removing "${title}". It disappears from the site in a minute or two.` } : s);
+        }}
+      >
+        <h3 className="font-semibold">Remove a calculator</h3>
+        <label className="mt-2 block text-sm">
+          Calculator
+          <select className={input} required value={removeSlug} onChange={(e) => setRemoveSlug(e.target.value)}>
+            <option value="" disabled>Choose one…</option>
+            {calculators.map((c) => (
+              <option key={c.id} value={c.id}>{c.title}</option>
+            ))}
+          </select>
+        </label>
+        <button className={button} disabled={removeStatus.kind === "sending" || !removeSlug}>Remove it</button>
+        <StatusLine status={removeStatus} />
+      </form>
     </section>
   );
 }

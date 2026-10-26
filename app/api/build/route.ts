@@ -1,5 +1,5 @@
-import { timingSafeEqual } from "node:crypto";
 import { z } from "zod";
+import { dispatchWorkflow, githubConfig, passcodeOk } from "@/lib/github";
 
 /**
  * Starts the research agent: dispatches the build-calculator GitHub Actions workflow.
@@ -16,34 +16,17 @@ const Body = z.discriminatedUnion("mode", [
   }),
 ]);
 
-function passcodeOk(given: string) {
-  const expected = process.env.BUILDER_PASSCODE;
-  if (!expected) return false;
-  const a = Buffer.from(given);
-  const b = Buffer.from(expected);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
-
 export async function POST(request: Request) {
   const parsed = Body.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return Response.json({ error: "Check the form and try again." }, { status: 400 });
   const body = parsed.data;
   if (!passcodeOk(body.passcode)) return Response.json({ error: "Wrong passcode." }, { status: 401 });
 
-  const repo = process.env.GITHUB_REPOSITORY;
-  const token = process.env.GITHUB_TOKEN;
-  if (!repo || !token) return Response.json({ error: "The builder isn't connected to GitHub yet." }, { status: 503 });
+  const cfg = githubConfig();
+  if (!cfg) return Response.json({ error: "The builder isn't connected to GitHub yet." }, { status: 503 });
 
-  const inputs = body.mode === "new" ? { topic: body.topic } : { slug: body.slug, prompt: body.prompt };
-  const res = await fetch(`https://api.github.com/repos/${repo}/actions/workflows/build-calculator.yml/dispatches`, {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${token}`,
-      accept: "application/vnd.github+json",
-      "x-github-api-version": "2022-11-28",
-    },
-    body: JSON.stringify({ ref: process.env.GITHUB_BRANCH ?? "main", inputs }),
-  });
-  if (!res.ok) return Response.json({ error: `GitHub refused the request (${res.status}).` }, { status: 502 });
-  return Response.json({ ok: true, runsUrl: `https://github.com/${repo}/actions/workflows/build-calculator.yml` });
+  const inputs: Record<string, string> = body.mode === "new" ? { topic: body.topic } : { slug: body.slug, prompt: body.prompt };
+  const status = await dispatchWorkflow(cfg, "build-calculator.yml", inputs);
+  if (status !== 204) return Response.json({ error: `GitHub refused the request (${status}).` }, { status: 502 });
+  return Response.json({ ok: true, runsUrl: `https://github.com/${cfg.repo}/actions/workflows/build-calculator.yml` });
 }
