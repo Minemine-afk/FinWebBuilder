@@ -5,7 +5,8 @@ import { renderCalculatorHtml } from "@/lib/render";
 describe("seed calculators", () => {
   const all = listCalculators();
   it("all parse against the spec schema", () => {
-    expect(all.map((s) => s.id).sort()).toEqual(["dog-vs-cat", "ev-vs-petrol-car", "japan-trip-from-singapore"]);
+    // Calculators the agent publishes join the hand-built seeds, so check the seeds are present, not the whole list.
+    expect(all.map((s) => s.id)).toEqual(expect.arrayContaining(["dog-vs-cat", "ev-vs-petrol-car", "japan-trip-from-singapore"]));
   });
   it("render into a page with the spec built in and a build-cost section", () => {
     for (const spec of all) {
@@ -13,7 +14,7 @@ describe("seed calculators", () => {
       expect(html).not.toContain("__SPEC_JSON__");
       expect(html).toContain(`<title>${spec.title}</title>`);
       expect(html).toContain('id="build-cost"');
-      expect(html).toContain("The AI cost was not metered");
+      expect(html).toContain(spec.buildLog.length ? "Total AI cost so far" : "The AI cost was not metered");
     }
   });
   it("shows the cost table when a build log exists", () => {
