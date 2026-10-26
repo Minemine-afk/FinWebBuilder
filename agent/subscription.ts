@@ -120,12 +120,26 @@ export function usageFromExecution(messages: unknown[], round: string): BuildLog
   }));
 }
 
+/** What Claude Code said and was refused, so a run that wrote nothing explains itself in the log. */
+export function describeRun(messages: unknown[]): string {
+  const result = [...messages].reverse().find((m): m is Record<string, unknown> => !!m && (m as { type?: string }).type === "result");
+  if (!result) return "The execution log has no result message.";
+  const denials = Array.isArray(result.permission_denials) ? result.permission_denials : [];
+  return [
+    `Result: ${String(result.subtype)}${result.is_error ? " (error)" : ""}, ${String(result.num_turns)} turns.`,
+    `Final message: ${String(result.result ?? "(none)").slice(0, 2000)}`,
+    denials.length ? `Refused tool calls: ${JSON.stringify(denials).slice(0, 1000)}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
 function record() {
   const state = JSON.parse(fs.readFileSync(STATE_FILE, "utf8")) as RunState;
-  const written = readCalculator(state.slug);
-  if (!written) throw new Error(`Claude Code didn't write data/calculators/${state.slug}.json.`);
   const executionFile = process.env.EXECUTION_FILE;
   const messages = executionFile && fs.existsSync(executionFile) ? (JSON.parse(fs.readFileSync(executionFile, "utf8")) as unknown[]) : [];
+  const written = readCalculator(state.slug);
+  if (!written) throw new Error(`Claude Code didn't write data/calculators/${state.slug}.json.\n${describeRun(messages)}`);
   const entries = usageFromExecution(messages, state.round);
   const next: Spec = {
     ...written,
