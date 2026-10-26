@@ -3,7 +3,7 @@ import { describeRun } from "@/lib/github";
 
 const run = (over: Partial<Parameters<typeof describeRun>[0]>) => ({
   id: 1,
-  name: "Build calculator",
+  path: ".github/workflows/build-calculator.yml",
   display_title: "Build: Owning an e-bike",
   status: "in_progress",
   conclusion: null,
