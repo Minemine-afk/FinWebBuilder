@@ -1,0 +1,2351 @@
+{
+  "id": "compare-and-predict-the-future-prices-of-100-pop",
+  "title": "Pokémon card prices by generation: compare and project",
+  "subject": "card",
+  "currency": "SGD",
+  "periodLabel": "Year held",
+  "scope": "Buying one raw (ungraded) Pokémon card from the US market and holding it in Singapore. It compares 90 popular cards, 10 from each of the nine generations, from Base Set (1999) to Scarlet & Violet (2023–25). The details table shows each card's price for five years in a row from the start year, so you can see how it is projected to move. The first year's price is the TCGplayer market price on that card's pokemonpricetracker.com set price guide, read 26 Oct 2026, and each later year grows by the generation's yearly rate. Import, a one-off in the first year only, is US$35 tracked postage, 1% transit insurance and 9% GST on the total: Customs collects GST above S$400, and eBay charges it on smaller orders. Collectibles insurance is about 0.65% of the card's value a year. Generations 1, 2, 8 and 9 grow at 15% a year and Generations 3 to 7 at 5%, as the limits explain. Pick a later start year to see the projected prices from then.",
+  "limits": "Read the card price row by row: each year shows what the card is projected to be worth that year. The page adds the five yearly prices into the Total row and the headline figure, so that total is not what one card costs. You buy the card once. Compare the yearly prices instead, or set your own yearly rate. This page covers 90 cards, not the 100 in the original request: 10 per generation for now. All prices come from one site, pokemonpricetracker.com, which republishes TCGplayer data. Its set pages give raw prices only, so graded (PSA) copies are not covered. They show no price date and no price history, and the figures move day to day. The site sometimes shows a different figure for the same card on its homepage, and the notes say where. For vintage sets the pages don't say whether a price is 1st Edition or Unlimited. Rare cards with few sales, such as Shining Mewtwo, Shining Tyranitar and the Gold Star (★) cards, can show a market price well away from a typical sale. I left out rows the site shows with obvious data errors: Gengar ex 108/112, Charizard ★ 100/101, Dark Charizard, Crystal Lugia and Crystal Charizard. The yearly rates are not per-card forecasts. Generations 1 and 2 use 15%, the calculator's cap, because the site's 28 Jan 2026 market report says many WotC vintage cards rose 30–50% in a year. Generation 8 uses 15% because the site's Charizard VMAX page shows +45% over a year. Generation 9 keeps the 15% from the first build, which came from graded sales of the two Charizard ex cards. I found no growth figure for Generations 3 to 7, so they use the 5% default. Card prices can fall, and the calculator never goes below 0%. Not included: TCGplayer or eBay buyer fees, grading, selling fees, a safe deposit box (DBS X-Small, S$190.75 a year), and currency moves. Prices are in USD and converted at a fixed rate.",
+  "fxNote": "USD/SGD 1.2787 on 26 Oct 2026 (Trading Economics), so S$1 = US$0.782.",
+  "fx": {
+    "USD": 0.782
+  },
+  "minStartYear": 2026,
+  "defaultGrowth": 0.05,
+  "components": [
+    {
+      "id": "purchase",
+      "label": "Card price that year (raw, projected)",
+      "kind": "recurring"
+    },
+    {
+      "id": "insurance",
+      "label": "Collectibles insurance (0.65% of value a year)",
+      "kind": "recurring"
+    },
+    {
+      "id": "import",
+      "label": "Shipping, transit insurance and 9% GST",
+      "kind": "oneoff"
+    }
+  ],
+  "groups": [
+    {
+      "id": "gen1",
+      "label": "Gen 1: Base Set to Gym (1999–2000)",
+      "growth": 0.15
+    },
+    {
+      "id": "gen2",
+      "label": "Gen 2: Neo and e-Card (2000–03)",
+      "growth": 0.15
+    },
+    {
+      "id": "gen3",
+      "label": "Gen 3: EX series (2003–07)"
+    },
+    {
+      "id": "gen4",
+      "label": "Gen 4: Diamond & Pearl to HGSS (2007–11)"
+    },
+    {
+      "id": "gen5",
+      "label": "Gen 5: Black & White (2011–13)"
+    },
+    {
+      "id": "gen6",
+      "label": "Gen 6: XY (2014–16)"
+    },
+    {
+      "id": "gen7",
+      "label": "Gen 7: Sun & Moon (2017–19)"
+    },
+    {
+      "id": "gen8",
+      "label": "Gen 8: Sword & Shield (2020–23)",
+      "growth": 0.15
+    },
+    {
+      "id": "gen9",
+      "label": "Gen 9: Scarlet & Violet (2023–25)",
+      "growth": 0.15
+    }
+  ],
+  "items": [
+    {
+      "id": "charizard-base-set-psa9",
+      "group": "gen1",
+      "name": "Charizard 4/102",
+      "option": "Base Set · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 954.65,
+          "insurance": 6.21,
+          "import": 134
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/base-set",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Base Set price guide, read 26 Oct 2026: raw (ungraded) TCGplayer market price US$954.65, low US$207.29. The page says prices update daily but shows no price date, and gives no PSA prices or price history. The site's homepage API sample (last updated 5 Oct 2026) gave US$910.75, close to this. Its blog guides give lower Near Mint ranges: US$250 to 400 (1 Jun 2026) and US$300 to 500 (28 Jan 2026). This card was PSA 9 in the first build; the id is kept. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "blastoise-base-set-psa9",
+      "group": "gen1",
+      "name": "Blastoise 2/102",
+      "option": "Base Set · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 227.27,
+          "insurance": 1.48,
+          "import": 61
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/base-set",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Base Set price guide, read 26 Oct 2026: raw TCGplayer market price US$227.27, low US$42.14. No price date, PSA prices or history on the page. The site's price checker page (25 Oct 2026) gave a Near Mint range of US$150 to 250. This card was PSA 9 in the first build; the id is kept. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "venusaur-base-set",
+      "group": "gen1",
+      "name": "Venusaur 15/102",
+      "option": "Base Set · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 154.42,
+          "insurance": 1,
+          "import": 54
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/base-set",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Base Set price guide, read 26 Oct 2026: raw TCGplayer market price US$154.42, low US$30.00. No price date, PSA prices or history on the page. The site's price checker page (25 Oct 2026) gave a Near Mint range of US$120 to 200. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "mewtwo-base-set",
+      "group": "gen1",
+      "name": "Mewtwo 10/102",
+      "option": "Base Set · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 84.59,
+          "insurance": 0.55,
+          "import": 47
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/base-set",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Base Set price guide, read 26 Oct 2026: raw TCGplayer market price US$84.59, low US$10.31. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "alakazam-base-set",
+      "group": "gen1",
+      "name": "Alakazam 1/102",
+      "option": "Base Set · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 72.46,
+          "insurance": 0.47,
+          "import": 45
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/base-set",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Base Set price guide, read 26 Oct 2026: raw TCGplayer market price US$72.46, low US$12.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "gyarados-base-set",
+      "group": "gen1",
+      "name": "Gyarados 6/102",
+      "option": "Base Set · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 56.33,
+          "insurance": 0.37,
+          "import": 44
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/base-set",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Base Set price guide, read 26 Oct 2026: raw TCGplayer market price US$56.33, low US$5.94. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "snorlax-jungle",
+      "group": "gen1",
+      "name": "Snorlax 11/64",
+      "option": "Jungle · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 445.14,
+          "insurance": 2.89,
+          "import": 83
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/jungle",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Jungle price guide, read 26 Oct 2026: raw TCGplayer market price US$445.14, low US$27.30. No price date, PSA prices or history on the page. The page doesn't say whether this is 1st Edition or Unlimited, and the wide gap between market and low suggests it mixes both. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "dragonite-fossil",
+      "group": "gen1",
+      "name": "Dragonite 4/62",
+      "option": "Fossil · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 582.67,
+          "insurance": 3.79,
+          "import": 97
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/fossil",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Fossil price guide, read 26 Oct 2026: raw TCGplayer market price US$582.67, low US$36.97. No price date, PSA prices or history on the page. The page doesn't say whether this is 1st Edition or Unlimited. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "gengar-fossil",
+      "group": "gen1",
+      "name": "Gengar 5/62",
+      "option": "Fossil · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 374.66,
+          "insurance": 2.44,
+          "import": 76
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/fossil",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Fossil price guide, read 26 Oct 2026: raw TCGplayer market price US$374.66, low US$50.80. No price date, PSA prices or history on the page. The page doesn't say whether this is 1st Edition or Unlimited. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "blaines-charizard-gym",
+      "group": "gen1",
+      "name": "Blaine's Charizard 2/132",
+      "option": "Gym Challenge · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 699.99,
+          "insurance": 4.55,
+          "import": 109
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/gym-challenge",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Gym Challenge price guide, read 26 Oct 2026: raw TCGplayer market price US$699.99, low US$180.00. No price date, PSA prices or history on the page. The page doesn't say whether this is 1st Edition or Unlimited. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "lugia-neo-genesis",
+      "group": "gen2",
+      "name": "Lugia 9/111",
+      "option": "Neo Genesis · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1300,
+          "insurance": 8.45,
+          "import": 169
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-genesis",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Genesis price guide, read 26 Oct 2026: raw TCGplayer market price US$1,300.00, low US$159.99. No price date, PSA prices or history on the page, and no split between 1st Edition and Unlimited. The site's /lugia page (undated) gave US$50 to 120 for Unlimited and US$150 to 300 for 1st Edition, so this market figure probably reflects 1st Edition sales. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "typhlosion-neo-genesis",
+      "group": "gen2",
+      "name": "Typhlosion 17/111",
+      "option": "Neo Genesis · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 475,
+          "insurance": 3.09,
+          "import": 86
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-genesis",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Genesis price guide, read 26 Oct 2026: raw TCGplayer market price US$475.00, low US$50.25. No price date, PSA prices or history on the page, and no edition stated. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "umbreon-neo-discovery",
+      "group": "gen2",
+      "name": "Umbreon 13/75",
+      "option": "Neo Discovery · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 399.99,
+          "insurance": 2.6,
+          "import": 79
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-discovery",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Discovery price guide, read 26 Oct 2026: raw TCGplayer market price US$399.99, low US$224.50. No price date, PSA prices or history on the page, and no edition stated. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "espeon-neo-discovery",
+      "group": "gen2",
+      "name": "Espeon 1/75",
+      "option": "Neo Discovery · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 237.5,
+          "insurance": 1.54,
+          "import": 62
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-discovery",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Discovery price guide, read 26 Oct 2026: raw TCGplayer market price US$237.50, low US$100.00. No price date, PSA prices or history on the page, and no edition stated. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "ho-oh-neo-revelation",
+      "group": "gen2",
+      "name": "Ho-Oh 7/64",
+      "option": "Neo Revelation · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 488.52,
+          "insurance": 3.18,
+          "import": 87
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-revelation",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Revelation price guide, read 26 Oct 2026: raw TCGplayer market price US$488.52, low US$125.00. No price date, PSA prices or history on the page, and no edition stated. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "shining-gyarados",
+      "group": "gen2",
+      "name": "Shining Gyarados 65/64",
+      "option": "Neo Revelation · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 793.16,
+          "insurance": 5.16,
+          "import": 118
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-revelation",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Revelation price guide, read 26 Oct 2026: raw TCGplayer market price US$793.16, low US$407.99. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "shining-charizard",
+      "group": "gen2",
+      "name": "Shining Charizard 107",
+      "option": "Neo Destiny 107/105 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1300,
+          "insurance": 8.45,
+          "import": 169
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-destiny",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Destiny price guide, read 26 Oct 2026: raw TCGplayer market price US$1,300.00, low US$1,400.00. The low is above the market price, so sales are thin. No price date, PSA prices or history on the page. The site's 28 Jan 2026 market report gave a Near Mint range of US$1,500 to 2,500. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "shining-mewtwo",
+      "group": "gen2",
+      "name": "Shining Mewtwo 109",
+      "option": "Neo Destiny 109/105 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 3000,
+          "insurance": 19.5,
+          "import": 341
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-destiny",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Destiny price guide, read 26 Oct 2026: raw TCGplayer market price US$3,000.00, low US$699.98. No price date, PSA prices or history on the page. The site's 10 Apr 2026 guide gave a raw range of US$600 to 1,000, far below this market price. Sales are thin, so treat this figure with care. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "shining-tyranitar",
+      "group": "gen2",
+      "name": "Shining Tyranitar 113",
+      "option": "Neo Destiny 113/105 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 4099.05,
+          "insurance": 26.64,
+          "import": 452
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/neo-destiny",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Neo Destiny price guide, read 26 Oct 2026: raw TCGplayer market price US$4,099.05, low US$449.97. No price date, PSA prices or history on the page. The site's 10 Apr 2026 guide gave a raw range of US$500 to 800, far below this market price. Sales are thin, so treat this figure with care. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-expedition",
+      "group": "gen2",
+      "name": "Charizard 40/165",
+      "option": "Expedition (non-holo) · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 152.17,
+          "insurance": 0.99,
+          "import": 54
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/expedition",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Expedition price guide, read 26 Oct 2026: raw TCGplayer market price US$152.17, low US$44.00. The page lists it as rarity R, the non-holo version. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-ex-frlg",
+      "group": "gen3",
+      "name": "Charizard ex 105/112",
+      "option": "EX FireRed & LeafGreen · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 500,
+          "insurance": 3.25,
+          "import": 89
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-firered-and-leafgreen",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX FireRed & LeafGreen price guide, read 26 Oct 2026: raw TCGplayer market price US$500.00, low US$420.00. No price date, PSA prices or history on the page. Search snippets from PokeInvesting (US$831.25, Jan 2026) were higher; those pages were not opened. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "venusaur-ex-frlg",
+      "group": "gen3",
+      "name": "Venusaur ex 112/112",
+      "option": "EX FireRed & LeafGreen · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 480.01,
+          "insurance": 3.12,
+          "import": 87
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-firered-and-leafgreen",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX FireRed & LeafGreen price guide, read 26 Oct 2026: raw TCGplayer market price US$480.01, low US$347.29. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "blastoise-ex-frlg",
+      "group": "gen3",
+      "name": "Blastoise ex 104/112",
+      "option": "EX FireRed & LeafGreen · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 425,
+          "insurance": 2.76,
+          "import": 81
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-firered-and-leafgreen",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX FireRed & LeafGreen price guide, read 26 Oct 2026: raw TCGplayer market price US$425.00, low US$373.95. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "salamence-ex-df",
+      "group": "gen3",
+      "name": "Salamence ex 98/101",
+      "option": "EX Dragon Frontiers · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 728.3,
+          "insurance": 4.73,
+          "import": 112
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-dragon-frontiers",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX Dragon Frontiers price guide, read 26 Oct 2026: raw TCGplayer market price US$728.30, low US$74.94. The page labels the cards \"Delta Species\", but the numbers match Dragon Frontiers. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "rayquaza-ex-df",
+      "group": "gen3",
+      "name": "Rayquaza ex 97/101",
+      "option": "EX Dragon Frontiers · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 349.4,
+          "insurance": 2.27,
+          "import": 73
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-dragon-frontiers",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX Dragon Frontiers price guide, read 26 Oct 2026: raw TCGplayer market price US$349.40, low US$179.99. The page labels the cards \"Delta Species\", but the numbers match Dragon Frontiers. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "rayquaza-ex-deoxys",
+      "group": "gen3",
+      "name": "Rayquaza ex 102/107",
+      "option": "EX Deoxys · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 999,
+          "insurance": 6.49,
+          "import": 139
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-deoxys",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX Deoxys price guide, read 26 Oct 2026: raw TCGplayer market price US$999.00, low US$251.32. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "latias-star-deoxys",
+      "group": "gen3",
+      "name": "Latias ★ 105/107",
+      "option": "EX Deoxys · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1800,
+          "insurance": 11.7,
+          "import": 220
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-deoxys",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX Deoxys price guide, read 26 Oct 2026: raw TCGplayer market price US$1,800.00. No low price was shown, so sales are thin. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "mudkip-star-trr",
+      "group": "gen3",
+      "name": "Mudkip ★ 107/109",
+      "option": "EX Team Rocket Returns · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 2500,
+          "insurance": 16.25,
+          "import": 290
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-team-rocket-returns",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX Team Rocket Returns price guide, read 26 Oct 2026: raw TCGplayer market price US$2,500.00. No low price was shown, so sales are thin. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "torchic-star-trr",
+      "group": "gen3",
+      "name": "Torchic ★ 108/109",
+      "option": "EX Team Rocket Returns · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 4000,
+          "insurance": 26,
+          "import": 442
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-team-rocket-returns",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX Team Rocket Returns price guide, read 26 Oct 2026: raw TCGplayer market price US$4,000.00. No low price was shown, so sales are thin. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "alakazam-star-cg",
+      "group": "gen3",
+      "name": "Alakazam ★ 99/100",
+      "option": "EX Crystal Guardians · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1429.5,
+          "insurance": 9.29,
+          "import": 182
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/ex-crystal-guardians",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com EX Crystal Guardians price guide, read 26 Oct 2026: raw TCGplayer market price US$1,429.50. No low price was shown, so sales are thin. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-g-lvx",
+      "group": "gen4",
+      "name": "Charizard G LV.X 143",
+      "option": "Supreme Victors 143/147 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 450.72,
+          "insurance": 2.93,
+          "import": 84
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/supreme-victors",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Supreme Victors price guide, read 26 Oct 2026: raw TCGplayer market price US$450.72, low US$259.11. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "rayquaza-c-lvx",
+      "group": "gen4",
+      "name": "Rayquaza C LV.X 146",
+      "option": "Supreme Victors 146/147 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 253,
+          "insurance": 1.64,
+          "import": 64
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/supreme-victors",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Supreme Victors price guide, read 26 Oct 2026: raw TCGplayer market price US$253.00, low US$50.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "garchomp-c-lvx",
+      "group": "gen4",
+      "name": "Garchomp C LV.X 145",
+      "option": "Supreme Victors 145/147 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 219.97,
+          "insurance": 1.43,
+          "import": 60
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/supreme-victors",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Supreme Victors price guide, read 26 Oct 2026: raw TCGplayer market price US$219.97, low US$57.95. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "lugia-legend-hgss",
+      "group": "gen4",
+      "name": "Lugia LEGEND 113/123",
+      "option": "HeartGold & SoulSilver · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 422.85,
+          "insurance": 2.75,
+          "import": 81
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/heartgold-soulsilver",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com HeartGold & SoulSilver price guide, read 26 Oct 2026: raw TCGplayer market price US$422.85 for the top half of the two-card LEGEND. The bottom half (114/123) was US$329.26 and is not included. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "ho-oh-legend-hgss",
+      "group": "gen4",
+      "name": "Ho-Oh LEGEND 111/123",
+      "option": "HeartGold & SoulSilver · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 258.41,
+          "insurance": 1.68,
+          "import": 64
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/heartgold-soulsilver",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com HeartGold & SoulSilver price guide, read 26 Oct 2026: raw TCGplayer market price US$258.41 for the top half of the two-card LEGEND. The bottom half (112/123) was US$213.06 and is not included. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "gyarados-123-hgss",
+      "group": "gen4",
+      "name": "Red Gyarados 123/123",
+      "option": "HeartGold & SoulSilver · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 369.59,
+          "insurance": 2.4,
+          "import": 75
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/heartgold-soulsilver",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com HeartGold & SoulSilver price guide, read 26 Oct 2026: raw TCGplayer market price US$369.59. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "typhlosion-prime-hgss",
+      "group": "gen4",
+      "name": "Typhlosion Prime 110",
+      "option": "HeartGold & SoulSilver 110/123 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 120.12,
+          "insurance": 0.78,
+          "import": 50
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/heartgold-soulsilver",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com HeartGold & SoulSilver price guide, read 26 Oct 2026: raw TCGplayer market price US$120.12. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "feraligatr-prime-hgss",
+      "group": "gen4",
+      "name": "Feraligatr Prime 108",
+      "option": "HeartGold & SoulSilver 108/123 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 124.55,
+          "insurance": 0.81,
+          "import": 51
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/heartgold-soulsilver",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com HeartGold & SoulSilver price guide, read 26 Oct 2026: raw TCGplayer market price US$124.55. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "ho-oh-sl5-col",
+      "group": "gen4",
+      "name": "Shiny Ho-Oh SL5",
+      "option": "Call of Legends · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 833.32,
+          "insurance": 5.42,
+          "import": 122
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/call-of-legends",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Call of Legends price guide, read 26 Oct 2026: raw TCGplayer market price US$833.32. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "suicune-sl11-col",
+      "group": "gen4",
+      "name": "Shiny Suicune SL11",
+      "option": "Call of Legends · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 799.97,
+          "insurance": 5.2,
+          "import": 119
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/call-of-legends",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Call of Legends price guide, read 26 Oct 2026: raw TCGplayer market price US$799.97. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "black-kyurem-ex-145",
+      "group": "gen5",
+      "name": "Black Kyurem EX 145/149",
+      "option": "Boundaries Crossed · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 650.48,
+          "insurance": 4.23,
+          "import": 104
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/boundaries-crossed",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Boundaries Crossed price guide, read 26 Oct 2026: raw TCGplayer market price US$650.48, low US$126.30. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "keldeo-ex-142",
+      "group": "gen5",
+      "name": "Keldeo EX 142/149",
+      "option": "Boundaries Crossed · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 155,
+          "insurance": 1.01,
+          "import": 54
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/boundaries-crossed",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Boundaries Crossed price guide, read 26 Oct 2026: raw TCGplayer market price US$155.00, low US$29.19. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "mewtwo-ex-98",
+      "group": "gen5",
+      "name": "Mewtwo EX 98/99",
+      "option": "Next Destinies · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 261.81,
+          "insurance": 1.7,
+          "import": 65
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/next-destinies",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Next Destinies price guide, read 26 Oct 2026: raw TCGplayer market price US$261.81, low US$56.85. A search snippet of the same page showed US$254.42 earlier, so the figure moves day to day. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "reshiram-ex-95",
+      "group": "gen5",
+      "name": "Reshiram EX 95/99",
+      "option": "Next Destinies · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 443.65,
+          "insurance": 2.88,
+          "import": 83
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/next-destinies",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Next Destinies price guide, read 26 Oct 2026: raw TCGplayer market price US$443.65, low US$50.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "darkrai-ex-107",
+      "group": "gen5",
+      "name": "Darkrai EX 107/108",
+      "option": "Dark Explorers · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 822.1,
+          "insurance": 5.34,
+          "import": 121
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/dark-explorers",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Dark Explorers price guide, read 26 Oct 2026: raw TCGplayer market price US$822.10, low US$229.99. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "rayquaza-ex-123",
+      "group": "gen5",
+      "name": "Rayquaza EX 123/124",
+      "option": "Dragons Exalted · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 219.47,
+          "insurance": 1.43,
+          "import": 60
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/dragons-exalted",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Dragons Exalted price guide, read 26 Oct 2026: raw TCGplayer market price US$219.47, low US$150.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "rayquaza-128-de",
+      "group": "gen5",
+      "name": "Rayquaza 128/124",
+      "option": "Dragons Exalted (secret) · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1250,
+          "insurance": 8.13,
+          "import": 164
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/dragons-exalted",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Dragons Exalted price guide, read 26 Oct 2026: raw TCGplayer market price US$1,250.00. No low price was shown, so sales are thin. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "zekrom-115-lt",
+      "group": "gen5",
+      "name": "Zekrom 115/113",
+      "option": "Legendary Treasures · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 519.49,
+          "insurance": 3.38,
+          "import": 91
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/legendary-treasures",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Legendary Treasures price guide, read 26 Oct 2026: raw TCGplayer market price US$519.49, low US$76.54. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-19-lt",
+      "group": "gen5",
+      "name": "Charizard 19/113",
+      "option": "Legendary Treasures · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 77.64,
+          "insurance": 0.5,
+          "import": 46
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/legendary-treasures",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Legendary Treasures price guide, read 26 Oct 2026: raw TCGplayer market price US$77.64, low US$10.25. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "rayquaza-11-dv",
+      "group": "gen5",
+      "name": "Rayquaza 11/20",
+      "option": "Dragon Vault · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 82.69,
+          "insurance": 0.54,
+          "import": 46
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/dragon-vault",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Dragon Vault price guide, read 26 Oct 2026: raw TCGplayer market price US$82.69, low US$10.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "m-charizard-ex-108",
+      "group": "gen6",
+      "name": "M Charizard EX 108/106",
+      "option": "XY Flashfire · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1501.23,
+          "insurance": 9.76,
+          "import": 190
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-flashfire",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Flashfire price guide, read 26 Oct 2026: raw TCGplayer market price US$1,501.23, low US$126.16. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "m-charizard-ex-107",
+      "group": "gen6",
+      "name": "M Charizard EX 107/106",
+      "option": "XY Flashfire · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 313.61,
+          "insurance": 2.04,
+          "import": 70
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-flashfire",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Flashfire price guide, read 26 Oct 2026: raw TCGplayer market price US$313.61, low US$43.13. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-ex-100-ff",
+      "group": "gen6",
+      "name": "Charizard EX 100/106",
+      "option": "XY Flashfire · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 295.26,
+          "insurance": 1.92,
+          "import": 68
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-flashfire",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Flashfire price guide, read 26 Oct 2026: raw TCGplayer market price US$295.26, low US$50.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-11-evo",
+      "group": "gen6",
+      "name": "Charizard 11/108",
+      "option": "XY Evolutions · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 97.79,
+          "insurance": 0.64,
+          "import": 48
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-evolutions",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Evolutions price guide, read 26 Oct 2026: raw TCGplayer market price US$97.79, low US$26.93. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "m-rayquaza-ex-105",
+      "group": "gen6",
+      "name": "M Rayquaza EX 105/108",
+      "option": "XY Roaring Skies · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 561.96,
+          "insurance": 3.65,
+          "import": 95
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-roaring-skies",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Roaring Skies price guide, read 26 Oct 2026: raw TCGplayer market price US$561.96, low US$116.82. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "m-rayquaza-ex-98",
+      "group": "gen6",
+      "name": "M Rayquaza EX 98/98",
+      "option": "XY Ancient Origins · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1172,
+          "insurance": 7.62,
+          "import": 156
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-ancient-origins",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Ancient Origins price guide, read 26 Oct 2026: raw TCGplayer market price US$1,172.00, low US$246.27. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "mewtwo-ex-163",
+      "group": "gen6",
+      "name": "Mewtwo EX 163/162",
+      "option": "XY BREAKthrough · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 208.35,
+          "insurance": 1.35,
+          "import": 59
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-breakthrough",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY BREAKthrough price guide, read 26 Oct 2026: raw TCGplayer market price US$208.35, low US$43.94. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "m-gengar-ex-121",
+      "group": "gen6",
+      "name": "M Gengar EX 121/119",
+      "option": "XY Phantom Forces · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 503.58,
+          "insurance": 3.27,
+          "import": 89
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-phantom-forces",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Phantom Forces price guide, read 26 Oct 2026: raw TCGplayer market price US$503.58, low US$90.78. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "dialga-ex-122",
+      "group": "gen6",
+      "name": "Dialga EX 122/119",
+      "option": "XY Phantom Forces · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1018.2,
+          "insurance": 6.62,
+          "import": 141
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/xy-phantom-forces",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com XY Phantom Forces price guide, read 26 Oct 2026: raw TCGplayer market price US$1,018.20, low US$245.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "m-charizard-ex-12-gen",
+      "group": "gen6",
+      "name": "M Charizard EX 12/83",
+      "option": "Generations · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 159.2,
+          "insurance": 1.03,
+          "import": 54
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/generations",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Generations price guide, read 26 Oct 2026: raw TCGplayer market price US$159.20, low US$36.50. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-gx-sv49",
+      "group": "gen7",
+      "name": "Charizard GX SV49",
+      "option": "Hidden Fates Shiny Vault · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 742.32,
+          "insurance": 4.83,
+          "import": 113
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/hidden-fates-shiny-vault",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Hidden Fates Shiny Vault price guide, read 26 Oct 2026: raw TCGplayer market price US$742.32. No price date, PSA prices or history on the page. Search snippets from other sites gave about US$523 to 694; those pages were not opened. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-gx-150",
+      "group": "gen7",
+      "name": "Charizard GX 150/147",
+      "option": "Burning Shadows · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 840.75,
+          "insurance": 5.46,
+          "import": 123
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-burning-shadows",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Burning Shadows price guide, read 26 Oct 2026: raw TCGplayer market price US$840.75. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "umbreon-gx-sv69",
+      "group": "gen7",
+      "name": "Umbreon GX SV69",
+      "option": "Hidden Fates Shiny Vault · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 314.26,
+          "insurance": 2.04,
+          "import": 70
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/hidden-fates-shiny-vault",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Hidden Fates Shiny Vault price guide, read 26 Oct 2026: raw TCGplayer market price US$314.26. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "pikachu-zekrom-gx-162",
+      "group": "gen7",
+      "name": "Pikachu & Zekrom GX 162",
+      "option": "Team Up 162/181 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 176.29,
+          "insurance": 1.15,
+          "import": 56
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-team-up",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Team Up price guide, read 26 Oct 2026: raw TCGplayer market price US$176.29 for the full art. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "latias-latios-gx-170",
+      "group": "gen7",
+      "name": "Latias & Latios GX 170",
+      "option": "Team Up 170/181 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 4499.66,
+          "insurance": 29.25,
+          "import": 492
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-team-up",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Team Up price guide, read 26 Oct 2026: raw TCGplayer market price US$4,499.66 for the alternate full art. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "gengar-mimikyu-gx-165",
+      "group": "gen7",
+      "name": "Gengar & Mimikyu GX 165",
+      "option": "Team Up 165/181 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1894.91,
+          "insurance": 12.32,
+          "import": 229
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-team-up",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Team Up price guide, read 26 Oct 2026: raw TCGplayer market price US$1,894.91 for the alternate full art. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "mewtwo-mew-gx-222",
+      "group": "gen7",
+      "name": "Mewtwo & Mew GX 222",
+      "option": "Unified Minds 222/236 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 210.34,
+          "insurance": 1.37,
+          "import": 59
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-unified-minds",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Unified Minds price guide, read 26 Oct 2026: raw TCGplayer market price US$210.34; the site lists it as a full art. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-braixen-gx-251",
+      "group": "gen7",
+      "name": "Charizard & Braixen 251",
+      "option": "Cosmic Eclipse 251/236 (GX) · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 137.23,
+          "insurance": 0.89,
+          "import": 52
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-cosmic-eclipse",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Cosmic Eclipse price guide, read 26 Oct 2026: raw TCGplayer market price US$137.23 for the secret rare GX, not the alternate art. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "reshiram-charizard-gx-217",
+      "group": "gen7",
+      "name": "Reshiram & Charizard 217",
+      "option": "Unbroken Bonds 217/214 (GX) · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 248.94,
+          "insurance": 1.62,
+          "import": 63
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-unbroken-bonds",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Unbroken Bonds price guide, read 26 Oct 2026: raw TCGplayer market price US$248.94 for the secret rare GX. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "lillie-151-up",
+      "group": "gen7",
+      "name": "Lillie 151/156",
+      "option": "Ultra Prism (full art) · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 468.18,
+          "insurance": 3.04,
+          "import": 85
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sm-ultra-prism",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Ultra Prism price guide, read 26 Oct 2026: raw TCGplayer market price US$468.18. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "umbreon-vmax-215-psa10",
+      "group": "gen8",
+      "name": "Umbreon VMAX 215/203",
+      "option": "Evolving Skies · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 2236.75,
+          "insurance": 14.54,
+          "import": 264
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh07-evolving-skies",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Evolving Skies price guide, read 26 Oct 2026: raw TCGplayer market price US$2,236.75, low US$1,499.99. No price date, PSA prices or history on the set page. The site's homepage showed US$2,210.46, and its 27 Jul 2026 blog showed US$2,396.28, both close. This card was PSA 10 in the first build; the id is kept. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "rayquaza-vmax-218",
+      "group": "gen8",
+      "name": "Rayquaza VMAX 218/203",
+      "option": "Evolving Skies · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1241.76,
+          "insurance": 8.07,
+          "import": 163
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh07-evolving-skies",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Evolving Skies price guide, read 26 Oct 2026: raw TCGplayer market price US$1,241.76, low US$742.50. No price date, PSA prices or history on the page. The site's homepage showed US$1,003.27. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "sylveon-vmax-212",
+      "group": "gen8",
+      "name": "Sylveon VMAX 212/203",
+      "option": "Evolving Skies · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 365.36,
+          "insurance": 2.37,
+          "import": 75
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh07-evolving-skies",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Evolving Skies price guide, read 26 Oct 2026: raw TCGplayer market price US$365.36, low US$185.34. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "giratina-v-186-psa10",
+      "group": "gen8",
+      "name": "Giratina V 186/196",
+      "option": "Lost Origin · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 855.17,
+          "insurance": 5.56,
+          "import": 124
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh11-lost-origin",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Lost Origin price guide, read 26 Oct 2026: raw TCGplayer market price US$855.17, low US$350.00. No price date, PSA prices or history on the page. The site's homepage showed US$866.21, close to this. This card was PSA 10 in the first build; the id is kept. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "espeon-vmax-270",
+      "group": "gen8",
+      "name": "Espeon VMAX 270/264",
+      "option": "Fusion Strike · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 340.99,
+          "insurance": 2.22,
+          "import": 73
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh08-fusion-strike",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Fusion Strike price guide, read 26 Oct 2026: raw TCGplayer market price US$340.99, low US$167.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "gengar-vmax-271",
+      "group": "gen8",
+      "name": "Gengar VMAX 271/264",
+      "option": "Fusion Strike · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1032.52,
+          "insurance": 6.71,
+          "import": 142
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh08-fusion-strike",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Fusion Strike price guide, read 26 Oct 2026: raw TCGplayer market price US$1,032.52, low US$699.99. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "mew-vmax-269",
+      "group": "gen8",
+      "name": "Mew VMAX 269/264",
+      "option": "Fusion Strike · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 234.23,
+          "insurance": 1.52,
+          "import": 62
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh08-fusion-strike",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Fusion Strike price guide, read 26 Oct 2026: raw TCGplayer market price US$234.23, low US$90.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "lugia-v-186",
+      "group": "gen8",
+      "name": "Lugia V 186/195",
+      "option": "Silver Tempest · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 469.66,
+          "insurance": 3.05,
+          "import": 86
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh12-silver-tempest",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Silver Tempest price guide, read 26 Oct 2026: raw TCGplayer market price US$469.66, low US$294.95. No price date, PSA prices or history on the page. The site's homepage showed US$533.71. Its /lugia page gave US$120 to 200 (undated), which looks out of date. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-v-154",
+      "group": "gen8",
+      "name": "Charizard V 154/172",
+      "option": "Brilliant Stars · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 266.93,
+          "insurance": 1.74,
+          "import": 65
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh09-brilliant-stars",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Brilliant Stars price guide, read 26 Oct 2026: raw TCGplayer market price US$266.93, low US$122.15. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "giratina-vstar-gg69",
+      "group": "gen8",
+      "name": "Giratina VSTAR GG69",
+      "option": "Crown Zenith Galarian Gallery · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 284.9,
+          "insurance": 1.85,
+          "import": 67
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/swsh-crown-zenith-galarian-gallery",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Crown Zenith Galarian Gallery price guide, read 26 Oct 2026: raw TCGplayer market price US$284.90, low US$131.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-ex-151-199-psa10",
+      "group": "gen9",
+      "name": "Charizard ex 199/165",
+      "option": "Scarlet & Violet 151 · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 294.42,
+          "insurance": 1.91,
+          "import": 68
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv-scarlet-and-violet-151",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Scarlet & Violet 151 price guide, read 26 Oct 2026: raw TCGplayer market price US$294.42, low US$239.00. No price date, PSA prices or history on the page. The site's homepage showed US$430.30 for the same card; the set page is used because it is the card's own listing. This card was PSA 10 in the first build; the id is kept. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-ex-obf-223-psa10",
+      "group": "gen9",
+      "name": "Charizard ex 223/197",
+      "option": "Obsidian Flames · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 87.86,
+          "insurance": 0.57,
+          "import": 47
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv03-obsidian-flames",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Obsidian Flames price guide, read 26 Oct 2026: raw TCGplayer market price US$87.86, low US$47.25. No price date, PSA prices or history on the page. The first build found PSA 10 copies down about 6% since Sep 2025. This card was PSA 10 in the first build; the id is kept. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "pikachu-ex-238",
+      "group": "gen9",
+      "name": "Pikachu ex 238/191",
+      "option": "Surging Sparks · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 256.63,
+          "insurance": 1.67,
+          "import": 64
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv08-surging-sparks",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Surging Sparks price guide, read 26 Oct 2026: raw TCGplayer market price US$256.63, low US$200.00. No price date, PSA prices or history on the page. The site's homepage showed US$382.99 for the same card. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "latias-ex-239",
+      "group": "gen9",
+      "name": "Latias ex 239/191",
+      "option": "Surging Sparks · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 169.78,
+          "insurance": 1.1,
+          "import": 55
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv08-surging-sparks",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Surging Sparks price guide, read 26 Oct 2026: raw TCGplayer market price US$169.78, low US$150.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "umbreon-ex-161",
+      "group": "gen9",
+      "name": "Umbreon ex 161/131",
+      "option": "Prismatic Evolutions · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1198.39,
+          "insurance": 7.79,
+          "import": 159
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv-prismatic-evolutions",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Prismatic Evolutions price guide, read twice on 26 Oct 2026: raw TCGplayer market price US$1,198.39, low US$1,098.00. A search snippet of the same page showed US$1,477.11 earlier, so the figure moves day to day. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "sylveon-ex-156",
+      "group": "gen9",
+      "name": "Sylveon ex 156/131",
+      "option": "Prismatic Evolutions · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 390.8,
+          "insurance": 2.54,
+          "import": 78
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv-prismatic-evolutions",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Prismatic Evolutions price guide, read 26 Oct 2026: raw TCGplayer market price US$390.80, low US$350.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "espeon-ex-155",
+      "group": "gen9",
+      "name": "Espeon ex 155/131",
+      "option": "Prismatic Evolutions · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 268.37,
+          "insurance": 1.74,
+          "import": 65
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv-prismatic-evolutions",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Prismatic Evolutions price guide, read 26 Oct 2026: raw TCGplayer market price US$268.37, low US$219.99. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "iono-269",
+      "group": "gen9",
+      "name": "Iono 269/193",
+      "option": "Paldea Evolved · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 46.99,
+          "insurance": 0.31,
+          "import": 43
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv02-paldea-evolved",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Paldea Evolved price guide, read 26 Oct 2026: raw TCGplayer market price US$46.99, low US$40.00. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total; postage is large next to a card this cheap. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "magikarp-203",
+      "group": "gen9",
+      "name": "Magikarp 203/193",
+      "option": "Paldea Evolved · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 313.81,
+          "insurance": 2.04,
+          "import": 70
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv02-paldea-evolved",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Paldea Evolved price guide, read 26 Oct 2026: raw TCGplayer market price US$313.81, low US$192.56. No price date, PSA prices or history on the page. The site's homepage grading example showed raw US$264.46 and PSA 10 US$1,356.83. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "greninja-ex-214",
+      "group": "gen9",
+      "name": "Greninja ex 214/167",
+      "option": "Twilight Masquerade · Raw",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 255.69,
+          "insurance": 1.66,
+          "import": 64
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.pokemonpricetracker.com/price-guide/sv06-twilight-masquerade",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: pokemonpricetracker.com Twilight Masquerade price guide, read 26 Oct 2026: raw TCGplayer market price US$255.69, low US$196.50. No price date, PSA prices or history on the page. Import: estimated US$35 tracked postage, plus 1% transit insurance and 9% GST on the total. Insurance: 0.65% of value a year."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "charizard-base-set-psa9",
+      "umbreon-vmax-215-psa10",
+      "charizard-ex-151-199-psa10"
+    ]
+  },
+  "version": 3,
+  "updated": "2026-10-26",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 1484303,
+      "output": 95377,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 34,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:09:29.474Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 68,
+      "output": 25487,
+      "cacheRead": 1934421,
+      "cacheWrite": 79453,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:09:29.474Z"
+    },
+    {
+      "round": "First build",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 62,
+      "output": 24612,
+      "cacheRead": 278702,
+      "cacheWrite": 65766,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:09:29.474Z"
+    },
+    {
+      "round": "Refinement 1: Base the prices on pokemonpricetracker.com and compare at le",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 3771104,
+      "output": 170627,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 24,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:28:30.201Z"
+    },
+    {
+      "round": "Refinement 1: Base the prices on pokemonpricetracker.com and compare at le",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 58,
+      "output": 77969,
+      "cacheRead": 2173473,
+      "cacheWrite": 148661,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:28:30.201Z"
+    },
+    {
+      "round": "Refinement 1: Base the prices on pokemonpricetracker.com and compare at le",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 132,
+      "output": 61287,
+      "cacheRead": 441492,
+      "cacheWrite": 144657,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:28:30.201Z"
+    },
+    {
+      "round": "Refinement 2: Change the details table such that it shows the projected pr",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 1909,
+      "output": 24,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:50:17.222Z"
+    },
+    {
+      "round": "Refinement 2: Change the details table such that it shows the projected pr",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 20,
+      "output": 4460,
+      "cacheRead": 267259,
+      "cacheWrite": 22614,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:50:17.222Z"
+    }
+  ]
+}

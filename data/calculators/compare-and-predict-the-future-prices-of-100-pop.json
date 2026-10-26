@@ -4,8 +4,8 @@
   "subject": "card",
   "currency": "SGD",
   "periodLabel": "Year held",
-  "scope": "Buying one raw (ungraded) Pokémon card from the US market and holding it in Singapore. It compares 90 popular cards, 10 from each of the nine generations, from Base Set (1999) to Scarlet & Violet (2023–25). The details table shows each card's price for five years in a row from the start year, so you can see how it is projected to move. The first year's price is the TCGplayer market price on that card's pokemonpricetracker.com set price guide, read 26 Oct 2026, and each later year grows by the generation's yearly rate. Import, a one-off in the first year only, is US$35 tracked postage, 1% transit insurance and 9% GST on the total: Customs collects GST above S$400, and eBay charges it on smaller orders. Collectibles insurance is about 0.65% of the card's value a year. Generations 1, 2, 8 and 9 grow at 15% a year and Generations 3 to 7 at 5%, as the limits explain. Pick a later start year to see the projected prices from then.",
-  "limits": "Read the card price row by row: each year shows what the card is projected to be worth that year. The page adds the five yearly prices into the Total row and the headline figure, so that total is not what one card costs. You buy the card once. Compare the yearly prices instead, or set your own yearly rate. This page covers 90 cards, not the 100 in the original request: 10 per generation for now. All prices come from one site, pokemonpricetracker.com, which republishes TCGplayer data. Its set pages give raw prices only, so graded (PSA) copies are not covered. They show no price date and no price history, and the figures move day to day. The site sometimes shows a different figure for the same card on its homepage, and the notes say where. For vintage sets the pages don't say whether a price is 1st Edition or Unlimited. Rare cards with few sales, such as Shining Mewtwo, Shining Tyranitar and the Gold Star (★) cards, can show a market price well away from a typical sale. I left out rows the site shows with obvious data errors: Gengar ex 108/112, Charizard ★ 100/101, Dark Charizard, Crystal Lugia and Crystal Charizard. The yearly rates are not per-card forecasts. Generations 1 and 2 use 15%, the calculator's cap, because the site's 28 Jan 2026 market report says many WotC vintage cards rose 30–50% in a year. Generation 8 uses 15% because the site's Charizard VMAX page shows +45% over a year. Generation 9 keeps the 15% from the first build, which came from graded sales of the two Charizard ex cards. I found no growth figure for Generations 3 to 7, so they use the 5% default. Card prices can fall, and the calculator never goes below 0%. Not included: TCGplayer or eBay buyer fees, grading, selling fees, a safe deposit box (DBS X-Small, S$190.75 a year), and currency moves. Prices are in USD and converted at a fixed rate.",
+  "scope": "Buying one raw (ungraded) Pokémon card from the US market and holding it in Singapore. It compares 90 popular cards, 10 from each of the nine generations, from Base Set (1999) to Scarlet & Violet (2023–25). The details table shows each card's price for five years in a row from the start year, so you can see how it is projected to move. The 'Rise in price over that year' column shows how much the card is projected to gain during each year held, and its figure in the Total row is the total increase in price: what the card is projected to be worth after five years minus its price in the start year. With the start year left at the current year (2026), that is the increase from today's 2026 price. The first year's price is the TCGplayer market price on that card's pokemonpricetracker.com set price guide, read 26 Oct 2026, and each later year grows by the generation's yearly rate. Import, a one-off in the first year only, is US$35 tracked postage, 1% transit insurance and 9% GST on the total: Customs collects GST above S$400, and eBay charges it on smaller orders. Collectibles insurance is about 0.65% of the card's value a year. Generations 1, 2, 8 and 9 grow at 15% a year and Generations 3 to 7 at 5%, as the limits explain. Pick a later start year to see the projected prices from then.",
+  "limits": "Read the card price row by row: each year shows what the card is projected to be worth that year. For the total increase in price, read the 'Rise in price over that year' column in the Total row. The table always runs forward five years from the start year and the row is labelled 'Total', not 'Total increase in price', because the page layout is fixed. It can't list the five years before a chosen year, and past prices aren't on file anyway. The rise column is the start-year price times the generation's yearly rate (15% or 5%), grown by the same rate each year, so its Total-row figure is the projected price after five full years minus the start-year price, not counting the import cost and insurance. If you set your own yearly rate, that column still starts from the generation's rate, so it no longer matches. The page also adds the yearly prices, the yearly rises, insurance and import into the Total column and the headline figure, so that total is not what one card costs: you buy the card once. Compare the yearly prices and the rise column's total instead. This page covers 90 cards, not the 100 in the original request: 10 per generation for now. All prices come from one site, pokemonpricetracker.com, which republishes TCGplayer data. Its set pages give raw prices only, so graded (PSA) copies are not covered. They show no price date and no price history, and the figures move day to day. The site sometimes shows a different figure for the same card on its homepage, and the notes say where. For vintage sets the pages don't say whether a price is 1st Edition or Unlimited. Rare cards with few sales, such as Shining Mewtwo, Shining Tyranitar and the Gold Star (★) cards, can show a market price well away from a typical sale. I left out rows the site shows with obvious data errors: Gengar ex 108/112, Charizard ★ 100/101, Dark Charizard, Crystal Lugia and Crystal Charizard. The yearly rates are not per-card forecasts. Generations 1 and 2 use 15%, the calculator's cap, because the site's 28 Jan 2026 market report says many WotC vintage cards rose 30–50% in a year. Generation 8 uses 15% because the site's Charizard VMAX page shows +45% over a year. Generation 9 keeps the 15% from the first build, which came from graded sales of the two Charizard ex cards. I found no growth figure for Generations 3 to 7, so they use the 5% default. Card prices can fall, and the calculator never goes below 0%. Not included: TCGplayer or eBay buyer fees, grading, selling fees, a safe deposit box (DBS X-Small, S$190.75 a year), and currency moves. Prices are in USD and converted at a fixed rate.",
   "fxNote": "USD/SGD 1.2787 on 26 Oct 2026 (Trading Economics), so S$1 = US$0.782.",
   "fx": {
     "USD": 0.782
@@ -16,6 +16,11 @@
     {
       "id": "purchase",
       "label": "Card price that year (raw, projected)",
+      "kind": "recurring"
+    },
+    {
+      "id": "increase",
+      "label": "Rise in price over that year (Total row = total increase in price)",
       "kind": "recurring"
     },
     {
@@ -84,6 +89,7 @@
       "costs": {
         "default": {
           "purchase": 954.65,
+          "increase": 143.2,
           "insurance": 6.21,
           "import": 134
         }
@@ -108,6 +114,7 @@
       "costs": {
         "default": {
           "purchase": 227.27,
+          "increase": 34.09,
           "insurance": 1.48,
           "import": 61
         }
@@ -132,6 +139,7 @@
       "costs": {
         "default": {
           "purchase": 154.42,
+          "increase": 23.16,
           "insurance": 1,
           "import": 54
         }
@@ -156,6 +164,7 @@
       "costs": {
         "default": {
           "purchase": 84.59,
+          "increase": 12.69,
           "insurance": 0.55,
           "import": 47
         }
@@ -180,6 +189,7 @@
       "costs": {
         "default": {
           "purchase": 72.46,
+          "increase": 10.87,
           "insurance": 0.47,
           "import": 45
         }
@@ -204,6 +214,7 @@
       "costs": {
         "default": {
           "purchase": 56.33,
+          "increase": 8.45,
           "insurance": 0.37,
           "import": 44
         }
@@ -228,6 +239,7 @@
       "costs": {
         "default": {
           "purchase": 445.14,
+          "increase": 66.77,
           "insurance": 2.89,
           "import": 83
         }
@@ -252,6 +264,7 @@
       "costs": {
         "default": {
           "purchase": 582.67,
+          "increase": 87.4,
           "insurance": 3.79,
           "import": 97
         }
@@ -276,6 +289,7 @@
       "costs": {
         "default": {
           "purchase": 374.66,
+          "increase": 56.2,
           "insurance": 2.44,
           "import": 76
         }
@@ -300,6 +314,7 @@
       "costs": {
         "default": {
           "purchase": 699.99,
+          "increase": 105,
           "insurance": 4.55,
           "import": 109
         }
@@ -324,6 +339,7 @@
       "costs": {
         "default": {
           "purchase": 1300,
+          "increase": 195,
           "insurance": 8.45,
           "import": 169
         }
@@ -348,6 +364,7 @@
       "costs": {
         "default": {
           "purchase": 475,
+          "increase": 71.25,
           "insurance": 3.09,
           "import": 86
         }
@@ -372,6 +389,7 @@
       "costs": {
         "default": {
           "purchase": 399.99,
+          "increase": 60,
           "insurance": 2.6,
           "import": 79
         }
@@ -396,6 +414,7 @@
       "costs": {
         "default": {
           "purchase": 237.5,
+          "increase": 35.63,
           "insurance": 1.54,
           "import": 62
         }
@@ -420,6 +439,7 @@
       "costs": {
         "default": {
           "purchase": 488.52,
+          "increase": 73.28,
           "insurance": 3.18,
           "import": 87
         }
@@ -444,6 +464,7 @@
       "costs": {
         "default": {
           "purchase": 793.16,
+          "increase": 118.97,
           "insurance": 5.16,
           "import": 118
         }
@@ -468,6 +489,7 @@
       "costs": {
         "default": {
           "purchase": 1300,
+          "increase": 195,
           "insurance": 8.45,
           "import": 169
         }
@@ -492,6 +514,7 @@
       "costs": {
         "default": {
           "purchase": 3000,
+          "increase": 450,
           "insurance": 19.5,
           "import": 341
         }
@@ -516,6 +539,7 @@
       "costs": {
         "default": {
           "purchase": 4099.05,
+          "increase": 614.86,
           "insurance": 26.64,
           "import": 452
         }
@@ -540,6 +564,7 @@
       "costs": {
         "default": {
           "purchase": 152.17,
+          "increase": 22.83,
           "insurance": 0.99,
           "import": 54
         }
@@ -564,6 +589,7 @@
       "costs": {
         "default": {
           "purchase": 500,
+          "increase": 25,
           "insurance": 3.25,
           "import": 89
         }
@@ -588,6 +614,7 @@
       "costs": {
         "default": {
           "purchase": 480.01,
+          "increase": 24,
           "insurance": 3.12,
           "import": 87
         }
@@ -612,6 +639,7 @@
       "costs": {
         "default": {
           "purchase": 425,
+          "increase": 21.25,
           "insurance": 2.76,
           "import": 81
         }
@@ -636,6 +664,7 @@
       "costs": {
         "default": {
           "purchase": 728.3,
+          "increase": 36.42,
           "insurance": 4.73,
           "import": 112
         }
@@ -660,6 +689,7 @@
       "costs": {
         "default": {
           "purchase": 349.4,
+          "increase": 17.47,
           "insurance": 2.27,
           "import": 73
         }
@@ -684,6 +714,7 @@
       "costs": {
         "default": {
           "purchase": 999,
+          "increase": 49.95,
           "insurance": 6.49,
           "import": 139
         }
@@ -708,6 +739,7 @@
       "costs": {
         "default": {
           "purchase": 1800,
+          "increase": 90,
           "insurance": 11.7,
           "import": 220
         }
@@ -732,6 +764,7 @@
       "costs": {
         "default": {
           "purchase": 2500,
+          "increase": 125,
           "insurance": 16.25,
           "import": 290
         }
@@ -756,6 +789,7 @@
       "costs": {
         "default": {
           "purchase": 4000,
+          "increase": 200,
           "insurance": 26,
           "import": 442
         }
@@ -780,6 +814,7 @@
       "costs": {
         "default": {
           "purchase": 1429.5,
+          "increase": 71.48,
           "insurance": 9.29,
           "import": 182
         }
@@ -804,6 +839,7 @@
       "costs": {
         "default": {
           "purchase": 450.72,
+          "increase": 22.54,
           "insurance": 2.93,
           "import": 84
         }
@@ -828,6 +864,7 @@
       "costs": {
         "default": {
           "purchase": 253,
+          "increase": 12.65,
           "insurance": 1.64,
           "import": 64
         }
@@ -852,6 +889,7 @@
       "costs": {
         "default": {
           "purchase": 219.97,
+          "increase": 11,
           "insurance": 1.43,
           "import": 60
         }
@@ -876,6 +914,7 @@
       "costs": {
         "default": {
           "purchase": 422.85,
+          "increase": 21.14,
           "insurance": 2.75,
           "import": 81
         }
@@ -900,6 +939,7 @@
       "costs": {
         "default": {
           "purchase": 258.41,
+          "increase": 12.92,
           "insurance": 1.68,
           "import": 64
         }
@@ -924,6 +964,7 @@
       "costs": {
         "default": {
           "purchase": 369.59,
+          "increase": 18.48,
           "insurance": 2.4,
           "import": 75
         }
@@ -948,6 +989,7 @@
       "costs": {
         "default": {
           "purchase": 120.12,
+          "increase": 6.01,
           "insurance": 0.78,
           "import": 50
         }
@@ -972,6 +1014,7 @@
       "costs": {
         "default": {
           "purchase": 124.55,
+          "increase": 6.23,
           "insurance": 0.81,
           "import": 51
         }
@@ -996,6 +1039,7 @@
       "costs": {
         "default": {
           "purchase": 833.32,
+          "increase": 41.67,
           "insurance": 5.42,
           "import": 122
         }
@@ -1020,6 +1064,7 @@
       "costs": {
         "default": {
           "purchase": 799.97,
+          "increase": 40,
           "insurance": 5.2,
           "import": 119
         }
@@ -1044,6 +1089,7 @@
       "costs": {
         "default": {
           "purchase": 650.48,
+          "increase": 32.52,
           "insurance": 4.23,
           "import": 104
         }
@@ -1068,6 +1114,7 @@
       "costs": {
         "default": {
           "purchase": 155,
+          "increase": 7.75,
           "insurance": 1.01,
           "import": 54
         }
@@ -1092,6 +1139,7 @@
       "costs": {
         "default": {
           "purchase": 261.81,
+          "increase": 13.09,
           "insurance": 1.7,
           "import": 65
         }
@@ -1116,6 +1164,7 @@
       "costs": {
         "default": {
           "purchase": 443.65,
+          "increase": 22.18,
           "insurance": 2.88,
           "import": 83
         }
@@ -1140,6 +1189,7 @@
       "costs": {
         "default": {
           "purchase": 822.1,
+          "increase": 41.11,
           "insurance": 5.34,
           "import": 121
         }
@@ -1164,6 +1214,7 @@
       "costs": {
         "default": {
           "purchase": 219.47,
+          "increase": 10.97,
           "insurance": 1.43,
           "import": 60
         }
@@ -1188,6 +1239,7 @@
       "costs": {
         "default": {
           "purchase": 1250,
+          "increase": 62.5,
           "insurance": 8.13,
           "import": 164
         }
@@ -1212,6 +1264,7 @@
       "costs": {
         "default": {
           "purchase": 519.49,
+          "increase": 25.97,
           "insurance": 3.38,
           "import": 91
         }
@@ -1236,6 +1289,7 @@
       "costs": {
         "default": {
           "purchase": 77.64,
+          "increase": 3.88,
           "insurance": 0.5,
           "import": 46
         }
@@ -1260,6 +1314,7 @@
       "costs": {
         "default": {
           "purchase": 82.69,
+          "increase": 4.13,
           "insurance": 0.54,
           "import": 46
         }
@@ -1284,6 +1339,7 @@
       "costs": {
         "default": {
           "purchase": 1501.23,
+          "increase": 75.06,
           "insurance": 9.76,
           "import": 190
         }
@@ -1308,6 +1364,7 @@
       "costs": {
         "default": {
           "purchase": 313.61,
+          "increase": 15.68,
           "insurance": 2.04,
           "import": 70
         }
@@ -1332,6 +1389,7 @@
       "costs": {
         "default": {
           "purchase": 295.26,
+          "increase": 14.76,
           "insurance": 1.92,
           "import": 68
         }
@@ -1356,6 +1414,7 @@
       "costs": {
         "default": {
           "purchase": 97.79,
+          "increase": 4.89,
           "insurance": 0.64,
           "import": 48
         }
@@ -1380,6 +1439,7 @@
       "costs": {
         "default": {
           "purchase": 561.96,
+          "increase": 28.1,
           "insurance": 3.65,
           "import": 95
         }
@@ -1404,6 +1464,7 @@
       "costs": {
         "default": {
           "purchase": 1172,
+          "increase": 58.6,
           "insurance": 7.62,
           "import": 156
         }
@@ -1428,6 +1489,7 @@
       "costs": {
         "default": {
           "purchase": 208.35,
+          "increase": 10.42,
           "insurance": 1.35,
           "import": 59
         }
@@ -1452,6 +1514,7 @@
       "costs": {
         "default": {
           "purchase": 503.58,
+          "increase": 25.18,
           "insurance": 3.27,
           "import": 89
         }
@@ -1476,6 +1539,7 @@
       "costs": {
         "default": {
           "purchase": 1018.2,
+          "increase": 50.91,
           "insurance": 6.62,
           "import": 141
         }
@@ -1500,6 +1564,7 @@
       "costs": {
         "default": {
           "purchase": 159.2,
+          "increase": 7.96,
           "insurance": 1.03,
           "import": 54
         }
@@ -1524,6 +1589,7 @@
       "costs": {
         "default": {
           "purchase": 742.32,
+          "increase": 37.12,
           "insurance": 4.83,
           "import": 113
         }
@@ -1548,6 +1614,7 @@
       "costs": {
         "default": {
           "purchase": 840.75,
+          "increase": 42.04,
           "insurance": 5.46,
           "import": 123
         }
@@ -1572,6 +1639,7 @@
       "costs": {
         "default": {
           "purchase": 314.26,
+          "increase": 15.71,
           "insurance": 2.04,
           "import": 70
         }
@@ -1596,6 +1664,7 @@
       "costs": {
         "default": {
           "purchase": 176.29,
+          "increase": 8.81,
           "insurance": 1.15,
           "import": 56
         }
@@ -1620,6 +1689,7 @@
       "costs": {
         "default": {
           "purchase": 4499.66,
+          "increase": 224.98,
           "insurance": 29.25,
           "import": 492
         }
@@ -1644,6 +1714,7 @@
       "costs": {
         "default": {
           "purchase": 1894.91,
+          "increase": 94.75,
           "insurance": 12.32,
           "import": 229
         }
@@ -1668,6 +1739,7 @@
       "costs": {
         "default": {
           "purchase": 210.34,
+          "increase": 10.52,
           "insurance": 1.37,
           "import": 59
         }
@@ -1692,6 +1764,7 @@
       "costs": {
         "default": {
           "purchase": 137.23,
+          "increase": 6.86,
           "insurance": 0.89,
           "import": 52
         }
@@ -1716,6 +1789,7 @@
       "costs": {
         "default": {
           "purchase": 248.94,
+          "increase": 12.45,
           "insurance": 1.62,
           "import": 63
         }
@@ -1740,6 +1814,7 @@
       "costs": {
         "default": {
           "purchase": 468.18,
+          "increase": 23.41,
           "insurance": 3.04,
           "import": 85
         }
@@ -1764,6 +1839,7 @@
       "costs": {
         "default": {
           "purchase": 2236.75,
+          "increase": 335.51,
           "insurance": 14.54,
           "import": 264
         }
@@ -1788,6 +1864,7 @@
       "costs": {
         "default": {
           "purchase": 1241.76,
+          "increase": 186.26,
           "insurance": 8.07,
           "import": 163
         }
@@ -1812,6 +1889,7 @@
       "costs": {
         "default": {
           "purchase": 365.36,
+          "increase": 54.8,
           "insurance": 2.37,
           "import": 75
         }
@@ -1836,6 +1914,7 @@
       "costs": {
         "default": {
           "purchase": 855.17,
+          "increase": 128.28,
           "insurance": 5.56,
           "import": 124
         }
@@ -1860,6 +1939,7 @@
       "costs": {
         "default": {
           "purchase": 340.99,
+          "increase": 51.15,
           "insurance": 2.22,
           "import": 73
         }
@@ -1884,6 +1964,7 @@
       "costs": {
         "default": {
           "purchase": 1032.52,
+          "increase": 154.88,
           "insurance": 6.71,
           "import": 142
         }
@@ -1908,6 +1989,7 @@
       "costs": {
         "default": {
           "purchase": 234.23,
+          "increase": 35.13,
           "insurance": 1.52,
           "import": 62
         }
@@ -1932,6 +2014,7 @@
       "costs": {
         "default": {
           "purchase": 469.66,
+          "increase": 70.45,
           "insurance": 3.05,
           "import": 86
         }
@@ -1956,6 +2039,7 @@
       "costs": {
         "default": {
           "purchase": 266.93,
+          "increase": 40.04,
           "insurance": 1.74,
           "import": 65
         }
@@ -1980,6 +2064,7 @@
       "costs": {
         "default": {
           "purchase": 284.9,
+          "increase": 42.74,
           "insurance": 1.85,
           "import": 67
         }
@@ -2004,6 +2089,7 @@
       "costs": {
         "default": {
           "purchase": 294.42,
+          "increase": 44.16,
           "insurance": 1.91,
           "import": 68
         }
@@ -2028,6 +2114,7 @@
       "costs": {
         "default": {
           "purchase": 87.86,
+          "increase": 13.18,
           "insurance": 0.57,
           "import": 47
         }
@@ -2052,6 +2139,7 @@
       "costs": {
         "default": {
           "purchase": 256.63,
+          "increase": 38.49,
           "insurance": 1.67,
           "import": 64
         }
@@ -2076,6 +2164,7 @@
       "costs": {
         "default": {
           "purchase": 169.78,
+          "increase": 25.47,
           "insurance": 1.1,
           "import": 55
         }
@@ -2100,6 +2189,7 @@
       "costs": {
         "default": {
           "purchase": 1198.39,
+          "increase": 179.76,
           "insurance": 7.79,
           "import": 159
         }
@@ -2124,6 +2214,7 @@
       "costs": {
         "default": {
           "purchase": 390.8,
+          "increase": 58.62,
           "insurance": 2.54,
           "import": 78
         }
@@ -2148,6 +2239,7 @@
       "costs": {
         "default": {
           "purchase": 268.37,
+          "increase": 40.26,
           "insurance": 1.74,
           "import": 65
         }
@@ -2172,6 +2264,7 @@
       "costs": {
         "default": {
           "purchase": 46.99,
+          "increase": 7.05,
           "insurance": 0.31,
           "import": 43
         }
@@ -2196,6 +2289,7 @@
       "costs": {
         "default": {
           "purchase": 313.81,
+          "increase": 47.07,
           "insurance": 2.04,
           "import": 70
         }
@@ -2220,6 +2314,7 @@
       "costs": {
         "default": {
           "purchase": 255.69,
+          "increase": 38.35,
           "insurance": 1.66,
           "import": 64
         }
@@ -2240,7 +2335,7 @@
       "charizard-ex-151-199-psa10"
     ]
   },
-  "version": 3,
+  "version": 4,
   "updated": "2026-10-26",
   "buildLog": [
     {
@@ -2346,6 +2441,32 @@
       "fetches": 0,
       "billing": "subscription",
       "at": "2026-10-26T06:50:17.222Z"
+    },
+    {
+      "round": "Refinement 3: Actually change it such that the details table, shows the pa",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 1945,
+      "output": 23,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T07:02:39.295Z"
+    },
+    {
+      "round": "Refinement 3: Actually change it such that the details table, shows the pa",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 40,
+      "output": 27568,
+      "cacheRead": 896244,
+      "cacheWrite": 65789,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T07:02:39.295Z"
     }
   ]
 }
