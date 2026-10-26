@@ -42,5 +42,7 @@ describe("buildPrompt", () => {
     const previous = readCalculator("ev-vs-petrol-car")!;
     const p = buildPrompt({ slug: previous.id, round: "Refinement 1: x", previous }, "Add a hybrid car");
     expect(p).toContain("Keep every option");
+    expect(p).toContain("never rewrite the whole file");
+    expect(p).not.toContain("worked example");
   });
 });
