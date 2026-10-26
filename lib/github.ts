@@ -55,7 +55,8 @@ export interface RunSummary {
 
 interface ApiRun {
   id: number;
-  name: string | null;
+  /** Workflow file, e.g. .github/workflows/build-calculator.yml. The `name` field is the run-name once a workflow sets one, so match on this. */
+  path: string;
   display_title: string;
   status: string;
   conclusion: string | null;
@@ -109,7 +110,7 @@ export function describeRun(run: ApiRun, job: ApiJob | undefined): RunSummary {
   return { id: run.id, kind, title, state, step, progress, startedAt: run.created_at, url: run.html_url };
 }
 
-const WORKFLOW_NAMES = new Set(["Build calculator", "Remove calculator"]);
+const WORKFLOW_PATHS = new Set([".github/workflows/build-calculator.yml", ".github/workflows/remove-calculator.yml"]);
 
 /** The build and removal runs still going, with the current step of each. */
 export async function activeRuns(cfg: { repo: string; token: string }): Promise<RunSummary[]> {
@@ -117,7 +118,7 @@ export async function activeRuns(cfg: { repo: string; token: string }): Promise<
   const res = await fetch(`https://api.github.com/repos/${cfg.repo}/actions/runs?event=workflow_dispatch&per_page=12`, { headers, cache: "no-store" });
   if (!res.ok) return [];
   const data = (await res.json()) as { workflow_runs: ApiRun[] };
-  const runs = data.workflow_runs.filter((r) => WORKFLOW_NAMES.has(r.name ?? "") && r.status !== "completed");
+  const runs = data.workflow_runs.filter((r) => WORKFLOW_PATHS.has(r.path) && r.status !== "completed");
   return Promise.all(
     runs.map(async (run) => {
       const jobs = await fetch(`https://api.github.com/repos/${cfg.repo}/actions/runs/${run.id}/jobs`, { headers, cache: "no-store" });
