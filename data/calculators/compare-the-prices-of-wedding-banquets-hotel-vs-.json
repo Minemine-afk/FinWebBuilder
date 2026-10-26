@@ -1,0 +1,248 @@
+{
+  "id": "compare-the-prices-of-wedding-banquets-hotel-vs-",
+  "title": "Wedding banquet: hotel vs other venues",
+  "subject": "venue",
+  "currency": "SGD",
+  "periodLabel": "Wedding year",
+  "scope": "One weekend wedding dinner for 200 guests (20 tables of 10) in Singapore, in the year you pick. Covers the food and drinks package with 10% service charge and 9% GST, venue hire or void deck permit, decor, tentage and AV not in the package, and corkage or extra drinks. Hotel and restaurant prices are 2026 package rates; the other venues are estimates built from published rates. Choosing a later start year projects the 2026 prices forward at the growth rate.",
+  "limits": "Not included: bridal suite upgrades, photography, gown, emcee, live band, favours, invitations, solemnisation and ROM fees, and refundable deposits. Auspicious-date and public-holiday surcharges (for example S$80 a table at Carlton, S$10 a guest at Ritz-Carlton) are not added. Several venues publish only starting prices or do not publish Saturday-dinner rates at all, so ask for a written quote for your date. Rough Gardens by the Bay hall hire is not added (see its notes).",
+  "fx": {},
+  "minStartYear": 2026,
+  "defaultGrowth": 0.03,
+  "components": [
+    {
+      "id": "food",
+      "label": "Food and drinks package, 200 guests (with service charge and GST)",
+      "kind": "recurring"
+    },
+    {
+      "id": "venue",
+      "label": "Venue hire or void deck permit",
+      "kind": "oneoff"
+    },
+    {
+      "id": "setup",
+      "label": "Decor, tentage and AV not in the package",
+      "kind": "oneoff"
+    },
+    {
+      "id": "drinks",
+      "label": "Extra drinks and corkage",
+      "kind": "oneoff"
+    }
+  ],
+  "groups": [
+    {
+      "id": "hotel",
+      "label": "Hotels",
+      "growth": 0.03
+    },
+    {
+      "id": "other",
+      "label": "Other venues",
+      "growth": 0.03
+    }
+  ],
+  "items": [
+    {
+      "id": "shangri-la",
+      "group": "hotel",
+      "name": "5-star hotel: Shangri-La Singapore",
+      "option": "Silver dinner package, Azalea room, 20 tables",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "food": 52468,
+          "venue": 0,
+          "setup": 0,
+          "drinks": 1600
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.misslobang.com/article/best-wedding-banquet-venues-singapore-2026",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Food: the 2026 Ballroom Dinner Silver package is S$218.80++ per guest (Gold S$238.80++, Platinum S$268.80++), per MissLobang, which re-checked rates on 13 Oct 2026. 200 guests x 218.80 = S$43,760++, x 1.199 for service charge and GST = S$52,468. The hotel's own 2026 brochure PDF could not be read. The Azalea room takes about 16 tables. The ballrooms need 38 (Tower) or 60 (Island) tables for dinner. Includes a tasting for 10, one bottle of house wine per table, a champagne tower, fresh florals and a suite stay, so decor is 0. Corkage: the Shangri-La rate is not published. 1,600 is an estimate: one extra bottle a table at the Ritz-Carlton's S$80 nett per bottle (checked 15 Sep 2026), used as a 5-star benchmark. SmartCalculator (20 May 2026) gives S$2,160 to 3,600+ a table all-in for a 5-star Saturday dinner, which is consistent."
+    },
+    {
+      "id": "holiday-inn-atrium",
+      "group": "hotel",
+      "name": "4-star hotel: Holiday Inn Singapore Atrium",
+      "option": "Weekend dinner, 20 tables, free-flow beer and house wine",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "food": 39160,
+          "venue": 0,
+          "setup": 0,
+          "drinks": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://singaporeatrium.holidayinn.com/offers/enchanted-wedding-showcase-2026",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Food: Enchanted Wedding Showcase 2026 (dated 19 Apr 2026) lists weekend dinner at S$1,958 nett per table of 10 for 2026 weddings and S$2,018 for 2027, minimum 8 tables. 20 x 1,958 = S$39,160. The page returned 403 to us, so this was read from search excerpts of the official page on 26 Oct 2026. The showcase promotion has ended and the current rate may differ. TheMoneyBees (14 Oct 2026) gives a starting price of S$1,708 nett. Unlimited beer and red and white house wine are included from the first course, so extra drinks are 0. Package decor is assumed adequate (0). For comparison, Concorde Hotel dinner is from S$1,298++ (TheMoneyBees, Oct 2026), with S$300 off a table for 15+ tables in 2026. SmartCalculator gives S$1,440 to 2,400 a table all-in for 4-star hotels."
+    },
+    {
+      "id": "peach-garden",
+      "group": "other",
+      "name": "Chinese restaurant: Peach Garden",
+      "option": "OCBC Centre, Menu B, 20 tables",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "food": 34483,
+          "venue": 0,
+          "setup": 1500,
+          "drinks": 700
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.peachgarden.com.sg/wp-content/uploads/2025/12/PG-Wedding-Booklet-w-Promo_R2.pdf",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Food: the official 2026/27 wedding booklet (uploaded Dec 2025) lists OCBC Centre menus for 2026 at S$1,118++ (Menu A, Mon to Fri only), S$1,438++ (Menu B) and S$1,788++ (Menu C), valid for lunch and dinner. Menu B is used because Menu A is weekday-only. 1,438 x 1.199 = S$1,724 a table, x 20 = S$34,483. 2027 Menu A rises to S$1,158++. The PDF was too large to open, so these figures were read from search excerpts on 26 Oct 2026. TheMoneyBees (14 Oct 2026) confirms S$1,118++ and notes that restaurants bundle fewer perks. Includes a champagne fountain and a bottle of sparkling wine for the toast. Setup: 1,500 is an estimate, the low end of SmartCalculator's S$1,500 to 6,000 decor range (20 May 2026). Drinks: 700 is an estimate for one bottle of your own wine a table at about S$35 corkage, the middle of the S$20 to 50 range TheMoneyBees gives. Beer and soft drinks are not confirmed as free flow."
+    },
+    {
+      "id": "orchid-country-club",
+      "group": "other",
+      "name": "Country club: Orchid Country Club",
+      "option": "Weekend dinner package, 20 tables",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "food": 32000,
+          "venue": 0,
+          "setup": 1500,
+          "drinks": 700
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.orchidclub.com/docs/default-source/default-document-library/occ-packages/occ_wedding-package-2024-2025-(1-apr-2024---31-mar-2025).pdf",
+        "verified": "2026-10-26",
+        "type": "estimate"
+      },
+      "notes": "Estimate. The club's official 2024/25 sheet (1 Apr 2024 to 31 Mar 2025, read from search excerpts) gives the Forever Yours weekend dinner package from S$1,258++ a table. The Sapphire Suite takes 20 to 28 tables. The 2026/27 sheet is image-only and could not be read. 1,258 x 1.03 x 1.03 = about S$1,335++ for 2026, x 1.199 = about S$1,600 a table, x 20 = S$32,000. A 2023 MoneySmart list gave S$1,388 a table. An unattributed 2026/27 package PDF on SingaporeBrides shows S$2,038 a table for weekend dinner (25-table minimum), but we could not confirm which venue it belongs to. Ask the club (6750 2166) for the current rate. Setup 1,500 and drinks 700 are the same estimates as for the restaurant. No current price was found for SAFRA, Civil Service Club, NSRCC or SICC."
+    },
+    {
+      "id": "gardens-by-the-bay",
+      "group": "other",
+      "name": "Garden venue: Gardens by the Bay",
+      "option": "Flower Field Hall, Chinese banquet, 200 guests",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "food": 56244,
+          "venue": 0,
+          "setup": 1500,
+          "drinks": 700
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.gardensbythebay.com.sg/content/dam/gbb-2021/image/book-a-venue/weddings/weddings-gallery/GB-Wedding-Brochure-2026.pdf",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Food: the official 2026 wedding brochure lists Flower Field Hall from S$258+ per guest for a Chinese banquet (buffet S$228+, Western S$268+), minimum 200 guests. Waterview Room needs a minimum of 120. The PDF could not be read as text, so these figures come from search summaries of it (26 Oct 2026). We read the single '+' as 9% GST only: 200 x 258 x 1.09 = S$56,244. If a 10% service charge also applies it is about S$61,870. Venue: assumed included in the per-guest package. An older, undated hire sheet (7% GST era) lists Flower Field Hall hire at S$15,800 an event day plus S$11,000 for set-up and tear-down, so confirm whether hire is charged on top. Setup 1,500 and drinks 700 are the same estimates as for the restaurant. Aluxe (2025) puts venue plus catering here at S$1,500 to 3,000 a table."
+    },
+    {
+      "id": "void-deck",
+      "group": "other",
+      "name": "HDB void deck with caterer",
+      "option": "Tentage and buffet catering, 200 guests",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "food": 5000,
+          "venue": 175,
+          "setup": 5500,
+          "drinks": 600
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://themoneybees.co/blog/wedding-venues-singapore",
+        "verified": "2026-10-26",
+        "type": "estimate"
+      },
+      "notes": "Estimate. Food: buffet caterers start at S$13.90 to 21 per guest (MissLobang, re-read 15 Oct 2026; for example Neo Garden S$17.43 and Chilli Api S$18.31 with GST). We assume S$25 a guest for a wedding-grade menu with delivery and setup, so 200 x 25 = S$5,000. Venue: S$50 a day void deck fee plus S$30 a day for electricity and water, before GST, at Ang Mo Kio Town Council (official page, Aug 2025 rates). Marine Parade-Braddell Heights also charges S$50 a day. For 2 days with GST that is about S$175. Deposits of up to about S$500 are refundable and not counted. Setup: tentage, furniture, lighting and stage packages cost S$3,000 to 8,000 (TheMoneyBees, 14 Oct 2026); 5,500 is the midpoint and includes basic decor. A mini pelamin rents from about S$300. Drinks: 600 is an estimate for canned and bottled drinks at about S$3 a guest. TheMoneyBees puts a large all-in void deck wedding at S$15,000 to 30,000."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "shangri-la",
+      "peach-garden",
+      "void-deck"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-10-26",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 1208180,
+      "output": 80837,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 39,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T09:19:53.308Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 30,
+      "output": 16786,
+      "cacheRead": 683487,
+      "cacheWrite": 56173,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T09:19:53.308Z"
+    },
+    {
+      "round": "First build",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 54,
+      "output": 26218,
+      "cacheRead": 374137,
+      "cacheWrite": 76672,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T09:19:53.308Z"
+    }
+  ]
+}
