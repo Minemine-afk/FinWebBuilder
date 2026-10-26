@@ -49,12 +49,12 @@ ${request}
 How to work:
 1. Read lib/spec.ts for the file format and data/calculators/ev-vs-petrol-car.json as a worked example.
 2. Plan the calculator yourself: 3 to 6 real options people choose between, and 3 to 5 cost components (at least one recurring; one-off components are paid once at the start). Use buyer variants or monthly extras only when they genuinely apply.
-3. Hand the price research to the price-researcher sub-agent, one or two options per call, several calls in parallel. It runs on a cheaper model.
+3. Hand the price research to the price-researcher sub-agent, one or two options per call, several calls in parallel. It runs on a cheaper model. Start every sub-agent in the foreground (never with run_in_background) and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved.
 4. Read its notes. Any price it marks UNCONFIRMED, or where sources clash, research again yourself before you use it.
 5. Write the file. In each option's "notes", say how each figure was found, with dates; in "source", give the best URL, today's date as "verified", and "official", "secondary" or "estimate". Write "scope" and "limits" so a reader knows exactly what is and isn't included.
 6. Check the numbers against each other and the notes, then run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error it reports until it passes.
 
-Rules: change no file except ${file}. Leave "version", "updated" and "buildLog" alone; the workflow sets them. Do not invent URLs or prices.`;
+Rules: you must finish by writing ${file} and passing validate in this same run; never end your turn with research still pending. Change no file except ${file}. Leave "version", "updated" and "buildLog" alone; the workflow sets them. Do not invent URLs or prices.`;
 }
 
 function prepare() {
