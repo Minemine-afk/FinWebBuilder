@@ -1,0 +1,233 @@
+{
+  "id": "owning-an-e-bike-or-e-scooter-in-singapore",
+  "title": "Owning an e-bike or e-scooter in Singapore",
+  "subject": "device",
+  "currency": "SGD",
+  "periodLabel": "Year of ownership",
+  "scope": "Buying a new, LTA-compliant power-assisted bicycle (PAB, orange-sealed) or UL2272 e-scooter from a Singapore retailer and riding it for about 5 years. One-off: the retail price, plus the LTA fees you pay at the start (S$50 PAB registration and the S$10.90 rider theory test). Each year: home charging for about 3,000 km, wear parts (tyres, tubes, brake pads, brake tuning), the e-scooter's 2-yearly LTA inspection spread over each year, and money set aside for one battery replacement about every 4 years.",
+  "limits": "Not included: helmet, lock and other gear; optional third-party liability insurance (recommended, not mandatory, for private riders; no current premium could be confirmed); resale value; accident repairs; parking or storage. Charging, wear parts and battery set-aside are estimates built from shop price lists, not quotes, and depend heavily on how far you ride. Individuals can no longer register e-scooters with LTA, so an e-scooter must be bought new from a retailer that registers it; the retailer's registration inspection cost is assumed to be in the shelf price. Most UL2272 e-scooters on sale are seated models; standing kick-scooters such as the Ninebot MAX were sold out when checked. E-scooters may only be ridden on cycling paths, and PABs are not allowed on footpaths. Shop prices are often promotional and change quickly.",
+  "fx": {},
+  "minStartYear": 2026,
+  "defaultGrowth": 0.02,
+  "components": [
+    {
+      "id": "purchase",
+      "label": "Retail price",
+      "kind": "oneoff"
+    },
+    {
+      "id": "setup",
+      "label": "LTA registration and theory test",
+      "kind": "oneoff"
+    },
+    {
+      "id": "charging",
+      "label": "Home charging",
+      "kind": "recurring"
+    },
+    {
+      "id": "upkeep",
+      "label": "Wear parts and LTA inspection",
+      "kind": "recurring"
+    },
+    {
+      "id": "battery",
+      "label": "Battery replacement set-aside",
+      "kind": "recurring"
+    }
+  ],
+  "groups": [
+    {
+      "id": "pab",
+      "label": "E-bike (PAB)",
+      "growth": 0.02
+    },
+    {
+      "id": "escooter",
+      "label": "E-scooter (UL2272)",
+      "growth": 0.02
+    }
+  ],
+  "items": [
+    {
+      "id": "jimove-lc",
+      "group": "pab",
+      "name": "JI MOVE LC",
+      "option": "Budget LTA-approved e-bike",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 750,
+          "setup": 61,
+          "charging": 14,
+          "upkeep": 150,
+          "battery": 120
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.falconpev.com.sg/collections/ebike-electric-bike",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Price: S$750 sale price (regular S$1,288), listed as an LTA-approved e-bike and in stock on Falcon PEV's e-bike page, checked 26 Oct 2026; single source, and the sale price may end. Setup: S$50 PAB registration fee (LTA form PAB01, seen 26 Oct 2026) plus S$10.90 theory test per attempt (LTA guide updated Dec 2025); some retailers bundle registration into the price. Charging (estimate): about 3,000 km a year at about 15 Wh/km = 45 kWh at the SP Group Oct-Dec 2026 tariff of 31.16 cents/kWh with GST (28.59 cents before GST, reported 30 Sep 2026). Upkeep (estimate): one tyre S$50, one inner tube S$30, one pair of brake pads S$40 and two brake tunings S$15 each a year, using Falcon PEV's 'from' repair prices checked 26 Oct 2026; PABs have no periodic LTA inspection (LTA PAB page, updated 3 Jul 2026). Battery (estimate): battery size not published on the listing, so a 36V 10Ah-class pack at S$480 (Falcon PEV repair page) is assumed, replaced about every 4 years = S$120 a year."
+    },
+    {
+      "id": "jimove-mc",
+      "group": "pab",
+      "name": "JI MOVE MC",
+      "option": "36V 20.8Ah, LTA-approved e-bike",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1299,
+          "setup": 61,
+          "charging": 14,
+          "upkeep": 150,
+          "battery": 145
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.falconpev.com.sg/collections/ebike-electric-bike",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Price: S$1,299 (regular S$1,399), LTA-approved and in stock on Falcon PEV's e-bike page, checked 26 Oct 2026; Maximal's 2026 guide to LTA-approved e-bikes (dated Jul/Aug 2026) also gives about S$1,299, with a 36V 21Ah (about 756 Wh) battery and up to 100 km claimed range. Setup: S$50 PAB registration fee (LTA form PAB01) plus S$10.90 theory test (LTA guide updated Dec 2025). Charging (estimate): about 3,000 km a year at about 15 Wh/km = 45 kWh at 31.16 cents/kWh with GST (SP Group Oct-Dec 2026 tariff). Upkeep (estimate): tyre S$50, inner tube S$30, brake pads S$40 and two brake tunings S$30 a year from Falcon PEV's repair price list, checked 26 Oct 2026. Battery (estimate): a larger pack priced like the S$580 48V 19.2Ah replacement battery sold by Falcon PEV, replaced about every 4 years = S$145 a year; no price for this exact battery was found."
+    },
+    {
+      "id": "ecodrive-classic",
+      "group": "pab",
+      "name": "EcoDrive Classic",
+      "option": "48V 15Ah (720 Wh), 2024 model",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1588,
+          "setup": 61,
+          "charging": 14,
+          "upkeep": 150,
+          "battery": 145
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.falconpev.com.sg/collections/ebike-electric-bike",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Price: S$1,588 on Falcon PEV's e-bike page, in stock, checked 26 Oct 2026; Maximal's 2026 guide to LTA-approved e-bikes (dated Jul/Aug 2026) gives about S$1,590, a 48V 15Ah (720 Wh) battery and about 45 km real-world range. Falcon's listing does not itself say 'LTA approved'; Maximal lists it among LTA-approved models. Setup: S$50 PAB registration fee (LTA form PAB01) plus S$10.90 theory test (LTA guide updated Dec 2025). Charging (estimate): 720 Wh per 45 km is about 16 Wh/km; about 3,000 km a year at about 15 Wh/km = 45 kWh at 31.16 cents/kWh with GST (SP Group Oct-Dec 2026). Upkeep (estimate): tyre, tube, brake pads and two brake tunings a year = S$150 from Falcon PEV's repair price list, checked 26 Oct 2026. Battery (estimate): priced like Falcon PEV's S$580 48V 19.2Ah replacement battery, replaced about every 4 years = S$145 a year."
+    },
+    {
+      "id": "fiido-q1s",
+      "group": "escooter",
+      "name": "Fiido Q1S (UL certified)",
+      "option": "Seated UL2272 e-scooter",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 799,
+          "setup": 11,
+          "charging": 14,
+          "upkeep": 167,
+          "battery": 120
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.falconpev.com.sg/collections/ul2272-certified-escooter",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Price: S$799 sale price (regular S$899) on Falcon PEV's UL2272 e-scooter page, in stock, checked 26 Oct 2026; single source. Setup: S$10.90 theory test (LTA guide updated Dec 2025). LTA's e-scooter page (updated 17 Aug 2026) says individuals can no longer register e-scooters; only new ones sold by retailers are registered after a registration inspection, and no fee to the buyer is stated, so none is added. Charging (estimate): about 3,000 km a year at about 15 Wh/km = 45 kWh at 31.16 cents/kWh with GST (SP Group Oct-Dec 2026). Upkeep: S$150 a year of wear parts (estimate from Falcon PEV's repair prices: tyre S$50, tube S$30, brake pads S$40, two brake tunings S$30), plus the LTA periodic inspection every 2 years at S$31.50 before GST (S$34.34 with 9% GST) at STA centres, about S$17 a year (official, LTA e-scooter page). Battery (estimate): Falcon PEV's 36V 10Ah replacement battery from S$480, replaced about every 4 years = S$120 a year."
+    },
+    {
+      "id": "mobot-halo-drive-s2",
+      "group": "escooter",
+      "name": "MOBOT HALO Drive S2",
+      "option": "Seated UL2272 e-scooter",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1299,
+          "setup": 11,
+          "charging": 14,
+          "upkeep": 167,
+          "battery": 120
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.mobot.sg/collections/electric-scooters",
+        "verified": "2026-10-26",
+        "type": "official"
+      },
+      "notes": "Price: S$1,299 sale price (regular S$1,699) on Mobot's e-scooter page, checked 26 Oct 2026; single source and the sale price may end. Mobot's other seated UL2272 models were S$1,349 (HALO C-1) and S$1,199 (OLLI Drive S1, sold out). Setup: S$10.90 theory test (LTA guide updated Dec 2025); registration is done by the retailer (LTA e-scooter page, updated 17 Aug 2026) with no buyer fee stated. Charging (estimate): about 3,000 km a year at about 15 Wh/km = 45 kWh at 31.16 cents/kWh with GST (SP Group Oct-Dec 2026). Upkeep: S$150 a year of wear parts (estimate from Falcon PEV's repair price list) plus the 2-yearly LTA inspection, S$34.34 with GST, about S$17 a year (official). Battery (estimate): battery size not published; assumes a 36V 10Ah-class pack at Falcon PEV's S$480, replaced about every 4 years = S$120 a year."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "jimove-mc",
+      "ecodrive-classic",
+      "fiido-q1s"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-10-26",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 711777,
+      "output": 52267,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 32,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T05:21:51.432Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 24,
+      "output": 13124,
+      "cacheRead": 491286,
+      "cacheWrite": 46472,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T05:21:51.432Z"
+    },
+    {
+      "round": "First build",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 30,
+      "output": 16459,
+      "cacheRead": 115561,
+      "cacheWrite": 48124,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T05:21:51.432Z"
+    }
+  ]
+}
