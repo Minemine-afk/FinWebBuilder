@@ -3,7 +3,7 @@ name: Remove calculator
 # Started from the site's remove box (app/api/remove) or by hand from the Actions tab.
 # Deletes the calculator and its saved versions from main; the site redeploys without it.
 # Git history still holds the old files if you need one back.
-run-name: ${{ format('Remove: {0}', inputs.slug) }}
+run-name: "${{ format('Remove: {0}', inputs.slug) }}"
 
 on:
   workflow_dispatch:
