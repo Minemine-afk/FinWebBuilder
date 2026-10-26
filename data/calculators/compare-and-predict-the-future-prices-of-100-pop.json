@@ -1,0 +1,279 @@
+{
+  "id": "compare-and-predict-the-future-prices-of-100-pop",
+  "title": "Pokémon card prices by generation: compare and project",
+  "subject": "card",
+  "currency": "SGD",
+  "periodLabel": "Year held",
+  "scope": "Buying one graded Pokémon card from the US market and holding it in Singapore. It covers six popular cards, grouped by the generation they were printed in: Generation 1 (Base Set, 1999), Generation 8 (Sword & Shield, 2021–22) and Generation 9 (Scarlet & Violet, 2023). Each card's cost has three parts. The purchase price is the PriceCharting guide value for that grade on 26 Oct 2026. Import is postage, 1% transit insurance and 9% Singapore GST on the CIF value, since every card here is over the S$400 import relief limit. Collectibles insurance is about 0.65% of the card's value a year. Each card's yearly increase comes from its own late-2024 sale and its Oct 2026 price. Pick a later start year to see the projected price of buying then.",
+  "limits": "This page covers 6 cards, not the 100 in the request. It has no reliable dated price history for 100 cards, and the format allows at most 6 options. The yearly increase comes from about 2 years of data, from Dec 2024 to Oct 2026, not 3. I found no Oct 2023 prices I could check, because PriceCharting's chart, Card Ladder and PSA's auction records would not load. The late-2024 points are single eBay sales reported by Pikawiz, which does not verify them. Every card actually rose 31% to 68% a year, but the calculator caps any rate at 15% a year and never goes below 0%. Its projections are therefore a capped extrapolation, not a forecast. Card prices can fall: the Obsidian Flames Charizard is down about 6% since Sep 2025. Not included: eBay or Fanatics buyer's premiums, PSA grading (the cards are already graded), selling fees when you sell, a safe deposit box (DBS X-Small, S$190.75 a year), and currency moves. Prices are in USD and converted at a fixed rate.",
+  "fxNote": "USD/SGD 1.2787 on 26 Oct 2026 (Trading Economics), so S$1 = US$0.782.",
+  "fx": {
+    "USD": 0.782
+  },
+  "minStartYear": 2026,
+  "defaultGrowth": 0.05,
+  "components": [
+    {
+      "id": "purchase",
+      "label": "Card price (graded)",
+      "kind": "oneoff"
+    },
+    {
+      "id": "insurance",
+      "label": "Collectibles insurance (0.65% of value a year)",
+      "kind": "recurring"
+    },
+    {
+      "id": "import",
+      "label": "Shipping, transit insurance and 9% GST",
+      "kind": "oneoff"
+    }
+  ],
+  "groups": [
+    {
+      "id": "gen1",
+      "label": "Generation 1: Base Set (1999)",
+      "growth": 0.15
+    },
+    {
+      "id": "gen8",
+      "label": "Generation 8: Sword & Shield (2021–22)",
+      "growth": 0.15
+    },
+    {
+      "id": "gen9",
+      "label": "Generation 9: Scarlet & Violet (2023)",
+      "growth": 0.15
+    }
+  ],
+  "items": [
+    {
+      "id": "charizard-base-set-psa9",
+      "group": "gen1",
+      "name": "Charizard 4/102, Base Set Unlimited",
+      "option": "PSA 9",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 3596,
+          "insurance": 23.37,
+          "import": 401
+        }
+      },
+      "history": [
+        {
+          "year": 2024,
+          "value": 8.94
+        }
+      ],
+      "source": {
+        "url": "https://www.pricecharting.com/game/pokemon-base-set/charizard-4",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: the PriceCharting Grade 9 guide was US$3,595.95, read 26 Oct 2026 (about S$4,598). PSA 9 sales between 3 and 22 Oct 2026 were US$3,451 to 4,297. Other 2026 guides are lower: Pokemon Price Tracker gave US$1,800 to 2,400 on 1 Jun 2026. The 2024 point is a PSA 9 sale of US$1,375 on 16 Dec 2024, listed on Pikawiz (pikawiz.com/card/baseset/charizard/4) as an unverified eBay sale. That works out to 61.7% a year from Dec 2024 to Oct 2026, capped at 15% here. History values are insurance at 0.65% of those prices. No Oct 2023 or Oct 2025 PSA 9 price could be confirmed. Import: estimated US$35 courier postage, plus 1% transit insurance and 9% GST on CIF. Insurance: 0.65% a year, the middle of US$0.50 to 0.80 per US$100 (pregradecards.com guide, Jun 2026)."
+    },
+    {
+      "id": "blastoise-base-set-psa9",
+      "group": "gen1",
+      "name": "Blastoise 2/102, Base Set Unlimited",
+      "option": "PSA 9",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 949,
+          "insurance": 6.17,
+          "import": 134
+        }
+      },
+      "history": [
+        {
+          "year": 2024,
+          "value": 2.76
+        }
+      ],
+      "source": {
+        "url": "https://www.pricecharting.com/game/pokemon-base-set/blastoise-2",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: the PriceCharting Grade 9 guide was US$948.92, read 26 Oct 2026 (about S$1,213). PSA 9 sales between 1 and 22 Oct 2026 were US$881 to 1,351, so the guide sits at the low end. The 2024 point is a PSA 9 Unlimited sale of US$425 on 17 Dec 2024, listed on Pikawiz (pikawiz.com/card/baseset/blastoise/2) as an unverified eBay sale. That works out to 49.4% a year, capped at 15% here. No 2023 or 2025 price could be confirmed. Import: estimated US$35 postage, plus 1% transit insurance and 9% GST on CIF. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "umbreon-vmax-215-psa10",
+      "group": "gen8",
+      "name": "Umbreon VMAX Alt Art 215/203, Evolving Skies",
+      "option": "PSA 10",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 3711,
+          "insurance": 24.12,
+          "import": 413
+        }
+      },
+      "history": [
+        {
+          "year": 2024,
+          "value": 13.98
+        }
+      ],
+      "source": {
+        "url": "https://www.pricecharting.com/game/pokemon-evolving-skies/umbreon-vmax-215",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: the PriceCharting PSA 10 guide was US$3,711.20, read 26 Oct 2026 (about S$4,746). 13 PSA 10 sales between 21 and 25 Oct 2026 were US$3,350 to 4,500. Dittobase gave US$3,750 on 23 Oct 2026. The 2024 point is a PSA 10 sale of US$2,150 on 30 Dec 2024, listed on Pikawiz (pikawiz.com/card/evolvingskies/umbreonvmax/215) as an unverified eBay sale. That works out to 31.4% a year, capped at 15% here. Search snippets suggest Aug to Oct 2025 PSA 10 sales of about US$2,800 to 3,950, but I could not open those pages, so they are not used. Import: estimated US$35 postage, plus 1% transit insurance and 9% GST. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "giratina-v-186-psa10",
+      "group": "gen8",
+      "name": "Giratina V Alt Art 186/196, Lost Origin",
+      "option": "PSA 10",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 3095,
+          "insurance": 20.11,
+          "import": 350
+        }
+      },
+      "history": [
+        {
+          "year": 2024,
+          "value": 7.15
+        }
+      ],
+      "source": {
+        "url": "https://www.pricecharting.com/game/pokemon-lost-origin/giratina-v-186",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: the PriceCharting PSA 10 guide was US$3,094.50, read 26 Oct 2026 (about S$3,957). 13 PSA 10 sales between 15 and 25 Oct 2026 were US$2,951 to 3,250. The 2024 point is a PSA 10 sale of US$1,100 on 31 Dec 2024, listed on Pikawiz (pikawiz.com/card/lostorigin/giratinav/186) as an unverified eBay sale. BGS and CGC 10 sales on PriceCharting in Oct 2024 were US$1,200 to 1,575, which is consistent. That works out to 67.7% a year, capped at 15% here. Import: estimated US$35 postage, plus 1% transit insurance and 9% GST. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-ex-151-199-psa10",
+      "group": "gen9",
+      "name": "Charizard ex SIR 199/165, Scarlet & Violet 151",
+      "option": "PSA 10",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 1288,
+          "insurance": 8.37,
+          "import": 168
+        }
+      },
+      "history": [
+        {
+          "year": 2024,
+          "value": 4.29
+        }
+      ],
+      "source": {
+        "url": "https://www.pricecharting.com/game/pokemon-scarlet-&-violet-151/charizard-ex-199",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: the PriceCharting PSA 10 guide was US$1,288.33, read 26 Oct 2026 (about S$1,647). PSA 10 sales between 20 and 25 Oct 2026 were US$1,100 to 1,399. PokeValues gave a 90-day PSA 10 median of US$1,288 on 25 Oct 2026. The 2024 point is a PSA 10 sale of US$660 on 30 Dec 2024, listed on Pikawiz (pikawiz.com/card/151/charizardex/199) as an unverified eBay sale. That works out to 39.7% a year, capped at 15% here. The card was released in Sep 2023, and no Oct 2023 PSA 10 price could be confirmed. Import: estimated US$35 postage, plus 1% transit insurance and 9% GST. Insurance: 0.65% of value a year."
+    },
+    {
+      "id": "charizard-ex-obf-223-psa10",
+      "group": "gen9",
+      "name": "Charizard ex SIR 223/197, Obsidian Flames",
+      "option": "PSA 10",
+      "currency": "USD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 657,
+          "insurance": 4.27,
+          "import": 104
+        }
+      },
+      "history": [
+        {
+          "year": 2024,
+          "value": 2.31
+        },
+        {
+          "year": 2025,
+          "value": 4.54
+        }
+      ],
+      "source": {
+        "url": "https://www.pricecharting.com/game/pokemon-obsidian-flames/charizard-ex-223",
+        "verified": "2026-10-26",
+        "type": "secondary"
+      },
+      "notes": "Price: the PriceCharting PSA 10 guide was US$657.39, read 26 Oct 2026 (about S$841). PSA 10 sales between 22 and 26 Oct 2026 were US$615 to 722. The 2025 point comes from Fanatics Collect, read 26 Oct 2026, which sold PSA 10 copies for US$699 on 26 and 27 Sep 2025, then US$550 on 6 Feb 2026. The 2024 point is a PSA 10 sale of US$355 on 30 Dec 2024, listed on Pikawiz as an unverified eBay sale. That works out to 36.1% a year from Dec 2024, capped at 15% here, but -6% since Sep 2025. Import: estimated US$35 postage, plus 1% transit insurance and 9% GST. At about S$894 with shipping, the card is over the S$400 relief limit. Insurance: 0.65% of value a year."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "charizard-base-set-psa9",
+      "umbreon-vmax-215-psa10",
+      "charizard-ex-151-199-psa10"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-10-26",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 1484303,
+      "output": 95377,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 34,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:09:29.474Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 68,
+      "output": 25487,
+      "cacheRead": 1934421,
+      "cacheWrite": 79453,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:09:29.474Z"
+    },
+    {
+      "round": "First build",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 62,
+      "output": 24612,
+      "cacheRead": 278702,
+      "cacheWrite": 65766,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:09:29.474Z"
+    }
+  ]
+}
