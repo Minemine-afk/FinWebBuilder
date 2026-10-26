@@ -7,7 +7,7 @@ name: Build calculator
 # Two ways to pay for the research:
 # - ANTHROPIC_API_KEY secret set: the API agent in agent/ runs (billed per use, per-step Sonnet/Opus routing).
 # - Only CLAUDE_CODE_OAUTH_TOKEN set (from `claude setup-token`): Claude Code runs on your Claude subscription.
-run-name: ${{ inputs.topic != '' && format('Build: {0}', inputs.topic) || format('Refine: {0}', inputs.slug) }}
+run-name: "${{ inputs.topic != '' && format('Build: {0}', inputs.topic) || format('Refine: {0}', inputs.slug) }}"
 
 on:
   workflow_dispatch:
