@@ -4,8 +4,8 @@
   "subject": "card",
   "currency": "SGD",
   "periodLabel": "Year held",
-  "scope": "Buying one raw (ungraded) Pokémon card from the US market and holding it in Singapore. It compares 90 popular cards, 10 from each of the nine generations, from Base Set (1999) to Scarlet & Violet (2023–25). Each card's cost has three parts. The purchase price is the TCGplayer market price on that card's pokemonpricetracker.com set price guide, read 26 Oct 2026. Import is US$35 tracked postage, 1% transit insurance and 9% GST on the total: Customs collects GST above S$400, and eBay charges it on smaller orders. Collectibles insurance is about 0.65% of the card's value a year. Generations 1, 2, 8 and 9 grow at 15% a year and Generations 3 to 7 at 5%, as the limits explain. Pick a later start year to see the projected price of buying then.",
-  "limits": "This page covers 90 cards, not the 100 in the original request: 10 per generation for now. All prices come from one site, pokemonpricetracker.com, which republishes TCGplayer data. Its set pages give raw prices only, so graded (PSA) copies are not covered. They show no price date and no price history, and the figures move day to day. The site sometimes shows a different figure for the same card on its homepage, and the notes say where. For vintage sets the pages don't say whether a price is 1st Edition or Unlimited. Rare cards with few sales, such as Shining Mewtwo, Shining Tyranitar and the Gold Star (★) cards, can show a market price well away from a typical sale. I left out rows the site shows with obvious data errors: Gengar ex 108/112, Charizard ★ 100/101, Dark Charizard, Crystal Lugia and Crystal Charizard. The yearly rates are not per-card forecasts. Generations 1 and 2 use 15%, the calculator's cap, because the site's 28 Jan 2026 market report says many WotC vintage cards rose 30–50% in a year. Generation 8 uses 15% because the site's Charizard VMAX page shows +45% over a year. Generation 9 keeps the 15% from the first build, which came from graded sales of the two Charizard ex cards. I found no growth figure for Generations 3 to 7, so they use the 5% default. Card prices can fall, and the calculator never goes below 0%. Not included: TCGplayer or eBay buyer fees, grading, selling fees, a safe deposit box (DBS X-Small, S$190.75 a year), and currency moves. Prices are in USD and converted at a fixed rate.",
+  "scope": "Buying one raw (ungraded) Pokémon card from the US market and holding it in Singapore. It compares 90 popular cards, 10 from each of the nine generations, from Base Set (1999) to Scarlet & Violet (2023–25). The details table shows each card's price for five years in a row from the start year, so you can see how it is projected to move. The first year's price is the TCGplayer market price on that card's pokemonpricetracker.com set price guide, read 26 Oct 2026, and each later year grows by the generation's yearly rate. Import, a one-off in the first year only, is US$35 tracked postage, 1% transit insurance and 9% GST on the total: Customs collects GST above S$400, and eBay charges it on smaller orders. Collectibles insurance is about 0.65% of the card's value a year. Generations 1, 2, 8 and 9 grow at 15% a year and Generations 3 to 7 at 5%, as the limits explain. Pick a later start year to see the projected prices from then.",
+  "limits": "Read the card price row by row: each year shows what the card is projected to be worth that year. The page adds the five yearly prices into the Total row and the headline figure, so that total is not what one card costs. You buy the card once. Compare the yearly prices instead, or set your own yearly rate. This page covers 90 cards, not the 100 in the original request: 10 per generation for now. All prices come from one site, pokemonpricetracker.com, which republishes TCGplayer data. Its set pages give raw prices only, so graded (PSA) copies are not covered. They show no price date and no price history, and the figures move day to day. The site sometimes shows a different figure for the same card on its homepage, and the notes say where. For vintage sets the pages don't say whether a price is 1st Edition or Unlimited. Rare cards with few sales, such as Shining Mewtwo, Shining Tyranitar and the Gold Star (★) cards, can show a market price well away from a typical sale. I left out rows the site shows with obvious data errors: Gengar ex 108/112, Charizard ★ 100/101, Dark Charizard, Crystal Lugia and Crystal Charizard. The yearly rates are not per-card forecasts. Generations 1 and 2 use 15%, the calculator's cap, because the site's 28 Jan 2026 market report says many WotC vintage cards rose 30–50% in a year. Generation 8 uses 15% because the site's Charizard VMAX page shows +45% over a year. Generation 9 keeps the 15% from the first build, which came from graded sales of the two Charizard ex cards. I found no growth figure for Generations 3 to 7, so they use the 5% default. Card prices can fall, and the calculator never goes below 0%. Not included: TCGplayer or eBay buyer fees, grading, selling fees, a safe deposit box (DBS X-Small, S$190.75 a year), and currency moves. Prices are in USD and converted at a fixed rate.",
   "fxNote": "USD/SGD 1.2787 on 26 Oct 2026 (Trading Economics), so S$1 = US$0.782.",
   "fx": {
     "USD": 0.782
@@ -15,8 +15,8 @@
   "components": [
     {
       "id": "purchase",
-      "label": "Card price (raw, ungraded)",
-      "kind": "oneoff"
+      "label": "Card price that year (raw, projected)",
+      "kind": "recurring"
     },
     {
       "id": "insurance",
@@ -2240,7 +2240,7 @@
       "charizard-ex-151-199-psa10"
     ]
   },
-  "version": 2,
+  "version": 3,
   "updated": "2026-10-26",
   "buildLog": [
     {
@@ -2320,6 +2320,32 @@
       "fetches": 0,
       "billing": "subscription",
       "at": "2026-10-26T06:28:30.201Z"
+    },
+    {
+      "round": "Refinement 2: Change the details table such that it shows the projected pr",
+      "label": "Background tasks",
+      "model": "claude-haiku-5-5",
+      "input": 1909,
+      "output": 24,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:50:17.222Z"
+    },
+    {
+      "round": "Refinement 2: Change the details table such that it shows the projected pr",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 20,
+      "output": 4460,
+      "cacheRead": 267259,
+      "cacheWrite": 22614,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-26T06:50:17.222Z"
     }
   ]
 }
