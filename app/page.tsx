@@ -1,6 +1,7 @@
 import { listCalculators } from "@/lib/data";
 import { formatSgd, summariseBuildLog } from "@/lib/pricing";
 import { BuilderForms } from "./builder-forms";
+import { BuildProgress } from "./build-progress";
 
 export default function Home() {
   const calculators = listCalculators();
@@ -25,6 +26,8 @@ export default function Home() {
           );
         })}
       </section>
+
+      <BuildProgress />
 
       <BuilderForms calculators={calculators.map((c) => ({ id: c.id, title: c.title }))} />
     </main>

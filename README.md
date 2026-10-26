@@ -11,7 +11,7 @@ Cost-comparison calculators that build themselves. Type a topic, and a research 
    - An option that is hard to price, or a price Sonnet can't confirm, is researched again on Opus.
    - A follow-up prompt is triaged by Sonnet. A simple edit stays on Sonnet; an open-ended change is planned and checked by Opus.
    The routing lives in `agent/models.ts`.
-3. The result is saved as `data/calculators/<slug>.json`. A new calculator is committed to `main` and goes live on the next deploy. A refinement opens a pull request: merge it to publish, close it to discard. Older versions are kept in `data/history/<slug>/`.
+3. The result is saved as `data/calculators/<slug>.json`. A new calculator or a refinement is committed straight to `main` and goes live when the site redeploys, with no approval step. Older versions are kept in `data/history/<slug>/`. The **Remove a calculator** box dispatches `Remove calculator`, which deletes the calculator and its saved versions from `main` (git history still has them). The home page's **Builder activity** panel follows the runs of both workflows through `app/api/builds`.
 4. Every page shows **How this page was built**: each API call with its model, tokens, web searches and estimated cost in SGD, with a subtotal for each round and a running total. Prices are in `lib/pricing.ts`.
 
 Pages are served from `app/c/[slug]/route.ts`, which fills `templates/calculator.html` (the calculator engine from the FinexisEdu builder prototype) with the spec.
@@ -22,7 +22,6 @@ Pages are served from `app/c/[slug]/route.ts`, which fills `templates/calculator
 
 - `CLAUDE_CODE_OAUTH_TOKEN`, to run on a Claude Pro or Max subscription: run `claude setup-token` in Claude Code on your computer and save the token it prints. Each build then runs Claude Code through the [Claude Code GitHub Action](https://code.claude.com/docs/en/github-actions): Opus leads, and the `price-researcher` sub-agent (`.claude/agents/`) does the reading on Sonnet. Runs count against your plan's usage limits rather than being billed, and the page's cost section shows what the run would have cost on the API. The token is tied to your account, so keep the builder passcode-protected.
 - `ANTHROPIC_API_KEY`, to pay per use: an API key from the Claude Console. This runs the API agent in `agent/` with per-step Sonnet/Opus routing and a spending cap (optional variable `MAX_SPEND_SGD`, default 25). When both secrets are set, the API key is used.
-- Settings → Actions → General → Workflow permissions: allow GitHub Actions to create pull requests.
 
 **Hosting (Vercel → Project → Settings → Environment Variables)**
 

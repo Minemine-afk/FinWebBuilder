@@ -1,0 +1,49 @@
+name: Remove calculator
+
+# Started from the site's remove box (app/api/remove) or by hand from the Actions tab.
+# Deletes the calculator and its saved versions from main; the site redeploys without it.
+# Git history still holds the old files if you need one back.
+run-name: ${{ format('Remove: {0}', inputs.slug) }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: "Calculator to remove, e.g. ev-vs-petrol-car"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-calculator
+  cancel-in-progress: false
+
+jobs:
+  remove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SLUG: ${{ inputs.slug }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove the calculator
+        run: |
+          if ! echo "$SLUG" | grep -Eq '^[a-z0-9-]{1,48}$'; then
+            echo "::error::\"$SLUG\" is not a calculator name."
+            exit 1
+          fi
+          if [ ! -f "data/calculators/$SLUG.json" ]; then
+            echo "::error::There is no calculator called $SLUG."
+            exit 1
+          fi
+          git rm -q "data/calculators/$SLUG.json"
+          rm -rf "data/history/$SLUG"
+          git add -A data
+      - name: Publish
+        run: |
+          git config user.name "finwebbuilder-agent"
+          git config user.email "finwebbuilder-agent@users.noreply.github.com"
+          git commit -m "Remove calculator: $SLUG"
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"

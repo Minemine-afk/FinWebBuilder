@@ -1,11 +1,14 @@
 name: Build calculator
 
 # Started from the site's builder box (app/api/build) or by hand from the Actions tab.
-# A new topic is published straight to main. A refinement opens a pull request; merging it is accepting it.
+# Both a new topic and a refinement are published straight to main; the site redeploys on its own.
+# The previous version of a refined calculator is kept in data/history/<slug>/.
 #
 # Two ways to pay for the research:
 # - ANTHROPIC_API_KEY secret set: the API agent in agent/ runs (billed per use, per-step Sonnet/Opus routing).
 # - Only CLAUDE_CODE_OAUTH_TOKEN set (from `claude setup-token`): Claude Code runs on your Claude subscription.
+run-name: ${{ inputs.topic != '' && format('Build: {0}', inputs.topic) || format('Refine: {0}', inputs.slug) }}
+
 on:
   workflow_dispatch:
     inputs:
@@ -21,7 +24,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
   id-token: write
 
 concurrency:
@@ -95,7 +97,6 @@ jobs:
         run: npm run build
       - name: Publish
         env:
-          GH_TOKEN: ${{ github.token }}
           NEW_SLUG: ${{ steps.agent.outputs.slug || steps.record.outputs.slug }}
           SUMMARY: ${{ steps.agent.outputs.summary || steps.record.outputs.summary }}
         run: |
@@ -104,14 +105,8 @@ jobs:
           git add data
           if [ -n "$TOPIC" ]; then
             git commit -m "Add calculator: $NEW_SLUG" -m "$SUMMARY"
-            git pull --rebase origin "$GITHUB_REF_NAME"
-            git push origin "HEAD:$GITHUB_REF_NAME"
           else
-            branch="refine/$NEW_SLUG-$GITHUB_RUN_ID"
-            git switch -c "$branch"
             git commit -m "Refine $NEW_SLUG: $PROMPT" -m "$SUMMARY"
-            git push origin "$branch"
-            gh pr create --base "$GITHUB_REF_NAME" --head "$branch" \
-              --title "Refine $NEW_SLUG" \
-              --body "$(printf 'Request: %s\n\n%s\n\nMerge to publish this version, or close to discard it.' "$PROMPT" "$SUMMARY")"
           fi
+          git pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin "HEAD:$GITHUB_REF_NAME"
