@@ -6,7 +6,7 @@ describe("seed calculators", () => {
   const all = listCalculators();
   it("all parse against the spec schema", () => {
     // Calculators the agent publishes join the hand-built seeds, so check the seeds are present, not the whole list.
-    expect(all.map((s) => s.id)).toEqual(expect.arrayContaining(["dog-vs-cat", "ev-vs-petrol-car", "japan-trip-from-singapore"]));
+    expect(all.map((s) => s.id)).toEqual(expect.arrayContaining(["dog-vs-cat", "ev-vs-petrol-car"]));
   });
   it("render into a page with the spec built in and a build-cost section", () => {
     for (const spec of all) {

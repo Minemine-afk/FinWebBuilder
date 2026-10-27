@@ -1,0 +1,172 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>__TITLE__</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"><style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style><style id="page-style">
+__BASE_CSS__
+.range-big{font-size:2rem;font-weight:650;color:var(--accent);margin:.3rem 0 .1rem;line-height:1.15}
+@media (max-width:640px){.range-big{font-size:1.6rem}}
+.chart svg .goal{stroke-dasharray:6 4}
+tr.last td{font-weight:600}
+</style></head><body><header class="band">
+  <div class="wrap"><div>
+    <p class="eyebrow" style="color:var(--on-accent-muted)">Projection</p>
+    <h1 id="title"></h1>
+    <p id="scope"></p>
+  </div></div>
+</header><main>
+  <div class="wrap"><div class="grid">
+    <aside id="sidebar" aria-label="Settings"></aside>
+    <section class="results" aria-live="polite"><div id="summary" class="results"></div><p class="limits" id="limits"></p></section>
+  </div></div>
+</main><script>window.SPEC=__SPEC_JSON__;</script><script>
+"use strict";
+__COMMON_JS__
+__ENGINE_JS__
+const spec = window.SPEC;
+const CUR = spec.currency;
+const SCEN = [["low", "Low", "var(--series-2)"], ["base", "Base", "var(--series-1)"], ["high", "High", "var(--series-3)"], ["own", "My rate", "var(--series-4)"]];
+const state = {
+  item: (spec.defaults && spec.defaults.item) || spec.items[0].id,
+  scenario: "base", ownText: "", real: false,
+  startText: spec.start ? String(spec.start.default) : "",
+  depText: spec.contribution ? String(spec.contribution.default) : "",
+  yearsText: String(spec.years.default),
+  goalText: spec.goal ? String(spec.goal.default) : "",
+  errors: {}, v: {}
+};
+const RATE_PCT = { min: spec.rateLimits.min * 100, max: spec.rateLimits.max * 100 };
+const curItem = () => spec.items.find((i) => i.id === state.item) || spec.items[0];
+const errP = (key) => `<p class="err" data-err="${key}" style="margin:0" hidden></p>`;
+function syncErrors() { document.querySelectorAll("[data-err]").forEach((el) => { const m = state.errors[el.dataset.err]; el.hidden = !m; el.textContent = m || ""; }); }
+const numField = (id, inp, text, label) => `<label class="field" for="${id}"><span class="small">${esc(label || inp.label)}${inp.unit ? " (" + esc(inp.unit) + ")" : ""}</span>
+  <input id="${id}" type="number" inputmode="decimal" min="${inp.min}" max="${inp.max}" step="${inp.step}" value="${esc(text)}" class="num">
+  <span class="muted small">Range ${inp.min.toLocaleString("en-SG")} to ${inp.max.toLocaleString("en-SG")}.${inp.note ? " " + esc(inp.note) : ""}</span></label>${errP(id)}`;
+
+function renderSidebar() {
+  const it = curItem();
+  let h = "";
+  if (spec.items.length > 1) h += `<label class="field" for="itemSel"><span>${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</span><select id="itemSel">${spec.items.map((i) => `<option value="${esc(i.id)}"${i.id === state.item ? " selected" : ""}>${esc(i.name)}${i.option ? " · " + esc(i.option) : ""}</option>`).join("")}</select></label>`;
+  h += `<fieldset><legend>Starting point</legend>${spec.startMode === "input" ? numField("start", spec.start, state.startText, spec.valueLabel) : `<p style="margin:0"><span class="small muted">${esc(spec.valueLabel)}</span><br><b class="num" id="startShown"></b></p>`}
+    ${spec.contribution ? numField("dep", spec.contribution, state.depText, spec.contribution.label + " (per " + spec.contribution.period + ")") : ""}
+    ${spec.goal ? numField("goal", spec.goal, state.goalText) : ""}
+    <label class="field" for="years"><span class="small">Years ahead</span><input id="years" type="number" inputmode="numeric" min="${spec.years.min}" max="${spec.years.max}" step="1" value="${esc(state.yearsText)}" class="num"><span class="muted small">Range ${spec.years.min} to ${spec.years.max}.</span></label>${errP("years")}
+  </fieldset>
+  <fieldset><legend>Yearly rate</legend><div class="seg" role="group" aria-label="Rate scenario">${SCEN.map(([k, l]) => `<button type="button" data-scen="${k}" aria-pressed="${state.scenario === k}">${l}</button>`).join("")}</div>
+    <ul class="rates" id="rateList"></ul><p class="muted small" style="margin:0" id="rateBasis"></p>
+    <div id="ownBox" ${state.scenario === "own" ? "" : "hidden"}><label class="field" for="own"><span class="small">Your yearly rate (%)</span><input id="own" type="number" inputmode="decimal" min="${RATE_PCT.min}" max="${RATE_PCT.max}" step="0.1" value="${esc(state.ownText)}" class="num"><span class="muted small">Range ${RATE_PCT.min} to ${RATE_PCT.max}%.</span></label>${errP("own")}</div>
+  </fieldset>`;
+  if (spec.inflation !== undefined) h += `<label class="check"><input type="checkbox" id="real"${state.real ? " checked" : ""}> Show in today's money (assumes ${pct(spec.inflation)} inflation a year)</label>`;
+  $("sidebar").innerHTML = h;
+}
+
+/** Reads every field; bad text keeps a usable value and sets a message. */
+function readInputs() {
+  const it = curItem(), e = (state.errors = {}), v = state.v;
+  const get = (id, text, inp, label) => { const r = clampInput(text, { min: inp.min, max: inp.max, fallback: inp.default, label: label || inp.label, unit: inp.unit }); if (r.error) e[id] = r.error; return r.value; };
+  v.start = spec.startMode === "input" ? get("start", state.startText, spec.start, spec.valueLabel) : it.value;
+  v.dep = spec.contribution ? get("dep", state.depText, spec.contribution) : 0;
+  v.goal = spec.goal ? get("goal", state.goalText, spec.goal) : 0;
+  const y = clampInput(state.yearsText, { min: spec.years.min, max: spec.years.max, fallback: spec.years.default, label: "Years ahead", unit: "years" });
+  if (y.error) e.years = y.error; v.years = Math.round(y.value);
+  v.ownDefault = it.rates.base * 100;
+  const o = state.ownText === "" ? { value: v.ownDefault, error: null } : clampInput(state.ownText, { min: RATE_PCT.min, max: RATE_PCT.max, fallback: v.ownDefault, label: "Your rate", unit: "%" });
+  if (o.error && state.scenario === "own") e.own = o.error;
+  v.rates = { low: it.rates.low, base: it.rates.base, high: it.rates.high, own: o.value / 100 };
+  v.monthlyDep = spec.contribution && spec.contribution.period === "year" ? v.dep / 12 : v.dep;
+}
+const params = (rate) => ({ start: state.v.start, deposit: state.v.monthlyDep, rate, years: state.v.years, compounding: spec.compounding, inflation: state.real ? spec.inflation : 0, goal: state.v.goal });
+const yrs = (m) => { const y = Math.floor(m / 12), r = m % 12; return [y ? y + (y === 1 ? " year" : " years") : "", r ? r + (r === 1 ? " month" : " months") : ""].filter(Boolean).join(" ") || "now"; };
+
+function refresh() {
+  readInputs();
+  const it = curItem(), v = state.v;
+  const runs = Object.fromEntries(SCEN.map(([k]) => [k, project(params(v.rates[k]))]));
+  const pick = runs[state.scenario], rate = v.rates[state.scenario];
+  if ($("startShown")) $("startShown").textContent = money(v.start, CUR) + (it.priceYear ? " (" + it.priceYear + ")" : "");
+  $("rateList").innerHTML = SCEN.filter(([k]) => k !== "own").map(([k, l]) => `<li><span>${l}</span><span class="num"><b>${pct(v.rates[k])}</b><span class="muted">/yr</span></span></li>`).join("");
+  $("rateBasis").textContent = it.rateBasis || "";
+  $("ownBox").hidden = state.scenario !== "own";
+  const final = (r) => (state.real ? r.rows[r.rows.length - 1].real : r.final);
+  let h = `<div class="panel"><p class="eyebrow">After ${v.years} ${v.years === 1 ? "year" : "years"} at ${pct(rate)} a year${state.real ? " · today's money" : ""}</p>
+    <p class="range-big num">${money(final(pick), CUR)}</p>
+    <p class="muted" style="margin:0">${state.scenario === "own" ? "" : `Range across Low to High: <b class="num">${money(final(runs.low), CUR)} – ${money(final(runs.high), CUR)}</b> · `}${v.start > 0 ? `<b class="num">${final(pick) >= v.start ? "+" : ""}${((final(pick) / v.start - 1) * 100).toFixed(0)}%</b> vs the starting ${money(v.start, CUR)}` : ""}</p></div>`;
+  h += `<div class="tiles">
+    <article class="tile"><p class="eyebrow">${esc(spec.valueLabel)}</p><p class="total num">${money(v.start, CUR)}</p></article>
+    ${spec.contribution ? `<article class="tile"><p class="eyebrow">Total added</p><p class="total num">${money(pick.deposited, CUR)}</p></article>` : ""}
+    <article class="tile"><p class="eyebrow">${spec.contribution ? "Growth earned" : "Increase"}</p><p class="total num">${money(pick.growth, CUR)}</p></article></div>`;
+  if (spec.goal && v.goal > 0) {
+    const need = requiredDeposit({ ...params(rate), goal: v.goal });
+    const gm = pick.goalMonths;
+    h += `<div class="panel"><p class="eyebrow">Goal: ${esc(spec.goal.label)} · ${money(v.goal, CUR)}</p><p style="margin:.25rem 0 0">${gm === null
+      ? `<b>Not reached</b> within ${v.years} years at ${pct(rate)}.${spec.contribution ? ` You would need about <b class="num">${money(need, CUR)}</b> a month${v.monthlyDep > 0 ? " (you have " + money(v.monthlyDep, CUR) + ")" : ""} to reach it in ${v.years} years.` : ""}`
+      : `<b>Reached after ${yrs(gm)}</b> at ${pct(rate)} a year.${spec.contribution ? ` To reach it by year ${v.years} you need at least ${money(need, CUR)} a month.` : ""}`}</p></div>`;
+  }
+  h += `<div class="panel chart"><div class="panel-head"><h3>Value over time</h3></div>${lineChart(runs, v)}
+    <div class="legend">${SCEN.filter(([k]) => k !== "own" || state.scenario === "own").map(([k, l, c]) => `<span><i style="background:${c}"></i>${l} (${pct(v.rates[k])})</span>`).join("")}${spec.goal && v.goal > 0 ? `<span><i style="background:var(--fg)"></i>Goal</span>` : ""}</div></div>`;
+  h += yearTable(pick);
+  const su = safeUrl((it.source || {}).url);
+  h += `<p class="limits">${esc(it.name)}${it.option ? " (" + esc(it.option) + ")" : ""}: ${esc(it.notes || "")} Source: ${su ? `<a href="${esc(su)}" target="_blank" rel="noopener">${esc(hostOf(su))}</a>` : "not given"}${it.source && it.source.verified ? ", checked " + esc(it.source.verified) : ""}${it.source && it.source.type === "estimate" ? " (estimate)" : ""}.</p>`;
+  $("summary").innerHTML = h;
+  syncErrors();
+}
+
+function yearTable(run) {
+  const real = state.real, v = state.v;
+  let h = `<div class="panel"><div class="panel-head"><h3>Year by year</h3><span class="muted small">${state.scenario === "own" ? "Your rate" : SCEN.find(([k]) => k === state.scenario)[1] + " rate"}</span></div><div class="tablewrap"><table><thead><tr><th>Year</th><th>Start</th>${spec.contribution ? "<th>Added</th>" : ""}<th>Growth</th><th>End</th>${real ? "<th>Today's money</th>" : ""}<th>Change vs start</th></tr></thead><tbody>`;
+  run.rows.forEach((r, i) => {
+    h += `<tr${i === run.rows.length - 1 ? ' class="last"' : ""}><td>${i + 1}</td><td>${money(r.open, CUR)}</td>${spec.contribution ? `<td>${money(r.deposits, CUR)}</td>` : ""}<td>${money(r.growth, CUR)}</td><td>${money(r.close, CUR)}</td>${real ? `<td>${money(r.real, CUR)}</td>` : ""}<td>${v.start > 0 ? ((r.close / v.start - 1) * 100).toFixed(0) + "%" : "–"}</td></tr>`;
+  });
+  return h + `</tbody></table></div></div>`;
+}
+
+function lineChart(runs, v) {
+  const W = 640, H = 300, L = 72, R = 14, T = 16, B = 34;
+  const keys = SCEN.map(([k]) => k).filter((k) => k !== "own" || state.scenario === "own");
+  const val = (r, i) => (i === 0 ? v.start : state.real ? r.rows[i - 1].real : r.rows[i - 1].close);
+  const max = Math.max(1, ...keys.map((k) => val(runs[k], v.years)), v.goal || 0);
+  const step = niceStep(max / 4), top = Math.ceil(max / step) * step;
+  const x = (i) => L + (W - L - R) * (i / v.years), y = (a) => T + (H - T - B) * (1 - a / top);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Projected value over time">`;
+  for (let a = 0; a <= top + 1e-9; a += step) svg += `<line x1="${L}" x2="${W - R}" y1="${y(a)}" y2="${y(a)}" stroke="var(--border)"/><text x="${L - 8}" y="${y(a) + 4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--font-mono)">${shortMoney(a)}</text>`;
+  const every = Math.max(1, Math.ceil(v.years / 8));
+  for (let i = 0; i <= v.years; i += every) svg += `<text x="${x(i)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--muted)">${i === 0 ? "Now" : "Yr " + i}</text>`;
+  if (v.goal > 0) svg += `<line class="goal" x1="${L}" x2="${W - R}" y1="${y(v.goal)}" y2="${y(v.goal)}" stroke="var(--fg)" stroke-width="1.5"/>`;
+  for (const k of keys) {
+    const color = SCEN.find(([s]) => s === k)[2];
+    const pts = Array.from({ length: v.years + 1 }, (_, i) => [x(i), y(val(runs[k], i)), val(runs[k], i)]);
+    svg += `<polyline fill="none" stroke="${color}" stroke-width="${k === state.scenario ? 3 : 1.75}" points="${pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ")}"/>`;
+    if (v.years <= 25) for (const [i, p] of pts.entries()) svg += `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${color}"><title>${SCEN.find(([s]) => s === k)[1]}, year ${i}: ${money(p[2], CUR)}</title></circle>`;
+  }
+  return svg + `</svg>`;
+}
+
+document.title = spec.title;
+$("title").textContent = spec.title;
+$("scope").textContent = spec.scope || "";
+$("limits").textContent = spec.limits || "";
+renderSidebar();
+refresh();
+
+$("sidebar").addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.id === "itemSel") { state.item = t.value; state.ownText = ""; renderSidebar(); }
+  else if (t.id === "real") state.real = t.checked;
+  else return;
+  refresh();
+});
+$("sidebar").addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.id === "start") state.startText = t.value;
+  else if (t.id === "dep") state.depText = t.value;
+  else if (t.id === "goal") state.goalText = t.value;
+  else if (t.id === "years") state.yearsText = t.value;
+  else if (t.id === "own") state.ownText = t.value;
+  else return;
+  refresh();
+});
+$("sidebar").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-scen]");
+  if (!b) return;
+  state.scenario = b.dataset.scen;
+  if (state.scenario === "own" && state.ownText === "") { state.ownText = (curItem().rates.base * 100).toFixed(1); $("own").value = state.ownText; }
+  document.querySelectorAll("[data-scen]").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.scen === state.scenario)));
+  refresh();
+});
+</script></body></html>

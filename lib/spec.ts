@@ -15,7 +15,23 @@ export const ComponentSchema = z.object({
   id: z.string().min(1),
   label: z.string().min(1),
   kind: z.enum(["recurring", "oneoff"]),
+  /** Id of a driver (spec.drivers) this recurring cost scales with. Amounts are priced at the driver's default. */
+  driver: z.string().optional(),
 });
+
+/** A number the viewer can change, e.g. km driven a year. Costs tied to it scale linearly from the default. */
+export const DriverSchema = z
+  .object({
+    id: z.string().min(1),
+    label: z.string().min(1),
+    unit: z.string().default(""),
+    default: z.number().positive(),
+    min: z.number().nonnegative(),
+    max: z.number().positive(),
+    step: z.number().positive().default(1),
+    note: z.string().optional(),
+  })
+  .refine((d) => d.min <= d.default && d.default <= d.max, { message: "A driver's default must sit between its min and max." });
 
 export const ItemSchema = z.object({
   id: z.string().min(1),
@@ -60,8 +76,24 @@ export const BuildLogEntrySchema = z.object({
   at: z.string().optional(),
 });
 
-export const SpecSchema = z
+/** Fields every kind of calculator shares. */
+const commonShape = {
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  title: z.string().min(1),
+  currency: z.string().regex(/^[A-Z]{3}$/),
+  scope: z.string().default(""),
+  limits: z.string().optional(),
+  /** Bumped on every build or accepted refinement. */
+  version: z.number().int().positive().default(1),
+  updated: z.string().optional(),
+  /** Shown on the page when there is no build log, e.g. for hand-built calculators. */
+  builtBy: z.string().optional(),
+  buildLog: z.array(BuildLogEntrySchema).default([]),
+};
+
+const CompareSpecSchema = z
   .object({
+    kind: z.literal("compare"),
     id: z.string().regex(/^[a-z0-9-]+$/),
     title: z.string().min(1),
     subject: z.string().default("option"),
@@ -82,6 +114,7 @@ export const SpecSchema = z
       })
       .optional(),
     components: z.array(ComponentSchema).min(1),
+    drivers: z.array(DriverSchema).max(4).default([]),
     extras: z
       .object({
         label: z.string(),
@@ -112,6 +145,11 @@ export const SpecSchema = z
   .superRefine((s, ctx) => {
     const issue = (message: string) => ctx.addIssue({ code: "custom", message });
     if (!s.components.some((c) => c.kind === "recurring")) issue("At least one component must be recurring.");
+    const driverIds = new Set(s.drivers.map((d) => d.id));
+    for (const c of s.components) {
+      if (c.driver && !driverIds.has(c.driver)) issue(`Component "${c.id}" uses unknown driver "${c.driver}".`);
+      if (c.driver && c.kind !== "recurring") issue(`Component "${c.id}" is one-off, so it cannot use a driver.`);
+    }
     const componentIds = new Set(s.components.map((c) => c.id));
     const groupIds = new Set(s.groups.map((g) => g.id));
     const itemIds = new Set<string>();
@@ -127,7 +165,157 @@ export const SpecSchema = z
     for (const slot of s.defaults.slots) if (!itemIds.has(slot)) issue(`Default slot "${slot}" is not an item.`);
   });
 
-export type Spec = z.infer<typeof SpecSchema>;
+const NumberInputSchema = z
+  .object({
+    id: z.string().min(1),
+    label: z.string().min(1),
+    unit: z.string().default(""),
+    default: z.number(),
+    min: z.number(),
+    max: z.number(),
+    step: z.number().positive().default(1),
+    note: z.string().optional(),
+  })
+  .refine((d) => d.min <= d.default && d.default <= d.max && d.min < d.max, { message: "An input's default must sit between its min and max." });
+
+const RangeSchema = z.object({ low: z.number().nonnegative(), high: z.number().nonnegative() }).refine((r) => r.low <= r.high, { message: "low must not exceed high." });
+
+/** Cost estimator: line items with a price range per quality level, scaled by size and quantity. */
+const EstimateSpecSchema = z
+  .object({
+    kind: z.literal("estimate"),
+    ...commonShape,
+    subject: z.string().default("project"),
+    /** Year the prices were published. */
+    priceYear: z.number().int(),
+    /** Size/quantity inputs that lines can scale with, e.g. floor area or number of guests. */
+    inputs: z.array(NumberInputSchema).max(4).default([]),
+    /** Quality levels. Every line prices each one. Omit for a single "default" level. */
+    tiers: z
+      .object({ label: z.string(), options: z.array(z.object({ id: z.string(), label: z.string(), note: z.string().optional() })).min(1), default: z.string() })
+      .optional(),
+    /** Buffer added on top of the sum, as a fraction. The viewer can change it between 0 and max. */
+    contingency: z.object({ default: z.number().min(0).max(1), max: z.number().min(0).max(1) }).default({ default: 0.1, max: 0.3 }),
+    groups: z.array(z.object({ id: z.string(), label: z.string() })).min(1),
+    lines: z
+      .array(
+        z.object({
+          id: z.string().min(1),
+          group: z.string(),
+          label: z.string().min(1),
+          description: z.string().optional(),
+          /** "fixed": price is per unit and the viewer sets the quantity. Otherwise an input id: price is per unit of that input. */
+          per: z.string().default("fixed"),
+          /** What one unit is, e.g. "per room", "per sq ft", "each". */
+          unit: z.string().default("each"),
+          qty: z.number().nonnegative().default(1),
+          qtyMax: z.number().positive().default(20),
+          /** An optional line starts switched off. */
+          optional: z.boolean().default(false),
+          /** tier id (or "default") -> price range for one unit */
+          prices: z.record(z.string(), RangeSchema),
+          source: SourceSchema,
+          notes: z.string().default(""),
+        }),
+      )
+      .min(2),
+  })
+  .superRefine((s, ctx) => {
+    const issue = (message: string) => ctx.addIssue({ code: "custom", message });
+    const inputIds = new Set(s.inputs.map((i) => i.id));
+    const groupIds = new Set(s.groups.map((g) => g.id));
+    const tierIds = s.tiers ? s.tiers.options.map((o) => o.id) : ["default"];
+    if (s.tiers && !tierIds.includes(s.tiers.default)) issue(`Default tier "${s.tiers.default}" is not one of the options.`);
+    if (s.contingency.default > s.contingency.max) issue("Contingency default exceeds its max.");
+    const ids = new Set<string>();
+    for (const l of s.lines) {
+      if (ids.has(l.id)) issue(`Duplicate line id "${l.id}".`);
+      ids.add(l.id);
+      if (!groupIds.has(l.group)) issue(`"${l.label}" is in unknown group "${l.group}".`);
+      if (l.per !== "fixed" && !inputIds.has(l.per)) issue(`"${l.label}" scales with unknown input "${l.per}".`);
+      for (const t of tierIds) if (!l.prices[t]) issue(`"${l.label}" has no price for "${t}".`);
+      for (const k of Object.keys(l.prices)) if (!tierIds.includes(k)) issue(`"${l.label}" prices unknown tier "${k}".`);
+    }
+  });
+
+const RateSchema = z.number().min(-0.5).max(1);
+
+/** Projection: how a starting value grows over time under low/base/high rates, optionally with regular deposits and a goal. */
+const ProjectionSpecSchema = z
+  .object({
+    kind: z.literal("projection"),
+    ...commonShape,
+    subject: z.string().default("value"),
+    /** Label of the starting amount, e.g. "Price today" or "Amount saved so far". */
+    valueLabel: z.string().default("Starting value"),
+    /** "item": each item carries its own starting value (a price today). "input": the viewer types the starting amount. */
+    startMode: z.enum(["item", "input"]),
+    start: NumberInputSchema.optional(),
+    /** Regular deposit, e.g. monthly saving. Omit for pure growth of a price. */
+    contribution: NumberInputSchema.extend({ period: z.enum(["month", "year"]).default("month") }).optional(),
+    years: z.object({ default: z.number().int().positive(), min: z.number().int().positive(), max: z.number().int().positive() }).default({ default: 10, min: 1, max: 40 }),
+    /** Limits on the rate the viewer can type, as fractions. */
+    rateLimits: z.object({ min: RateSchema, max: RateSchema }).default({ min: 0, max: 0.15 }),
+    /** "annual": the rate is an effective yearly rate. "monthly": rate / 12 is credited each month. */
+    compounding: z.enum(["annual", "monthly"]).default("annual"),
+    /** Adds a "today's money" column at this yearly inflation (fraction), switchable by the viewer. */
+    inflation: z.number().min(0).max(0.2).optional(),
+    goal: NumberInputSchema.optional(),
+    items: z
+      .array(
+        z.object({
+          id: z.string().min(1),
+          name: z.string().min(1),
+          option: z.string().default(""),
+          url: z.string().optional(),
+          /** Starting value when startMode is "item". */
+          value: z.number().nonnegative().optional(),
+          rates: z.object({ low: RateSchema, base: RateSchema, high: RateSchema }),
+          /** How the three rates were chosen, e.g. "2020-2025 average yearly rise". */
+          rateBasis: z.string().default(""),
+          priceYear: z.number().int().optional(),
+          source: SourceSchema,
+          notes: z.string().default(""),
+        }),
+      )
+      .min(1),
+    defaults: z.object({ item: z.string().optional() }).default({}),
+  })
+  .superRefine((s, ctx) => {
+    const issue = (message: string) => ctx.addIssue({ code: "custom", message });
+    if (s.startMode === "input" && !s.start) issue('startMode "input" needs a "start" input.');
+    const ids = new Set<string>();
+    for (const it of s.items) {
+      if (ids.has(it.id)) issue(`Duplicate item id "${it.id}".`);
+      ids.add(it.id);
+      if (s.startMode === "item" && !(typeof it.value === "number" && it.value > 0)) issue(`"${it.name}" needs a starting "value".`);
+      if (!(it.rates.low <= it.rates.base && it.rates.base <= it.rates.high)) issue(`"${it.name}" rates must run low <= base <= high.`);
+    }
+    if (s.defaults.item && !ids.has(s.defaults.item)) issue(`Default item "${s.defaults.item}" does not exist.`);
+    if (s.years.min > s.years.default || s.years.default > s.years.max) issue("years.default must sit between min and max.");
+    if (s.rateLimits.min > s.rateLimits.max) issue("rateLimits.min exceeds max.");
+  });
+
+export type CompareSpec = z.infer<typeof CompareSpecSchema>;
+export type EstimateSpec = z.infer<typeof EstimateSpecSchema>;
+export type ProjectionSpec = z.infer<typeof ProjectionSpecSchema>;
+export const KINDS = ["compare", "estimate", "projection"] as const;
+export type Kind = (typeof KINDS)[number];
+
+/** Any calculator. Files written before there were kinds have no "kind" and are comparisons. */
+export const SpecSchema = z.preprocess(
+  (raw) => (raw && typeof raw === "object" && !("kind" in raw) ? { kind: "compare", ...raw } : raw),
+  z.discriminatedUnion("kind", [CompareSpecSchema, EstimateSpecSchema, ProjectionSpecSchema]),
+);
+export type Spec = CompareSpec | EstimateSpec | ProjectionSpec;
+export { CompareSpecSchema, EstimateSpecSchema, ProjectionSpecSchema };
+
+/** One-line description for lists: what the reader can do with it. */
+export function describeSpec(spec: Spec): string {
+  if (spec.kind === "estimate") return `Cost estimate · ${spec.lines.length} line items`;
+  if (spec.kind === "projection") return `Projection · ${spec.items.length} ${spec.items.length === 1 ? "scenario set" : "options"}`;
+  return `Comparison · ${spec.items.length} options`;
+}
 export type Item = z.infer<typeof ItemSchema>;
 export type BuildLogEntry = z.infer<typeof BuildLogEntrySchema>;
 

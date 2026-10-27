@@ -22,7 +22,8 @@
     {
       "id": "running",
       "label": "Fuel or charging",
-      "kind": "recurring"
+      "kind": "recurring",
+      "driver": "km"
     },
     {
       "id": "upkeep",
@@ -129,5 +130,17 @@
   "version": 1,
   "updated": "2026-10-25",
   "builtBy": "Built by hand with Claude in a chat on 25 Oct 2026, before the research agent existed.",
-  "buildLog": []
+  "buildLog": [],
+  "drivers": [
+    {
+      "id": "km",
+      "label": "Distance driven",
+      "unit": "km a year",
+      "default": 15000,
+      "min": 0,
+      "max": 60000,
+      "step": 1000,
+      "note": "Fuel or charging scales with distance; road tax, insurance and servicing do not."
+    }
+  ]
 }

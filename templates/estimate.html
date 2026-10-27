@@ -1,0 +1,160 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>__TITLE__</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"><style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style><style id="page-style">
+__BASE_CSS__
+.line-on td{opacity:1}tr.off td{opacity:.45}
+td.l, th.l{text-align:left;white-space:normal;min-width:11rem}
+td.q input{width:5.5rem;display:inline-block}
+.range-big{font-size:2rem;font-weight:650;color:var(--accent);margin:.3rem 0 .1rem;line-height:1.15}
+@media (max-width:640px){.range-big{font-size:1.6rem}}
+</style></head><body><header class="band">
+  <div class="wrap"><div>
+    <p class="eyebrow" style="color:var(--on-accent-muted)">Cost estimate</p>
+    <h1 id="title"></h1>
+    <p id="scope"></p>
+  </div></div>
+</header><main>
+  <div class="wrap"><div class="grid">
+    <aside id="sidebar" aria-label="Settings"></aside>
+    <section class="results" aria-live="polite"><div id="summary"></div><div id="lines" class="results"></div><p class="limits" id="limits"></p></section>
+  </div></div>
+</main><script>window.SPEC=__SPEC_JSON__;</script><script>
+"use strict";
+__COMMON_JS__
+__ENGINE_JS__
+const spec = window.SPEC;
+const TODAY = new Date();
+const CUR = spec.currency;
+const tierOptions = spec.tiers ? spec.tiers.options : [{ id: "default", label: "" }];
+const state = {
+  tier: spec.tiers ? spec.tiers.default : "default",
+  inputText: Object.fromEntries(spec.inputs.map((i) => [i.id, String(i.default)])), inputs: {},
+  qtyText: {}, qty: {}, on: {},
+  contText: String(Math.round(spec.contingency.default * 1000) / 10), contingency: spec.contingency.default,
+  errors: {}
+};
+const CONT_LIMITS = { min: 0, max: Math.round(spec.contingency.max * 100), fallback: spec.contingency.default * 100, label: "Contingency", unit: "%" };
+
+function readInputs() {
+  state.errors = {};
+  for (const i of spec.inputs) {
+    const r = clampInput(state.inputText[i.id], { min: i.min, max: i.max, fallback: i.default, label: i.label, unit: i.unit });
+    state.inputs[i.id] = r.value; if (r.error) state.errors["in-" + i.id] = r.error;
+  }
+  const c = clampInput(state.contText, CONT_LIMITS);
+  state.contingency = c.value / 100; if (c.error) state.errors.cont = c.error;
+  for (const l of spec.lines) {
+    if (l.per !== "fixed" || state.qtyText[l.id] === undefined) continue;
+    const r = clampInput(state.qtyText[l.id], { min: 0, max: l.qtyMax, fallback: l.qty, label: "Quantity", unit: "" });
+    state.qty[l.id] = r.value; if (r.error) state.errors["qty-" + l.id] = r.error;
+  }
+}
+const errP = (key) => `<p class="err" data-err="${esc(key)}" style="margin:0" hidden></p>`;
+function syncErrors() { document.querySelectorAll("[data-err]").forEach((el) => { const m = state.errors[el.dataset.err]; el.hidden = !m; el.textContent = m || ""; }); }
+const range = (lo, hi) => (Math.round(lo) === Math.round(hi) ? money(lo, CUR) : money(lo, CUR) + " – " + money(hi, CUR));
+
+function renderSidebar() {
+  let h = "";
+  if (spec.tiers) {
+    h += `<fieldset><legend>${esc(spec.tiers.label)}</legend><div class="seg" role="group" aria-label="${esc(spec.tiers.label)}">${tierOptions.map((o) => `<button type="button" data-tier="${esc(o.id)}" aria-pressed="${o.id === state.tier}">${esc(o.label)}</button>`).join("")}</div><p class="muted small" id="tierNote" style="margin:0"></p></fieldset>`;
+  }
+  if (spec.inputs.length) {
+    h += `<fieldset><legend>Size and quantity</legend>${spec.inputs.map((i) => `<label class="field" for="in-${esc(i.id)}"><span class="small">${esc(i.label)}${i.unit ? " (" + esc(i.unit) + ")" : ""}</span>
+      <input id="in-${esc(i.id)}" data-input="${esc(i.id)}" type="number" inputmode="decimal" min="${i.min}" max="${i.max}" step="${i.step}" value="${esc(state.inputText[i.id])}" class="num">
+      <span class="muted small">Range ${i.min.toLocaleString("en-SG")} to ${i.max.toLocaleString("en-SG")}.${i.note ? " " + esc(i.note) : ""}</span></label>${errP("in-" + i.id)}`).join("")}</fieldset>`;
+  }
+  h += `<fieldset><legend>Contingency</legend><label class="field" for="cont"><span class="small">Buffer on top of the total (%)</span>
+    <input id="cont" type="number" inputmode="decimal" min="0" max="${CONT_LIMITS.max}" step="1" value="${esc(state.contText)}" class="num">
+    <span class="muted small">Costs usually overrun; ${Math.round(spec.contingency.default * 100)}% is the default. Range 0 to ${CONT_LIMITS.max}%.</span></label>${errP("cont")}</fieldset>`;
+  $("sidebar").innerHTML = h;
+}
+
+function renderLines() {
+  const staleMs = 365 * 864e5;
+  let h = "";
+  for (const g of spec.groups) {
+    const mine = spec.lines.filter((l) => l.group === g.id);
+    if (!mine.length) continue;
+    h += `<div class="panel"><div class="panel-head"><h3>${esc(g.label)}</h3><span class="num" id="grp-${esc(g.id)}"></span></div><div class="tablewrap"><table><thead><tr><th class="l">Item</th><th class="l">Quantity</th><th>Low</th><th>High</th><th class="l">Source</th></tr></thead><tbody>`;
+    for (const l of mine) {
+      const src = l.source || {};
+      const su = safeUrl(src.url);
+      const stale = src.verified && TODAY.getTime() - new Date(src.verified).getTime() > staleMs;
+      h += `<tr data-line="${esc(l.id)}"><td class="l"><label class="check"><input type="checkbox" data-on="${esc(l.id)}" ${!l.optional ? "checked" : ""}> <span><b>${esc(l.label)}</b>${l.optional ? ` <span class="pill">Optional</span>` : ""}${l.description ? `<br><span class="muted small">${esc(l.description)}</span>` : ""}${l.notes ? `<br><span class="muted small">${esc(l.notes)}</span>` : ""}</span></label></td>
+        <td class="l q">${l.per === "fixed" ? `<input type="number" inputmode="decimal" min="0" max="${l.qtyMax}" step="any" value="${l.qty}" data-qty="${esc(l.id)}" aria-label="Quantity of ${esc(l.label)}" class="num">` : `<span id="q-${esc(l.id)}" class="num"></span>`} <br><span class="muted small" id="u-${esc(l.id)}"></span>${errP("qty-" + l.id)}</td>
+        <td id="lo-${esc(l.id)}"></td><td id="hi-${esc(l.id)}"></td>
+        <td class="l">${src.type === "estimate" ? `<span class="pill warn">Estimate</span>` : src.type === "secondary" ? `<span class="pill warn">Unofficial</span>` : src.type === "official" ? `<span class="pill good">Official</span>` : ""}${su ? ` <a href="${esc(su)}" target="_blank" rel="noopener">${esc(hostOf(su))}</a>` : ""}${src.verified ? `<br><span class="muted small">checked ${esc(src.verified)}${stale ? " · may be outdated" : ""}</span>` : ""}</td></tr>`;
+    }
+    h += `</tbody></table></div></div>`;
+  }
+  $("lines").innerHTML = h;
+}
+
+function refresh() {
+  readInputs();
+  const est = estimate(spec, state);
+  const tier = tierOptions.find((o) => o.id === state.tier) || tierOptions[0];
+  if ($("tierNote")) $("tierNote").textContent = tier.note || "";
+  const off = est.lines.filter((l) => !l.on).length;
+  const contAmt = [est.subLow * est.contingency, est.subHigh * est.contingency];
+  const maxHigh = Math.max(1, ...est.groups.map((g) => g.high));
+  let h = `<div class="panel"><p class="eyebrow">Estimated total${tier.label ? " · " + esc(tier.label) : ""}</p>
+    <p class="range-big num">${range(est.low, est.high)}</p>
+    <p class="muted" style="margin:0">Typical: <b class="num">${money(est.mid, CUR)}</b>${est.contingency > 0 ? ` · includes a ${pct(est.contingency)} buffer (${range(contAmt[0], contAmt[1])})` : ""}${off ? ` · ${off} ${off === 1 ? "line" : "lines"} switched off` : ""}</p></div>`;
+  h += `<div class="panel chart"><div class="panel-head"><h3>Range by group</h3><span class="muted small">Bar spans low to high; tick is the middle</span></div>${rangeChart(est, maxHigh)}</div>`;
+  $("summary").innerHTML = h;
+  for (const g of est.groups) { const el = $("grp-" + g.id); if (el) el.textContent = range(g.low, g.high); }
+  for (const l of est.lines) {
+    const def = spec.lines.find((x) => x.id === l.id);
+    const row = document.querySelector(`tr[data-line="${CSS.escape(l.id)}"]`);
+    row.classList.toggle("off", !l.on);
+    $("lo-" + l.id).textContent = l.on ? money(l.low, CUR) : "–";
+    $("hi-" + l.id).textContent = l.on ? money(l.high, CUR) : "–";
+    const unitPrice = `× ${range(l.unitLow, l.unitHigh)} ${def.unit}`;
+    $("u-" + l.id).textContent = unitPrice;
+    if (l.per) { const inp = spec.inputs.find((i) => i.id === l.per); $("q-" + l.id).textContent = l.qty.toLocaleString("en-SG") + (inp && inp.unit ? " " + inp.unit : ""); }
+  }
+  syncErrors();
+}
+
+function rangeChart(est, maxHigh) {
+  const W = 640, LBL = 150, R = 150, ROW = 34, T = 8, H = T + ROW * est.groups.length + 6;
+  const step = niceStep(maxHigh / 4), top = Math.ceil(maxHigh / step) * step;
+  const x = (v) => LBL + (W - LBL - R) * (v / top);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cost range by group">`;
+  est.groups.forEach((g, i) => {
+    const y = T + ROW * i;
+    const lo = g.low * (1 + est.contingency), hi = g.high * (1 + est.contingency);
+    const label = g.label.length > 22 ? g.label.slice(0, 21) + "…" : g.label;
+    svg += `<text x="${LBL - 8}" y="${y + 20}" text-anchor="end" font-size="12" fill="var(--fg)">${esc(label)}</text>`;
+    svg += `<rect x="${LBL}" y="${y + 8}" width="${W - LBL - R}" height="16" rx="3" fill="var(--chip)"/>`;
+    svg += `<rect class="bar" x="${x(lo)}" y="${y + 8}" width="${Math.max(3, x(hi) - x(lo))}" height="16" rx="3" fill="var(--series-1)"><title>${esc(g.label)}: ${range(lo, hi)}</title></rect>`;
+    svg += `<line x1="${x((lo + hi) / 2)}" x2="${x((lo + hi) / 2)}" y1="${y + 5}" y2="${y + 27}" stroke="var(--fg)" stroke-width="2"/>`;
+    svg += `<text x="${W - R + 8}" y="${y + 20}" font-size="11" fill="var(--muted)" font-family="var(--font-mono)">${shortMoney(lo)}–${shortMoney(hi)}</text>`;
+  });
+  return svg + `</svg>`;
+}
+
+document.title = spec.title;
+$("title").textContent = spec.title;
+$("scope").textContent = spec.scope || "";
+$("limits").textContent = (spec.limits ? spec.limits + " " : "") + `Prices are ${spec.priceYear} ranges in ${CUR}; a quote for your own ${spec.subject} will differ.`;
+renderSidebar();
+renderLines();
+refresh();
+
+$("sidebar").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-tier]");
+  if (!b) return;
+  state.tier = b.dataset.tier;
+  document.querySelectorAll("[data-tier]").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.tier === state.tier)));
+  refresh();
+});
+$("sidebar").addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.dataset.input) state.inputText[t.dataset.input] = t.value;
+  else if (t.id === "cont") state.contText = t.value;
+  else return;
+  refresh();
+});
+$("lines").addEventListener("input", (e) => { if (e.target.dataset.qty) { state.qtyText[e.target.dataset.qty] = e.target.value; refresh(); } });
+$("lines").addEventListener("change", (e) => { if (e.target.dataset.on) { state.on[e.target.dataset.on] = e.target.checked; refresh(); } });
+</script></body></html>

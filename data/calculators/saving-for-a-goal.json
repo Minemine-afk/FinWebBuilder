@@ -1,0 +1,110 @@
+{
+  "kind": "projection",
+  "id": "saving-for-a-goal",
+  "title": "Saving for a goal",
+  "currency": "SGD",
+  "subject": "savings option",
+  "scope": "How long a savings pot takes to reach a goal in Singapore dollars. Type what you have, what you add each month and the target; pick a low, base or high yearly return, or your own.",
+  "limits": "Returns are Oct 2026 yields and bank rates, which change often; bank 'up to' rates need salary credit and card spend. Interest tax, fees and bond early-redemption rules are ignored. Not advice.",
+  "valueLabel": "Saved so far",
+  "startMode": "input",
+  "start": {
+    "id": "start",
+    "label": "Saved so far",
+    "unit": "S$",
+    "default": 5000,
+    "min": 0,
+    "max": 5000000,
+    "step": 100
+  },
+  "contribution": {
+    "id": "dep",
+    "label": "Added each month",
+    "unit": "S$",
+    "default": 500,
+    "min": 0,
+    "max": 50000,
+    "step": 50,
+    "period": "month"
+  },
+  "goal": {
+    "id": "goal",
+    "label": "Goal",
+    "unit": "S$",
+    "default": 50000,
+    "min": 1,
+    "max": 10000000,
+    "step": 1000
+  },
+  "years": {
+    "default": 10,
+    "min": 1,
+    "max": 40
+  },
+  "rateLimits": {
+    "min": 0,
+    "max": 0.15
+  },
+  "compounding": "annual",
+  "inflation": 0.02,
+  "items": [
+    {
+      "id": "bank-bonus",
+      "name": "Bank savings account with bonus interest",
+      "option": "e.g. OCBC 360, up to 2.20%",
+      "rates": {
+        "low": 0.01,
+        "base": 0.02,
+        "high": 0.022
+      },
+      "rateBasis": "High: the advertised 'up to' rate for the first S$100,000. Low: you miss some bonus conditions. Base: most of the bonus.",
+      "source": {
+        "url": "https://growbeansprout.com/tbills-vs-fixed-deposit-vs-ssb-yield-oct-2026",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Up to 2.20% a year if you credit salary, grow your balance and spend on the card (Aug to Dec 2026 promotion)."
+    },
+    {
+      "id": "ssb",
+      "name": "Singapore Savings Bonds",
+      "option": "10-year average return",
+      "rates": {
+        "low": 0.0225,
+        "base": 0.0245,
+        "high": 0.0265
+      },
+      "rateBasis": "Base: the Oct 2026 issue's 10-year average return. Low: the Aug 2026 issue. High: assumes a slightly better future issue.",
+      "source": {
+        "url": "https://growbeansprout.com/tbills-vs-fixed-deposit-vs-ssb-yield-oct-2026",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Government-backed; money can be withdrawn any month without penalty."
+    },
+    {
+      "id": "tbill",
+      "name": "6-month T-bills, rolled over",
+      "option": "Cut-off yield",
+      "rates": {
+        "low": 0.015,
+        "base": 0.019,
+        "high": 0.022
+      },
+      "rateBasis": "Base: 8 Oct 2026 cut-off of 1.90%. Low: assumes yields fall. High: assumes they rise.",
+      "source": {
+        "url": "https://growbeansprout.com/tbills-vs-fixed-deposit-vs-ssb-yield-oct-2026",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Yields reset at every auction, so a long projection is only an assumption."
+    }
+  ],
+  "defaults": {
+    "item": "ssb"
+  },
+  "version": 1,
+  "updated": "2026-10-27",
+  "builtBy": "Built by hand with Claude on 27 Oct 2026 to show this template. Figures come from a few web searches, not a full research run: check each source.",
+  "buildLog": []
+}

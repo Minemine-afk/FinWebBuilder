@@ -8,9 +8,9 @@
  */
 import fs from "node:fs";
 import { parseArgs } from "node:util";
-import { readCalculator, writeCalculator } from "@/lib/data";
+import { readCalculator, readCompare, writeCalculator } from "@/lib/data";
 import { formatSgd } from "@/lib/pricing";
-import { slugify, SpecSchema } from "@/lib/spec";
+import { slugify, type CompareSpec } from "@/lib/spec";
 import { Agent } from "./llm";
 import { buildNew, refine } from "./pipeline";
 
@@ -24,7 +24,7 @@ async function main() {
   let save: (agent: Agent) => Promise<string>;
   if (values.prompt) {
     if (!values.slug) throw new Error("--prompt needs --slug");
-    const current = readCalculator(values.slug);
+    const current = readCompare(values.slug);
     if (!current) throw new Error(`No calculator "${values.slug}".`);
     const n = new Set(current.buildLog.map((e) => e.round).filter((r) => r.startsWith("Refinement"))).size + 1;
     label = `Refinement ${n}: ${values.prompt.slice(0, 60)}`;
@@ -49,7 +49,7 @@ async function main() {
   if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `slug=${slug}\nsummary=${summary}\n`);
 }
 
-function finish(spec: ReturnType<typeof SpecSchema.parse>, agent: Agent) {
+function finish(spec: CompareSpec, agent: Agent) {
   return writeCalculator({ ...spec, buildLog: [...spec.buildLog, ...agent.log] });
 }
 

@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { SpecSchema, type Spec } from "./spec";
+import { SpecSchema, type CompareSpec, type Spec } from "./spec";
 
 export const DATA_DIR = path.join(process.cwd(), "data", "calculators");
 export const HISTORY_DIR = path.join(process.cwd(), "data", "history");
@@ -12,7 +12,14 @@ export function calculatorPath(slug: string) {
 export function readCalculator(slug: string): Spec | null {
   const file = calculatorPath(slug);
   if (!fs.existsSync(file)) return null;
-  return SpecSchema.parse(JSON.parse(fs.readFileSync(file, "utf8")));
+  return SpecSchema.parse(JSON.parse(fs.readFileSync(file, "utf8"))) as Spec;
+}
+
+/** A comparison calculator; throws if the slug is some other kind. The API agent only builds and refines comparisons. */
+export function readCompare(slug: string): CompareSpec | null {
+  const spec = readCalculator(slug);
+  if (spec && spec.kind !== "compare") throw new Error(`"${slug}" is a ${spec.kind} calculator; this agent only handles comparisons.`);
+  return spec;
 }
 
 export function listCalculators(): Spec[] {
@@ -30,7 +37,7 @@ export function listCalculators(): Spec[] {
  * Pass `previous` when the file on disk has already been overwritten (the subscription run edits it in place).
  */
 export function writeCalculator(spec: Spec, previous: Spec | null = readCalculator(spec.id)) {
-  const parsed = SpecSchema.parse(spec);
+  const parsed = SpecSchema.parse(spec) as Spec;
   if (previous) {
     const dir = path.join(HISTORY_DIR, parsed.id);
     fs.mkdirSync(dir, { recursive: true });

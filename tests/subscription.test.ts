@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildPrompt, usageFromExecution } from "@/agent/subscription";
+import fs from "node:fs";
+import { buildPrompt, FORMAT_EXAMPLES, usageFromExecution } from "@/agent/subscription";
 import { readCalculator } from "@/lib/data";
 import { callCostSgd } from "@/lib/pricing";
 
@@ -38,11 +39,22 @@ describe("buildPrompt", () => {
     expect(p).toContain("npx tsx agent/subscription.ts validate e-bikes");
     expect(p).toContain("price-researcher");
   });
+  it("makes the agent pick one of the three kinds and read only that kind's notes", () => {
+    const p = buildPrompt({ slug: "x", round: "First build", previous: null }, "Wedding in Singapore");
+    for (const kind of ["compare", "estimate", "projection"]) {
+      expect(p).toContain(`agent/formats/${kind}.md`);
+      expect(fs.existsSync(`agent/formats/${kind}.md`)).toBe(true);
+      expect(fs.existsSync(FORMAT_EXAMPLES[kind as keyof typeof FORMAT_EXAMPLES])).toBe(true);
+    }
+    expect(p).toContain("Do not read lib/spec.ts");
+  });
   it("asks a refinement to keep what the request doesn't touch", () => {
     const previous = readCalculator("ev-vs-petrol-car")!;
     const p = buildPrompt({ slug: previous.id, round: "Refinement 1: x", previous }, "Add a hybrid car");
     expect(p).toContain("Keep every option");
     expect(p).toContain("never rewrite the whole file");
     expect(p).not.toContain("worked example");
+    expect(p).toContain("agent/formats/compare.md");
+    expect(p).not.toContain("lib/spec.ts and");
   });
 });

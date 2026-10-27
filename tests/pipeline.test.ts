@@ -5,7 +5,7 @@ import { OPUS, SONNET } from "@/agent/models";
 import { buildNew, refine } from "@/agent/pipeline";
 import { CLASSIFY_SYSTEM, EXTRACT_SYSTEM, PATCH_SYSTEM, PLAN_SYSTEM, RESEARCH_SYSTEM, VERIFY_SYSTEM } from "@/agent/prompts";
 import { planFromSpec } from "@/agent/schema";
-import { readCalculator } from "@/lib/data";
+import { readCompare } from "@/lib/data";
 import { SpecSchema } from "@/lib/spec";
 
 const plan = {
@@ -89,7 +89,7 @@ describe("buildNew", () => {
 
 describe("refine", () => {
   it("keeps a simple change on Sonnet and skips the Opus check", async () => {
-    const current = readCalculator("ev-vs-petrol-car")!;
+    const current = readCompare("ev-vs-petrol-car")!;
     const updated = planFromSpec(current);
     updated.items.push({ id: "hybrid", group: "ice", name: "Hybrid car", option: "Cat A", duration: 10, researchQuestion: "q", hard: false });
     const { client, calls } = fakeClient((system) => {
