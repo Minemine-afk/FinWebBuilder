@@ -33,6 +33,19 @@ function output(values: Record<string, string>) {
   }
 }
 
+/** Where a calculator kind's format notes and worked example live. */
+export const FORMAT_EXAMPLES = {
+  compare: "data/calculators/ev-vs-petrol-car.json",
+  estimate: "data/calculators/hdb-renovation-cost.json",
+  projection: "data/calculators/saving-for-a-goal.json",
+} as const;
+
+const RESEARCH_BY_KIND = {
+  compare: "one or two options per call: the current prices of each cost component",
+  estimate: "one or two groups of lines per call: a realistic low and high price for one unit of each line at every quality level, with the size or quantity the price assumes",
+  projection: "one or two items per call: today's value or price, plus its yearly growth or return over recent years and any published current rate, so low, base and high rates can be chosen",
+} as const;
+
 export function buildPrompt(state: RunState, request: string): string {
   const file = `data/calculators/${state.slug}.json`;
   const task = state.previous
@@ -40,18 +53,22 @@ export function buildPrompt(state: RunState, request: string): string {
     : `Create a new calculator for this topic and save it as ${file}, with "id": "${state.slug}".`;
   const how = state.previous
     ? `How to work:
-1. Read ${file} (the current spec) and lib/spec.ts. Do not read other calculators.
+1. Read ${file} (the current spec, a "${state.previous.kind}" calculator) and agent/formats/${state.previous.kind}.md. Do not read other calculators or lib/spec.ts. Keep its "kind".
 2. Edit ${file} in place with small Edit calls; never rewrite the whole file.
 3. Research only what the request needs. A request about wording, structure, years, durations or the figures already in the file needs no web access at all: just edit. If a new option or price is needed, call the price-researcher sub-agent for that option only (foreground, never run_in_background), and wait for its notes.
 4. Run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error until it passes.`
     : `How to work:
-1. Read lib/spec.ts for the file format and data/calculators/ev-vs-petrol-car.json as a worked example.
-2. Plan the calculator yourself: 3 to 6 real options people choose between, and 3 to 5 cost components (at least one recurring; one-off components are paid once at the start). Use buyer variants or monthly extras only when they genuinely apply.
-3. Hand the price research to the price-researcher sub-agent, one or two options per call, several calls in parallel. It runs on a cheaper model. Start every sub-agent in the foreground (never with run_in_background) and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved.
+1. Pick the calculator kind that fits the topic, then read only that kind's notes in agent/formats/ and its worked example. Do not read lib/spec.ts or other calculators.
+   - compare: the topic is a choice between options ("A vs B", "which X", owning or using one thing versus another) and the answer is the total cost of each over a period.
+   - estimate: the topic is the cost of one project or purchase whose price depends on size, scope or quality ("how much does X cost", "wedding", "renovation").
+   - projection: the topic is about the future: a price or value growing over time ("future price of X", "how much will Y be worth"), or saving or investing toward a goal.
+   If a topic could fit two, choose the one the reader most likely wants an answer from. Set "kind" to your choice. Notes: ${Object.entries(FORMAT_EXAMPLES).map(([k, f]) => `agent/formats/${k}.md with ${f}`).join("; ")}.
+2. Plan the calculator yourself, as the kind's notes describe, with real options, lines or items people would recognise.
+3. Hand the price research to the price-researcher sub-agent, one or two options, lines or items per call, several calls in parallel. For this kind, ask for: compare = ${RESEARCH_BY_KIND.compare}; estimate = ${RESEARCH_BY_KIND.estimate}; projection = ${RESEARCH_BY_KIND.projection}. It runs on a cheaper model. Start every sub-agent in the foreground (never with run_in_background) and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved.
 4. Read its notes. Only a price marked UNCONFIRMED, or where sources clash, may be researched again, and only with a WebSearch; do not open pages yourself.
-5. Write the file. In each option's "notes", say how each figure was found, with dates; in "source", give the best URL, today's date as "verified", and "official", "secondary" or "estimate". Write "scope" and "limits" so a reader knows exactly what is and isn't included.
+5. Write the file. Give each source its best URL, today's date as "verified", and "official", "secondary" or "estimate" as its type, and say in the notes how each figure was found, with dates. Write "scope" and "limits" so a reader knows exactly what is and isn't included.
 6. Run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error it reports until it passes.`;
-  return `You build cost-comparison calculators for a Singapore audience. Prices are in Singapore dollars unless the topic is clearly about another market.
+  return `You build calculators for a Singapore audience. Prices are in Singapore dollars unless the topic is clearly about another market.
 
 ${task}
 

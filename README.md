@@ -14,7 +14,19 @@ Cost-comparison calculators that build themselves. Type a topic, and a research 
 3. The result is saved as `data/calculators/<slug>.json`. A new calculator or a refinement is committed straight to `main` and goes live when the site redeploys, with no approval step. Older versions are kept in `data/history/<slug>/`. The **Remove a calculator** box dispatches `Remove calculator`, which deletes the calculator and its saved versions from `main` (git history still has them). The home page's **Build in progress** panel shows the loading bar and current step of any build or removal running right now (through `app/api/builds`), and disappears when none is.
 4. Every page shows **How this page was built**: each API call with its model, tokens, web searches and estimated cost in SGD, with a subtotal for each round and a running total. Prices are in `lib/pricing.ts`.
 
-Pages are served from `app/c/[slug]/route.ts`, which fills `templates/calculator.html` (the calculator engine from the FinexisEdu builder prototype) with the spec.
+## Calculator kinds
+
+Each calculator JSON has a `kind`, and the builder picks one per topic (files with no `kind` are comparisons):
+
+- **compare** (`templates/calculator.html`): options side by side over a period. Shows a break-even headline, a running-total table, limited inputs (years to compare, own rate) and optional *drivers* such as km a year, which scale the cost components that depend on them.
+- **estimate** (`templates/estimate.html`): what a project costs, line by line, with a low to high range, finish levels, size and quantity inputs, optional lines and a contingency buffer. Example: HDB renovation.
+- **projection** (`templates/projection.html`): a value over time at low, base, high or your own yearly rate, with optional monthly deposits, a goal and a today's-money view. Examples: saving for a goal, future HDB price.
+
+Schemas are in `lib/spec.ts`; the format notes the agent reads are in `agent/formats/`. The page maths lives in `templates/*-engine.js` and `templates/common.js`, which the tests run directly. Health, tax and converter calculators are not built yet.
+
+The Claude Code (subscription) path chooses the kind. The API-key agent in `agent/pipeline.ts` still builds comparisons only.
+
+Pages are served from `app/c/[slug]/route.ts`, which fills the kind's template (the compare engine comes from the FinexisEdu builder prototype) with the spec.
 
 ## Setup
 

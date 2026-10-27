@@ -1,0 +1,466 @@
+{
+  "kind": "estimate",
+  "id": "hdb-renovation-cost",
+  "title": "HDB renovation cost",
+  "currency": "SGD",
+  "subject": "flat",
+  "priceYear": 2026,
+  "scope": "What renovating a resale HDB flat in Singapore costs, line by line, at three finish levels. Prices are ranges in Singapore dollars; set the floor area, switch lines on or off and add a buffer.",
+  "limits": "Anchored on 2026 whole-flat ranges from renovation guides (about S$55,000 to S$95,000 for a 4-room resale); the split into items is our estimate. Excludes professional fees, permit costs, moving and most appliances. Get itemised quotes before budgeting.",
+  "inputs": [
+    {
+      "id": "area",
+      "label": "Floor area",
+      "unit": "sqm",
+      "default": 90,
+      "min": 40,
+      "max": 200,
+      "step": 1,
+      "note": "A 4-room HDB flat is about 90 sqm."
+    }
+  ],
+  "tiers": {
+    "label": "Finish level",
+    "default": "standard",
+    "options": [
+      {
+        "id": "basic",
+        "label": "Basic",
+        "note": "Cosmetic refresh: overlay or vinyl flooring, minimal hacking, stock cabinets."
+      },
+      {
+        "id": "standard",
+        "label": "Standard",
+        "note": "Typical resale renovation: new tiles, rewiring, custom carpentry."
+      },
+      {
+        "id": "premium",
+        "label": "Premium",
+        "note": "Designer finishes, large-format tiles, full custom carpentry."
+      }
+    ]
+  },
+  "contingency": {
+    "default": 0.1,
+    "max": 0.3
+  },
+  "groups": [
+    {
+      "id": "prep",
+      "label": "Hacking, wiring and plumbing"
+    },
+    {
+      "id": "finish",
+      "label": "Floors, walls and paint"
+    },
+    {
+      "id": "carp",
+      "label": "Carpentry"
+    },
+    {
+      "id": "fit",
+      "label": "Fittings"
+    },
+    {
+      "id": "extra",
+      "label": "Optional extras"
+    }
+  ],
+  "lines": [
+    {
+      "id": "hacking",
+      "group": "prep",
+      "label": "Hacking and disposal",
+      "per": "area",
+      "unit": "per sqm",
+      "qty": 1,
+      "qtyMax": 20,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 25,
+          "high": 45
+        },
+        "standard": {
+          "low": 40,
+          "high": 70
+        },
+        "premium": {
+          "low": 60,
+          "high": 100
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "",
+      "description": "Removing old tiles, fixtures and carpentry."
+    },
+    {
+      "id": "electrical",
+      "group": "prep",
+      "label": "Electrical rewiring",
+      "per": "area",
+      "unit": "per sqm",
+      "qty": 1,
+      "qtyMax": 20,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 30,
+          "high": 50
+        },
+        "standard": {
+          "low": 50,
+          "high": 80
+        },
+        "premium": {
+          "low": 80,
+          "high": 120
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "plumbing",
+      "group": "prep",
+      "label": "Plumbing and waterproofing",
+      "per": "fixed",
+      "unit": "per bathroom",
+      "qty": 2,
+      "qtyMax": 6,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 800,
+          "high": 1500
+        },
+        "standard": {
+          "low": 1500,
+          "high": 2500
+        },
+        "premium": {
+          "low": 2500,
+          "high": 4000
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "flooring",
+      "group": "finish",
+      "label": "Flooring",
+      "per": "area",
+      "unit": "per sqm",
+      "qty": 1,
+      "qtyMax": 20,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 40,
+          "high": 70
+        },
+        "standard": {
+          "low": 80,
+          "high": 130
+        },
+        "premium": {
+          "low": 130,
+          "high": 220
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "painting",
+      "group": "finish",
+      "label": "Painting",
+      "per": "area",
+      "unit": "per sqm",
+      "qty": 1,
+      "qtyMax": 20,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 20,
+          "high": 30
+        },
+        "standard": {
+          "low": 30,
+          "high": 45
+        },
+        "premium": {
+          "low": 45,
+          "high": 70
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "bath-tiles",
+      "group": "finish",
+      "label": "Bathroom wall tiling",
+      "per": "fixed",
+      "unit": "per bathroom",
+      "qty": 2,
+      "qtyMax": 6,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 1500,
+          "high": 2500
+        },
+        "standard": {
+          "low": 2500,
+          "high": 4000
+        },
+        "premium": {
+          "low": 4000,
+          "high": 7000
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "wardrobes",
+      "group": "carp",
+      "label": "Wardrobes and built-ins",
+      "per": "fixed",
+      "unit": "per room",
+      "qty": 3,
+      "qtyMax": 8,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 1500,
+          "high": 2500
+        },
+        "standard": {
+          "low": 2500,
+          "high": 4000
+        },
+        "premium": {
+          "low": 4000,
+          "high": 7000
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "kitchen",
+      "group": "carp",
+      "label": "Kitchen cabinets and countertop",
+      "per": "fixed",
+      "unit": "per kitchen",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 3500,
+          "high": 6000
+        },
+        "standard": {
+          "low": 6000,
+          "high": 10000
+        },
+        "premium": {
+          "low": 10000,
+          "high": 18000
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "consoles",
+      "group": "carp",
+      "label": "TV console and shoe cabinet",
+      "per": "fixed",
+      "unit": "each",
+      "qty": 2,
+      "qtyMax": 6,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 800,
+          "high": 1500
+        },
+        "standard": {
+          "low": 1500,
+          "high": 3000
+        },
+        "premium": {
+          "low": 3000,
+          "high": 6000
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "doors",
+      "group": "fit",
+      "label": "Doors and windows",
+      "per": "fixed",
+      "unit": "per flat",
+      "qty": 1,
+      "qtyMax": 20,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 1500,
+          "high": 3000
+        },
+        "standard": {
+          "low": 3000,
+          "high": 6000
+        },
+        "premium": {
+          "low": 6000,
+          "high": 12000
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "lighting",
+      "group": "fit",
+      "label": "Lighting and fans",
+      "per": "area",
+      "unit": "per sqm",
+      "qty": 1,
+      "qtyMax": 20,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 10,
+          "high": 20
+        },
+        "standard": {
+          "low": 20,
+          "high": 35
+        },
+        "premium": {
+          "low": 35,
+          "high": 60
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "aircon",
+      "group": "extra",
+      "label": "Air-conditioning",
+      "per": "fixed",
+      "unit": "per unit",
+      "qty": 3,
+      "qtyMax": 8,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 1400,
+          "high": 2000
+        },
+        "standard": {
+          "low": 1800,
+          "high": 2800
+        },
+        "premium": {
+          "low": 2800,
+          "high": 4500
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": ""
+    },
+    {
+      "id": "furniture",
+      "group": "extra",
+      "label": "Furniture and curtains",
+      "per": "area",
+      "unit": "per sqm",
+      "qty": 1,
+      "qtyMax": 20,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 100,
+          "high": 180
+        },
+        "standard": {
+          "low": 180,
+          "high": 320
+        },
+        "premium": {
+          "low": 320,
+          "high": 600
+        }
+      },
+      "source": {
+        "url": "https://www.shopback.sg/blog/finance/hdb-renovation-cost",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Loose furniture, curtains and appliances vary most; treat as a placeholder."
+    }
+  ],
+  "version": 1,
+  "updated": "2026-10-27",
+  "builtBy": "Built by hand with Claude on 27 Oct 2026 to show this template. Figures come from a few web searches, not a full research run: check each source.",
+  "buildLog": []
+}

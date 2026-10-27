@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { Item, Spec } from "@/lib/spec";
+import type { CompareSpec as Spec, Item } from "@/lib/spec";
 
 /**
  * Schemas the agent asks Claude to fill in (structured outputs). They use arrays of
@@ -131,6 +131,8 @@ export function toSpec(args: {
     });
   }
   return {
+    kind: "compare",
+    drivers: previous?.drivers ?? [],
     id: args.slug,
     title: plan.title,
     subject: plan.subject,

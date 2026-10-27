@@ -3,7 +3,15 @@ import path from "node:path";
 import { formatSgd, modelName, SGD_PER_USD, summariseBuildLog } from "./pricing";
 import type { Spec } from "./spec";
 
-const TEMPLATE_PATH = path.join(process.cwd(), "templates", "calculator.html");
+const TEMPLATES = path.join(process.cwd(), "templates");
+const read = (file: string) => fs.readFileSync(path.join(TEMPLATES, file), "utf8");
+
+/** Which page template and engine script each kind of calculator uses. */
+const KIND_FILES: Record<Spec["kind"], { template: string; engine?: string }> = {
+  compare: { template: "calculator.html" },
+  estimate: { template: "estimate.html", engine: "estimate-engine.js" },
+  projection: { template: "projection.html", engine: "projection-engine.js" },
+};
 
 function esc(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -46,14 +54,20 @@ export function buildCostSection(spec: Spec): string {
 <tfoot><tr><td colspan="5">Total AI cost so far</td><td>${formatSgd(totalSgd)}</td></tr></tfoot></table></div></section>`;
 }
 
-/** The full calculator page: the prototype's standalone page with this spec built in. */
-export function renderCalculatorHtml(spec: Spec, template = fs.readFileSync(TEMPLATE_PATH, "utf8")): string {
+/** The full calculator page: the kind's template with the shared styles and scripts and this spec built in. */
+export function renderCalculatorHtml(spec: Spec, template = read(KIND_FILES[spec.kind].template)): string {
   // The page script only needs what it renders; the build log is shown by the section below.
   const { buildLog: _log, ...pageSpec } = spec;
   void _log;
   const json = JSON.stringify(pageSpec).replace(/</g, "\\u003c").replace(/[\u2028\u2029]/g, (c) => "\\u" + c.charCodeAt(0).toString(16));
   const nav = `<div style="padding:10px 16px;font:500 14px Geist,system-ui,sans-serif"><a href="/" style="color:inherit">&larr; All calculators</a></div>`;
-  let html = template.replace("__SPEC_JSON__", () => json).replace("__TITLE__", () => esc(spec.title));
+  const engine = KIND_FILES[spec.kind].engine;
+  let html = template
+    .replace("__BASE_CSS__", () => read("shared.css"))
+    .replace("__COMMON_JS__", () => read("common.js"))
+    .replace("__ENGINE_JS__", () => (engine ? read(engine) : ""))
+    .replace("__SPEC_JSON__", () => json)
+    .replace("__TITLE__", () => esc(spec.title));
   html = html.replace("<body>", () => "<body>" + nav);
   // The page script also contains the text "</body>", so insert before the real closing tag (the last one).
   const end = html.lastIndexOf("</body>");

@@ -1,4 +1,5 @@
 import { listCalculators } from "@/lib/data";
+import { describeSpec } from "@/lib/spec";
 import { formatSgd, summariseBuildLog } from "@/lib/pricing";
 import { BuilderForms } from "./builder-forms";
 import { BuildProgress } from "./build-progress";
@@ -20,7 +21,7 @@ export default function Home() {
               <h2 className="text-lg font-semibold">{c.title}</h2>
               <p className="mt-2 line-clamp-3 text-sm text-muted">{c.scope}</p>
               <p className="mt-3 text-xs text-accent">
-                {c.items.length} options · version {c.version} · {c.buildLog.length ? `AI cost ${formatSgd(totalSgd)}` : "built by hand"}
+                {describeSpec(c)} · version {c.version} · {c.buildLog.length ? `AI cost ${formatSgd(totalSgd)}` : "built by hand"}
               </p>
             </a>
           );

@@ -1,4 +1,4 @@
-import type { Spec } from "@/lib/spec";
+import type { CompareSpec as Spec } from "@/lib/spec";
 import { slugify } from "@/lib/spec";
 import type { Agent } from "./llm";
 import { CLASSIFY_SYSTEM, EXTRACT_SYSTEM, PATCH_SYSTEM, PLAN_SYSTEM, RESEARCH_SYSTEM, VERIFY_SYSTEM } from "./prompts";
