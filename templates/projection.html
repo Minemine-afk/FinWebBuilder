@@ -98,6 +98,7 @@ function refresh() {
       ? `<b>Not reached</b> within ${v.years} years at ${pct(rate)}.${spec.contribution ? ` You would need about <b class="num">${money(need, CUR)}</b> a month${v.monthlyDep > 0 ? " (you have " + money(v.monthlyDep, CUR) + ")" : ""} to reach it in ${v.years} years.` : ""}`
       : `<b>Reached after ${yrs(gm)}</b> at ${pct(rate)} a year.${spec.contribution ? ` To reach it by year ${v.years} you need at least ${money(need, CUR)} a month.` : ""}`}</p></div>`;
   }
+  if (spec.items.length > 1) h += compareTable(v);
   h += `<div class="panel chart"><div class="panel-head"><h3>Value over time</h3></div>${lineChart(runs, v)}
     <div class="legend">${SCEN.filter(([k]) => k !== "own" || state.scenario === "own").map(([k, l, c]) => `<span><i style="background:${c}"></i>${l} (${pct(v.rates[k])})</span>`).join("")}${spec.goal && v.goal > 0 ? `<span><i style="background:var(--fg)"></i>Goal</span>` : ""}</div></div>`;
   h += yearTable(pick);
@@ -105,6 +106,24 @@ function refresh() {
   h += `<p class="limits">${esc(it.name)}${it.option ? " (" + esc(it.option) + ")" : ""}: ${esc(it.notes || "")} Source: ${su ? `<a href="${esc(su)}" target="_blank" rel="noopener">${esc(hostOf(su))}</a>` : "not given"}${it.source && it.source.verified ? ", checked " + esc(it.source.verified) : ""}${it.source && it.source.type === "estimate" ? " (estimate)" : ""}.</p>`;
   $("summary").innerHTML = h;
   syncErrors();
+}
+
+/** Every item at the viewer's inputs, so options can be ranked without switching one by one. A row click selects that item. */
+function compareTable(v) {
+  const rows = spec.items.map((it) => {
+    const start = spec.startMode === "input" ? v.start : it.value;
+    const run = (rate) => project({ ...params(rate), start });
+    const end = (r) => (state.real ? r.rows[r.rows.length - 1].real : r.final);
+    const base = run(it.rates.base);
+    return { it, low: end(run(it.rates.low)), base: end(base), high: end(run(it.rates.high)), goalMonths: base.goalMonths };
+  }).sort((a, b) => b.base - a.base);
+  const max = Math.max(1, ...rows.map((r) => r.high));
+  let h = `<div class="panel"><div class="panel-head"><h3>All options after ${v.years} ${v.years === 1 ? "year" : "years"}</h3><span class="muted small">Base rate, with the low to high range${state.real ? " · today's money" : ""}. Pick a row to see it in detail.</span></div><div class="tablewrap"><table class="compare-all"><thead><tr><th>${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</th><th>Base rate</th><th>Value at base</th><th>Low to high</th>${spec.goal && v.goal > 0 ? "<th>Goal reached</th>" : ""}</tr></thead><tbody>`;
+  for (const r of rows) {
+    const sel = r.it.id === state.item;
+    h += `<tr data-item="${esc(r.it.id)}" tabindex="0" style="cursor:pointer${sel ? ";font-weight:600" : ""}"${sel ? ' aria-current="true"' : ""}><td>${esc(r.it.name)}</td><td class="num">${pct(r.it.rates.base)}</td><td class="num">${money(r.base, CUR)}<div aria-hidden="true" style="height:6px;margin-top:4px;border-radius:3px;background:var(--border);position:relative"><span style="position:absolute;left:${((r.low / max) * 100).toFixed(1)}%;width:${(((r.high - r.low) / max) * 100).toFixed(1)}%;top:0;bottom:0;border-radius:3px;background:var(--series-1);opacity:.35"></span><span style="position:absolute;left:calc(${((r.base / max) * 100).toFixed(1)}% - 1px);width:2px;top:-2px;bottom:-2px;background:var(--series-1)"></span></div></td><td class="num">${money(r.low, CUR)} – ${money(r.high, CUR)}</td>${spec.goal && v.goal > 0 ? `<td>${r.goalMonths === null ? `<span class="muted">Not within ${v.years} years</span>` : yrs(r.goalMonths)}</td>` : ""}</tr>`;
+  }
+  return h + `</tbody></table></div></div>`;
 }
 
 function yearTable(run) {
@@ -161,6 +180,12 @@ $("sidebar").addEventListener("input", (e) => {
   else return;
   refresh();
 });
+function pickItem(row) {
+  if (!row || row.dataset.item === state.item) return;
+  state.item = row.dataset.item; state.ownText = ""; renderSidebar(); refresh();
+}
+$("summary").addEventListener("click", (e) => pickItem(e.target.closest("tr[data-item]")));
+$("summary").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { const row = e.target.closest("tr[data-item]"); if (row) { e.preventDefault(); pickItem(row); } } });
 $("sidebar").addEventListener("click", (e) => {
   const b = e.target.closest("[data-scen]");
   if (!b) return;
