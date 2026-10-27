@@ -1,0 +1,217 @@
+{
+  "kind": "projection",
+  "id": "grow-your-savings-gold-vs-stocks-vs-bonds",
+  "title": "Where to grow your savings: gold vs stocks vs bonds vs CPF",
+  "currency": "SGD",
+  "scope": "Projects a lump sum plus monthly top-ups in Singapore dollars over the years in seven places: Singapore Savings Bonds, rolled-over 6-month SGS T-bills, a bonus-interest bank account (UOB One or OCBC 360 with salary credit), a CPF cash top-up earning the Special/Retirement Account rate, an STI ETF and an S&P 500 ETF with dividends reinvested, and physical gold. Each has a low, base and high yearly rate from recent history and rates published by Oct 2026, or you can type your own. Shows when you would reach your goal, and offers a today's-money view using 2% a year Singapore inflation.",
+  "limits": "These are scenarios, not forecasts: no one knows future yields, share prices or the gold price, and past returns, especially the strong 2024-26 runs in stocks and gold, may not repeat. Only Singapore Savings Bonds, SGS T-bills and CPF are capital-guaranteed by the Singapore Government; bank deposits are insured by SDIC only up to S$100,000 per depositor per bank; STI ETFs, S&P 500 ETFs and gold can fall in value and you can get back less than you put in. CPF top-ups are locked in CPF until retirement age (from 55 for the Retirement Account, with payouts from 65) and cannot be withdrawn as cash in the meantime; the CPF cash top-up tax relief (up to S$8,000 a year for yourself) is not counted. Bank bonus rates need salary credit and often card spend, change often and apply only to set balance tiers. Not counted: broker and platform fees, ETF expense ratios beyond what is built into the rates, the 15% or 30% US dividend withholding tax, gold dealer buy/sell spreads (about 2-3% for a 1 kg bar, far more for small bars) and storage fees, currency swings beyond the assumed rate, and SSB or T-bill application limits. Rates are applied as yearly averages; real returns vary year to year. Not financial advice.",
+  "version": 1,
+  "updated": "2026-10-27",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 431675,
+      "output": 30166,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 23,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:30:36.394Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 12,
+      "output": 9111,
+      "cacheRead": 182532,
+      "cacheWrite": 35446,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:30:36.394Z"
+    },
+    {
+      "round": "First build",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 32,
+      "output": 18768,
+      "cacheRead": 86604,
+      "cacheWrite": 37632,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:30:36.394Z"
+    }
+  ],
+  "subject": "place to grow your savings",
+  "valueLabel": "Savings",
+  "startMode": "input",
+  "start": {
+    "id": "start",
+    "label": "Lump sum today",
+    "unit": "S$",
+    "default": 20000,
+    "min": 0,
+    "max": 5000000,
+    "step": 500
+  },
+  "contribution": {
+    "id": "topup",
+    "label": "Top-up each month",
+    "unit": "S$",
+    "default": 500,
+    "min": 0,
+    "max": 50000,
+    "step": 50,
+    "period": "month"
+  },
+  "years": {
+    "default": 10,
+    "min": 1,
+    "max": 40
+  },
+  "rateLimits": {
+    "min": -0.05,
+    "max": 0.15
+  },
+  "compounding": "annual",
+  "inflation": 0.02,
+  "goal": {
+    "id": "goal",
+    "label": "Savings goal",
+    "unit": "S$",
+    "default": 100000,
+    "min": 1,
+    "max": 10000000,
+    "step": 1000
+  },
+  "items": [
+    {
+      "id": "ssb",
+      "name": "Singapore Savings Bonds",
+      "option": "10-year average return, Oct 2026 issue 2.32%",
+      "rates": {
+        "low": 0.0185,
+        "base": 0.0232,
+        "high": 0.0333
+      },
+      "rateBasis": "Base: the Oct 2026 issue's 10-year average return of 2.32% (first-year rate 1.65%). Low: 1.85%, the Nov 2025 issue, the lowest found in the past three years. High: 3.33%, the May 2024 issue, near the 2023-24 peak.",
+      "source": {
+        "url": "https://growbeansprout.com/ssb-vs-tbill-vs-fixed-deposit-sep-2026",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Government-backed and capital-guaranteed; you can redeem any month without penalty. Oct 2026 rates from Beansprout (18 Sep 2026); the low and high are earlier issues reported by Beansprout (Nov 2025 and May 2024 pages). Interest rises each year, so the 10-year average applies only if held the full 10 years."
+    },
+    {
+      "id": "tbill",
+      "name": "6-month SGS T-bills, rolled over",
+      "option": "Cut-off yield, 24 Sep 2026 auction 1.92%",
+      "rates": {
+        "low": 0.0136,
+        "base": 0.0192,
+        "high": 0.038
+      },
+      "rateBasis": "Base: the 24 Sep 2026 cut-off of 1.92%, the latest result found. Low: 1.36%, the Feb 2026 auctions, the recent low. High: about 3.8%, typical of early 2024 auctions (peak 3.95% in Oct 2023).",
+      "source": {
+        "url": "https://growbeansprout.com/t-bill-auction-8-oct-2026",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Government-backed and capital-guaranteed if held to maturity. Latest cut-offs from Beansprout (2 Oct 2026); history from StashAway's MAS cut-off table (https://www.stashaway.sg/r/t-bill-historical-cut-off-yield). The Oct 2026 auction results could not be confirmed. Yields reset at every auction, so a long projection is only an assumption."
+    },
+    {
+      "id": "bank",
+      "name": "High-yield bank savings account",
+      "option": "UOB One or OCBC 360 with salary credit",
+      "rates": {
+        "low": 0.01,
+        "base": 0.013,
+        "high": 0.019
+      },
+      "rateBasis": "Low: 1.00%, UOB One with salary credit and S$500 card spend on balances up to S$75,000. Base: about 1.3%, OCBC 360 salary bonus plus base rate, or UOB One on S$100,000 (1.375%). High: 1.90%, UOB One's maximum effective rate on S$150,000, about the same as OCBC 360 with salary, save and spend bonuses.",
+      "source": {
+        "url": "https://www.uob.com.sg/personal/save/everyday-accounts/one-account.page",
+        "verified": "2026-10-27",
+        "type": "official"
+      },
+      "notes": "UOB One tiers since 1 Dec 2025 from UOB's page: 1.00% on the first S$75k, 2.50% on the next S$50k, 3.40% on the next S$25k with salary of S$1,600+ and S$500 card spend; effective rate worked out by us. OCBC 360 cuts from 1 May 2026 from Milelion (1 Apr 2026, https://milelion.com/2026/04/01/ocbc-360-account-cuts-interest-rates-from-may-2026/): salary bonus about 1.25%. Miss the conditions and both pay 0.05%. Banks change these rates often. SDIC insures up to S$100,000 per depositor per bank."
+    },
+    {
+      "id": "cpf",
+      "name": "CPF voluntary cash top-up (SA/RA)",
+      "option": "Special/Retirement Account, 4% floor",
+      "rates": {
+        "low": 0.04,
+        "base": 0.04,
+        "high": 0.05
+      },
+      "rateBasis": "Low and base: the 4% floor rate for Special, MediSave and Retirement Account money, paid for Oct-Dec 2026 and extended to 31 Dec 2027. High: 5%, the 4% plus the 1% extra interest paid on the first S$60,000 of combined CPF balances (under 55), which applies only if your total balances are small.",
+      "source": {
+        "url": "https://www.cpf.gov.sg/member/infohub/news/news-releases/government-extends-4-per-cent-interest-rate-floor-on-special-medisave-and-retirement-account-monies-until-31-december-2027",
+        "verified": "2026-10-27",
+        "type": "official"
+      },
+      "notes": "Rate and floor extension from the CPF Board release of 22 Sep 2026. Extra interest rules from search summaries of CPF pages. Government-guaranteed, but the money is locked until retirement: it cannot be withdrawn as cash before 55 and the Retirement Account pays out from 65. Cash top-ups earn up to S$8,000 a year of tax relief for yourself (IRAS), only up to the Full Retirement Sum, which caps how much you can top up."
+    },
+    {
+      "id": "sti",
+      "name": "STI ETF, dividends reinvested",
+      "option": "e.g. SPDR STI ETF (ES3), yield 3.25%",
+      "rates": {
+        "low": 0.04,
+        "base": 0.06,
+        "high": 0.085
+      },
+      "rateBasis": "Base: about 6%, near the long-run total return since 2002 of 6.4-6.5% a year reported by The Smart Investor and Stockanalysis, trimmed for fees. High: 8.5%, about SSGA's 8.59% a year since inception to 30 Sep 2026. Low: 4%, roughly the 3% dividend yield plus slow price growth. The 10-year 11.0% and 5-year 17.6% figures are lifted by a very strong 2025-26 and are not used.",
+      "source": {
+        "url": "https://www.ssga.com/sg/en/individual/etfs/spdr-straits-times-index-etf-es3",
+        "verified": "2026-10-27",
+        "type": "official"
+      },
+      "notes": "SSGA fund page (dated 26 Oct 2026): NAV returns to 30 Sep 2026 of 36.5% (1 year), 17.6% a year (5 years), 11.0% a year (10 years), 8.59% a year since Apr 2002; dividend yield 3.25%; expense ratio 0.28%. Sources disagree on the since-inception figure (6.36% to Aug 2021 per The Smart Investor). Share prices can fall; not capital-guaranteed."
+    },
+    {
+      "id": "sp500",
+      "name": "S&P 500 ETF in SGD, dividends reinvested",
+      "option": "e.g. iShares Core S&P 500 UCITS (CSPX)",
+      "rates": {
+        "low": 0.05,
+        "base": 0.075,
+        "high": 0.1
+      },
+      "rateBasis": "Our estimate in SGD: the US market's long-run total return of about 10.5% a year in USD since 1926 (Hartford Funds), less about 1% a year for the US dollar's past fall against the SGD (USD/SGD about 1.42 in 2015 to about 1.29 in 2026), less fees and 15% dividend withholding tax. Base 7.5% also trims for high valuations after a 10-year USD return near 14.7%. High 10%: close to the long-run USD average. Low 5%: weaker returns and a stronger SGD.",
+      "source": {
+        "url": "https://dr.hartfordfunds.com/dam/en/docs/pub/whitepapers/HF0015.pdf",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Long-run average from Hartford Funds (to 31 Dec 2025), with YCharts at 10.77%. CSPX 10-year return 14.73% a year in USD to 30 Jun 2026 and 0.07% expense ratio from BlackRock (https://www.blackrock.com/uk/intermediaries/products/253743/ishares-core-s-p-500-ucits-etf). No published SGD-terms return was found, so the currency drag is our own arithmetic. Irish-domiciled funds lose 15% of US dividends to tax, US-domiciled ones 30%. Not capital-guaranteed."
+    },
+    {
+      "id": "gold",
+      "name": "Physical gold in SGD",
+      "option": "Gold bars, about SGD 5,200 per oz in Jul 2026",
+      "rates": {
+        "low": 0.01,
+        "base": 0.05,
+        "high": 0.09
+      },
+      "rateBasis": "Our estimate in SGD: gold returned about 9.4% a year in USD over 20 years and 11.4% over 10 years to Jul 2026 (GLD price, ChartRow); less about 1% a year for SGD strength gives roughly 8.5% and 10.5%. High 9%: close to the 20-year pace. Base 5%: well below it, because the 10-year figure is lifted by the 2024-26 surge and gold has fallen from its Jan 2026 record. Low 1%: a long flat spell, as in 2012-2018.",
+      "source": {
+        "url": "https://chartrow.com/gold/trailing-returns",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Trailing USD returns from ChartRow (as of 2 Jul 2026) via search; a World Gold Council figure of 9.9% a year spot return for Jun 2006-Jun 2026 was reported by Business Today. SGD price about S$5,202 per oz on 31 Jul 2026 (cbonds, WGC data). Gold pays no income. Buying and selling a 1 kg bar costs about 2-3% (Silver Bullion), and vault storage about 0.35% a year; neither is deducted here. Not capital-guaranteed."
+    }
+  ],
+  "defaults": {
+    "item": "ssb"
+  }
+}
