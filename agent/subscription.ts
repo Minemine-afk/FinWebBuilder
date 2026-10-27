@@ -38,6 +38,19 @@ export function buildPrompt(state: RunState, request: string): string {
   const task = state.previous
     ? `Update the existing calculator in ${file} to satisfy this follow-up request. Keep every option, id and price that the request doesn't affect.`
     : `Create a new calculator for this topic and save it as ${file}, with "id": "${state.slug}".`;
+  const how = state.previous
+    ? `How to work:
+1. Read ${file} (the current spec) and lib/spec.ts. Do not read other calculators.
+2. Edit ${file} in place with small Edit calls; never rewrite the whole file.
+3. Research only what the request needs. A request about wording, structure, years, durations or the figures already in the file needs no web access at all: just edit. If a new option or price is needed, call the price-researcher sub-agent for that option only (foreground, never run_in_background), and wait for its notes.
+4. Run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error until it passes.`
+    : `How to work:
+1. Read lib/spec.ts for the file format and data/calculators/ev-vs-petrol-car.json as a worked example.
+2. Plan the calculator yourself: 3 to 6 real options people choose between, and 3 to 5 cost components (at least one recurring; one-off components are paid once at the start). Use buyer variants or monthly extras only when they genuinely apply.
+3. Hand the price research to the price-researcher sub-agent, one or two options per call, several calls in parallel. It runs on a cheaper model. Start every sub-agent in the foreground (never with run_in_background) and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved.
+4. Read its notes. Only a price marked UNCONFIRMED, or where sources clash, may be researched again, and only with a WebSearch; do not open pages yourself.
+5. Write the file. In each option's "notes", say how each figure was found, with dates; in "source", give the best URL, today's date as "verified", and "official", "secondary" or "estimate". Write "scope" and "limits" so a reader knows exactly what is and isn't included.
+6. Run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error it reports until it passes.`;
   return `You build cost-comparison calculators for a Singapore audience. Prices are in Singapore dollars unless the topic is clearly about another market.
 
 ${task}
@@ -46,15 +59,9 @@ ${task}
 ${request}
 </request>
 
-How to work:
-1. Read lib/spec.ts for the file format and data/calculators/ev-vs-petrol-car.json as a worked example.
-2. Plan the calculator yourself: 3 to 6 real options people choose between, and 3 to 5 cost components (at least one recurring; one-off components are paid once at the start). Use buyer variants or monthly extras only when they genuinely apply.
-3. Hand the price research to the price-researcher sub-agent, one or two options per call, several calls in parallel. It runs on a cheaper model. Start every sub-agent in the foreground (never with run_in_background) and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved.
-4. Read its notes. Any price it marks UNCONFIRMED, or where sources clash, research again yourself before you use it.
-5. Write the file. In each option's "notes", say how each figure was found, with dates; in "source", give the best URL, today's date as "verified", and "official", "secondary" or "estimate". Write "scope" and "limits" so a reader knows exactly what is and isn't included.
-6. Check the numbers against each other and the notes, then run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error it reports until it passes.
+${how}
 
-Rules: you must finish by writing ${file} and passing validate in this same run; never end your turn with research still pending. Change no file except ${file}. Leave "version", "updated" and "buildLog" alone; the workflow sets them. Do not invent URLs or prices.`;
+Rules: you must finish by writing ${file} and passing validate in this same run; never end your turn with research still pending. Change no file except ${file}. Leave "version", "updated" and "buildLog" alone; the workflow sets them. Do not invent URLs or prices. The page HTML is rendered from the JSON by the site, so never write HTML, and never print the whole file back in your reply.`;
 }
 
 function prepare() {
@@ -76,7 +83,8 @@ function prepare() {
     request = prompt;
   }
   fs.writeFileSync(STATE_FILE, JSON.stringify(state));
-  output({ slug: state.slug, prompt: buildPrompt(state, request) });
+  // Refinements patch an existing spec, so the cheaper model leads; a new build keeps Opus for planning.
+  output({ slug: state.slug, prompt: buildPrompt(state, request), model: state.previous ? "claude-sonnet-5-5" : "claude-opus-5-5" });
 }
 
 function validate(slug: string) {
