@@ -132,7 +132,7 @@ export function usageFromExecution(messages: unknown[], round: string): BuildLog
   const byModel = (result.modelUsage ?? {}) as Record<string, ModelUsage>;
   return Object.entries(byModel).map(([model, u]) => ({
     round,
-    label: /sonnet/.test(model) ? "Price research (sub-agents)" : /haiku/.test(model) ? "Background tasks" : "Planning, checking and writing",
+    label: /sonnet/.test(model) ? "Price research (sub-agents)" : /haiku/.test(model) ? "Reading fetched pages" : "Planning, checking and writing",
     model,
     input: u.inputTokens ?? 0,
     output: u.outputTokens ?? 0,

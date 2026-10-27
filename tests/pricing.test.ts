@@ -14,6 +14,7 @@ describe("callCostSgd", () => {
   });
   it("prices Opus at its own rate", () => {
     expect(callCostSgd(entry({ model: "claude-opus-5-5", input: 1_000_000 }))).toBeCloseTo(4 * SGD_PER_USD, 6);
+    expect(callCostSgd(entry({ model: "claude-haiku-5-5", input: 1_000_000, output: 100_000 }))).toBeCloseTo(0.15 * SGD_PER_USD, 6);
   });
   it("never under-prices an unknown model", () => {
     const unknown = callCostSgd(entry({ model: "claude-future-9", input: 1_000_000, output: 1_000_000 }));
