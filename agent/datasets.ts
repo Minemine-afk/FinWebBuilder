@@ -11,6 +11,10 @@
  *       Adds private-property items whose price level the agent researched. Their history and rates come from
  *       the URA index for their segment, so every item's yearly rate is measured over the same three years.
  *
+ *   archive-prices <url> [--from 2023] [--to 2025]
+ *       Lists dated Internet Archive (Wayback Machine) snapshots of one page and prints the price lines in the
+ *       earliest and latest snapshot of each year, so a provider's own past prices can be read with their dates.
+ *
  * Items are tagged with "location" and "type" filters, which this script adds to the file as needed.
  */
 import fs from "node:fs";
@@ -257,6 +261,46 @@ async function downloadResale(): Promise<string> {
   throw new Error("data.gov.sg did not prepare the HDB resale download in time.");
 }
 
+const PRICE_RE = /s?\$\s?\d[\d,]*(?:\.\d+)?\s?[kK]?/i;
+const PRICE_CONTEXT = /4[- ]?room|average|package|BTO|HDB|from|renovation|starting|per /i;
+
+async function fetchText(url: string, tries = 4): Promise<string | null> {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0 (compatible; finwebbuilder-research)" }, signal: AbortSignal.timeout(60_000) });
+      if (res.ok) return await res.text();
+    } catch { /* retry */ }
+    await new Promise((r) => setTimeout(r, 8000 * (i + 1)));
+  }
+  return null;
+}
+
+export function priceLines(html: string): string[] {
+  const text = html.replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, "\n");
+  const lines = text.split("\n").map((l) => l.replace(/\s+/g, " ").trim());
+  return [...new Set(lines.filter((l) => l.length < 260 && PRICE_RE.test(l) && PRICE_CONTEXT.test(l)))].slice(0, 14);
+}
+
+async function archivePrices(url: string, from: string, to: string) {
+  const cdx = "https://web.archive.org/cdx/search/cdx?" + new URLSearchParams({ url, from, to, output: "json", fl: "timestamp,statuscode", filter: "statuscode:200", collapse: "timestamp:6", limit: "60" });
+  const raw = await fetchText(cdx);
+  if (!raw) throw new Error("The Internet Archive did not answer; try again later, and report the provider's past prices as an ESTIMATE.");
+  const stamps = (JSON.parse(raw) as string[][]).slice(1).map((r) => r[0]);
+  console.log(`${url}: ${stamps.length} snapshots ${stamps.map((s) => s.slice(0, 8)).join(" ")}`);
+  const pick = new Set<string>();
+  for (let y = Number(from); y <= Number(to); y++) {
+    const ys = stamps.filter((s) => s.startsWith(String(y)));
+    if (ys.length) { pick.add(ys[0]); pick.add(ys[ys.length - 1]); }
+  }
+  for (const ts of pick) {
+    const html = await fetchText(`https://web.archive.org/web/${ts}id_/${url}`);
+    if (!html) { console.log(`--- ${ts.slice(0, 8)}: fetch failed`); continue; }
+    console.log(`--- ${ts.slice(0, 8)} https://web.archive.org/web/${ts}/${url}`);
+    for (const l of priceLines(html)) console.log(`    ${l}`);
+    await new Promise((r) => setTimeout(r, 3000));
+  }
+}
+
 async function main() {
   const [command, ...args] = process.argv.slice(2);
   if (command === "hdb-resale") {
@@ -289,8 +333,12 @@ async function main() {
     save(slug, mergeItems(readOrSkeleton(slug), items, labels));
     for (const it of items) console.log(`  ${it.id}: ${it.value} | base ${(it.rates.base * 100).toFixed(1)}%/yr | ${it.history.map((h) => h.value).join(" > ")}`);
     console.log(`Added ${items.length} private items to data/calculators/${slug}.json.`);
+  } else if (command === "archive-prices") {
+    const url = args[0];
+    if (!url || url.startsWith("--")) throw new Error("Usage: archive-prices <url> [--from 2023] [--to 2025]");
+    await archivePrices(url, flag(args, "--from") ?? String(new Date().getFullYear() - 3), flag(args, "--to") ?? String(new Date().getFullYear()));
   } else {
-    throw new Error("Commands: hdb-resale <slug>, private-index, private-items <slug> '<json>'");
+    throw new Error("Commands: archive-prices <url>, hdb-resale <slug>, private-index, private-items <slug> '<json>'");
   }
 }
 

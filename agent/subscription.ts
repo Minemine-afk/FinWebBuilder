@@ -43,7 +43,7 @@ export const FORMAT_EXAMPLES = {
 
 /** Which model the price-researcher sub-agents run on; a build can ask for Opus when the research is hard. */
 export function researchModel(): "sonnet" | "opus" {
-  return process.env.RESEARCH_MODEL === "opus" ? "opus" : "sonnet";
+  return process.env.RESEARCH_MODEL === "sonnet" ? "sonnet" : "opus";
 }
 
 const RESEARCH_BY_KIND = {
@@ -52,7 +52,7 @@ const RESEARCH_BY_KIND = {
   projection: "one or two items per call: today's value or price, plus its yearly growth or return over recent years and any published current rate, so low, base and high rates can be chosen",
 } as const;
 
-export function buildPrompt(state: RunState, request: string, research: "sonnet" | "opus" = "sonnet"): string {
+export function buildPrompt(state: RunState, request: string, research: "sonnet" | "opus" = "opus"): string {
   const agentModel = research === "opus" ? ` Start every price-researcher call with model "opus" (this build asked for the strongest research model).` : "";
   const file = `data/calculators/${state.slug}.json`;
   const task = state.previous
@@ -72,6 +72,7 @@ export function buildPrompt(state: RunState, request: string, research: "sonnet"
    If a topic could fit two, choose the one the reader most likely wants an answer from. Set "kind" to your choice. Notes: ${Object.entries(FORMAT_EXAMPLES).map(([k, f]) => `agent/formats/${k}.md with ${f}`).join("; ")}.
 2. Plan the calculator yourself, as the kind's notes describe, with real options, lines or items people would recognise.
 3. Hand the price research to the price-researcher sub-agent, one or two options, lines or items per call, several calls in parallel. For this kind, ask for: compare = ${RESEARCH_BY_KIND.compare}; estimate = ${RESEARCH_BY_KIND.estimate}; projection = ${RESEARCH_BY_KIND.projection}. ${research === "opus" ? agentModel.trim() : "It runs on a cheaper model."} Start every sub-agent in the foreground and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved. Never end your turn saying you will wait; the run is over when you stop.
+   Past prices: whenever the calculator needs a provider's or option's own price history (a provider with a "history", or a projection item's past prices), do not settle for today's figure. For each provider's own pricing page or profile (including its Hometrust, Qanvast or similar listing) run \`npx tsx agent/datasets.ts archive-prices "<url>" --from <three years ago> --to <this year>\` yourself, which prints dated Internet Archive snapshots and the price lines in them, and have the price-researcher find dated reviews, quotes and articles for years the archive lacks. Use these real dated figures as the history, quote the snapshot URL, and mark a year ESTIMATE only after both searches found nothing, saying so in its rationale.
    For property prices in Singapore, use the official data tools in agent/formats/projection.md (HDB resale and URA indices) instead of researching those figures.
 4. Read its notes. Only a price marked UNCONFIRMED, or where sources clash, may be researched again, and only with a WebSearch; do not open pages yourself.
 5. Write the file. Give each source its best URL, today's date as "verified", and "official", "secondary" or "estimate" as its type, and say in the notes how each figure was found, with dates. Write "scope" and "limits" so a reader knows exactly what is and isn't included.

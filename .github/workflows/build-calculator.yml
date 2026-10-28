@@ -24,9 +24,9 @@ on:
       research_model:
         description: "Model for the price-research sub-agents"
         required: false
-        default: sonnet
+        default: opus
         type: choice
-        options: [sonnet, opus]
+        options: [opus, sonnet]
 
 permissions:
   contents: write
