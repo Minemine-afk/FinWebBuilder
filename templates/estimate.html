@@ -69,7 +69,7 @@ function renderSidebar() {
     h += `<label class="field" for="presetSel"><span>${esc(spec.presets.label)}</span><select id="presetSel">${spec.presets.options.map((o) => `<option value="${esc(o.id)}"${o.id === state.preset ? " selected" : ""}>${esc(o.label)}</option>`).join("")}</select><span class="muted small" id="presetNote"></span></label>`;
   }
   if (P) {
-    h += `<fieldset><legend>${esc(P.label)}</legend><label class="field" for="provSel"><span class="small">Who does the work</span><select id="provSel">${P.options.map((o) => `<option value="${esc(o.id)}"${o.id === state.provider ? " selected" : ""}>${esc(o.name)}${o.type ? " · " + esc(o.type) : ""}</option>`).join("")}</select></label>
+    h += `<fieldset><legend>${esc(P.label)}</legend><label class="field" for="provSel"><span class="small">Pick one, or a row in the table</span><select id="provSel">${P.options.map((o) => `<option value="${esc(o.id)}"${o.id === state.provider ? " selected" : ""}>${esc(o.name)}${o.type ? " · " + esc(o.type) : ""}</option>`).join("")}</select></label>
       <div id="provInfo" class="small"></div>
       <label class="field" for="year"><span class="small">Year of the work ${tip(`Prices are ${spec.priceYear} figures. For a later year, each provider's prices grow at the yearly rate of its own last three or more years of prices (shown below), compounded. Past rises don't guarantee future ones.`)}</span><input id="year" type="number" inputmode="numeric" min="${spec.priceYear}" max="${P.maxYear}" step="1" value="${esc(state.yearText)}" class="num"><span class="muted small">${spec.priceYear} to ${P.maxYear}.</span></label>${errP("year")}</fieldset>`;
   }
@@ -140,7 +140,7 @@ function providerTable() {
   const rows = compareProviders(spec, state);
   if (!rows.length) return "";
   const max = Math.max(1, ...rows.map((r) => r.high));
-  let h = `<div class="panel"><div class="panel-head"><h3>Same job at every ${esc(P.label.toLowerCase())}, ${state.year}</h3><span class="muted small">Your settings, cheapest first. Pick a row to use it.</span></div><div class="tablewrap"><table><thead><tr><th>${esc(P.label)}</th><th>Price level</th><th>Yearly change</th><th>Trend</th><th>Estimated total</th></tr></thead><tbody>`;
+  let h = `<div class="panel"><div class="panel-head"><h3>Same job, every option: ${esc(P.label)}, ${state.year}</h3><span class="muted small">Your settings, cheapest first. Pick a row to use it.</span></div><div class="tablewrap"><table><thead><tr><th>${esc(P.label)}</th><th>Price level</th><th>Yearly change</th><th>Trend</th><th>Estimated total</th></tr></thead><tbody>`;
   for (const r of rows) {
     const p = P.options.find((o) => o.id === r.id);
     h += `<tr data-pick="${esc(r.id)}" tabindex="0"${r.id === state.provider ? ' class="sel" aria-current="true"' : ""}><td style="white-space:normal">${esc(r.name)}${r.type ? `<br><span class="sub">${esc(r.type)}</span>` : ""}</td><td>${r.factor === 1 ? "Market" : (r.factor > 1 ? "+" : "−") + Math.round(Math.abs(r.factor - 1) * 100) + "%"}</td><td>${signedPct(r.rate)}</td><td>${spark(p, state.year)}</td><td>${range(r.low, r.high)}<div aria-hidden="true" style="height:6px;margin-top:4px;border-radius:3px;background:var(--border);position:relative"><span style="position:absolute;left:${((r.low / max) * 100).toFixed(1)}%;width:${Math.max(1, ((r.high - r.low) / max) * 100).toFixed(1)}%;top:0;bottom:0;border-radius:3px;background:var(--series-1);opacity:.6"></span></div></td></tr>`;

@@ -152,3 +152,4 @@ tr.sel td { background: var(--chip); font-weight: 600; }
 tr[data-pick] { cursor: pointer; }
 tr[data-pick]:hover td { background: color-mix(in srgb, var(--chip) 60%, transparent); }
 .sub { font-size: 0.75rem; color: var(--muted); font-weight: 400; }
+.results > * { min-width: 0; }
