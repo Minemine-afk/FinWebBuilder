@@ -19,10 +19,12 @@ Cost-comparison calculators that build themselves. Type a topic, and a research 
 Each calculator JSON has a `kind`, and the builder picks one per topic (files with no `kind` are comparisons):
 
 - **compare** (`templates/calculator.html`): options side by side over a period. Shows a break-even headline, a running-total table, limited inputs (years to compare, own rate) and optional *drivers* such as km a year, which scale the cost components that depend on them.
-- **estimate** (`templates/estimate.html`): what a project costs, line by line, with a low to high range, finish levels, size and quantity inputs, optional lines and a contingency buffer. Example: HDB renovation.
-- **projection** (`templates/projection.html`): a value over time at low, base, high or your own yearly rate, with optional monthly deposits, a goal and a today's-money view. Examples: saving for a goal, future HDB price.
+- **estimate** (`templates/estimate.html`): what a project costs, line by line, with a low to high range, finish levels, size and quantity inputs, optional lines and a contingency buffer. Optional *presets* (kinds of job that switch lines on) and *providers* (who does the work: each has a price level and at least three years of its own prices, and the page grows its prices at that yearly rate for a future year). Example: HDB renovation cost.
+- **projection** (`templates/projection.html`): a value over time at low, base, high or your own yearly rate, with optional monthly deposits, a goal and a today's-money view. Long lists can be narrowed by up to three *filters* (e.g. location and property type), items can show their past prices, and `baseRateFrom: "history"` makes every base rate the compound yearly change across the item's own history. Example: Singapore property value.
 
-Schemas are in `lib/spec.ts`; the format notes the agent reads are in `agent/formats/`. The page maths lives in `templates/*-engine.js` and `templates/common.js`, which the tests run directly. Health, tax and converter calculators are not built yet.
+Schemas are in `lib/spec.ts`; the format notes the agent reads are in `agent/formats/`, with a worked example per kind in `agent/examples/` (kept out of `data/` so removing a calculator never removes them). Any figure can carry a `rationale`, shown on the page as hover text.
+
+**Official data tools** (`agent/datasets.ts`, which the build is allowed to run): `hdb-resale` adds every HDB town and flat type from HDB's resale transactions on data.gov.sg; `private-index` prints URA's private price indices from SingStat; `private-items` adds researched private-property prices whose past values and rates follow those indices. A build can also ask for Opus price research with the workflow's `research_model` input. The page maths lives in `templates/*-engine.js` and `templates/common.js`, which the tests run directly. Health, tax and converter calculators are not built yet.
 
 The Claude Code (subscription) path chooses the kind. The API-key agent in `agent/pipeline.ts` still builds comparisons only.
 

@@ -1,0 +1,19 @@
+{
+  "kind": "estimate", "id": "fixture-reno", "title": "Fixture renovation", "currency": "SGD", "subject": "flat", "priceYear": 2026,
+  "scope": "Test fixture.", "inputs": [{ "id": "area", "label": "Floor area", "unit": "sqm", "default": 90, "min": 30, "max": 200, "step": 1, "rationale": "A 4-room flat is about 90 sqm.", "choices": [{ "label": "3-room", "value": 65 }, { "label": "4-room", "value": 90 }] }],
+  "tiers": { "label": "Finish", "default": "standard", "options": [{ "id": "basic", "label": "Basic" }, { "id": "standard", "label": "Standard", "rationale": "Most common." }] },
+  "presets": { "label": "Type of renovation", "default": "full", "options": [
+    { "id": "full", "label": "Full", "lines": ["floor", "paint", "kitchen"] },
+    { "id": "kitchen", "label": "Kitchen only", "lines": ["kitchen"], "rationale": "Kitchen cabinets only." } ] },
+  "providers": { "label": "Provider", "default": "market", "maxYear": 2035, "options": [
+    { "id": "market", "name": "Market average", "factor": 1, "factorBasis": "Line ranges are market ranges.", "history": [{ "year": 2023, "value": 100 }, { "year": 2024, "value": 105 }, { "year": 2025, "value": 110.25 }], "rationale": "Index.", "source": { "url": "https://example.com", "verified": "2026-10-28", "type": "estimate" } },
+    { "id": "pricey", "name": "Pricey ID", "type": "Interior design firm", "factor": 1.2, "factorBasis": "20% above.", "history": [{ "year": 2023, "value": 40000 }, { "year": 2024, "value": 44000 }, { "year": 2025, "value": 48400, "label": "4-room package" }], "rationale": "Packages.", "source": { "url": "https://example.com", "verified": "2026-10-28", "type": "secondary" } }
+  ] },
+  "contingency": { "default": 0, "max": 0.3 },
+  "groups": [{ "id": "g1", "label": "Works" }],
+  "lines": [
+    { "id": "floor", "group": "g1", "label": "Flooring", "per": "area", "unit": "per sqm", "prices": { "basic": { "low": 40, "high": 60 }, "standard": { "low": 60, "high": 90 } }, "source": { "type": "estimate" }, "rationale": "Vinyl to tiles." },
+    { "id": "paint", "group": "g1", "label": "Painting", "unit": "whole flat", "qty": 1, "prices": { "basic": { "low": 1000, "high": 1500 }, "standard": { "low": 1500, "high": 2500 } }, "source": { "type": "estimate" } },
+    { "id": "kitchen", "group": "g1", "label": "Kitchen cabinets", "unit": "per metre", "qty": 5, "optional": true, "prices": { "basic": { "low": 400, "high": 600 }, "standard": { "low": 600, "high": 900 } }, "source": { "type": "official", "url": "https://example.com" } }
+  ]
+}

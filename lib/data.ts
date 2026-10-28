@@ -47,3 +47,9 @@ export function writeCalculator(spec: Spec, previous: Spec | null = readCalculat
   fs.writeFileSync(calculatorPath(parsed.id), JSON.stringify(parsed, null, 2) + "\n");
   return parsed;
 }
+
+/** The builder's worked example for a kind (agent/examples/<kind>.json), which the tests also use. */
+export function readExample<K extends Spec["kind"]>(kind: K): Extract<Spec, { kind: K }> {
+  const file = path.join(process.cwd(), "agent", "examples", `${kind}.json`);
+  return SpecSchema.parse(JSON.parse(fs.readFileSync(file, "utf8"))) as Extract<Spec, { kind: K }>;
+}

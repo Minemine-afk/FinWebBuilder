@@ -34,11 +34,17 @@ function output(values: Record<string, string>) {
 }
 
 /** Where a calculator kind's format notes and worked example live. */
+// Kept outside data/calculators so removing a calculator from the site never removes the builder's examples.
 export const FORMAT_EXAMPLES = {
-  compare: "data/calculators/ev-vs-petrol-car.json",
-  estimate: "data/calculators/hdb-renovation-cost.json",
-  projection: "data/calculators/future-hdb-resale-price.json",
+  compare: "agent/examples/compare.json",
+  estimate: "agent/examples/estimate.json",
+  projection: "agent/examples/projection.json",
 } as const;
+
+/** Which model the price-researcher sub-agents run on; a build can ask for Opus when the research is hard. */
+export function researchModel(): "sonnet" | "opus" {
+  return process.env.RESEARCH_MODEL === "sonnet" ? "sonnet" : "opus";
+}
 
 const RESEARCH_BY_KIND = {
   compare: "one or two options per call: the current prices of each cost component",
@@ -46,7 +52,8 @@ const RESEARCH_BY_KIND = {
   projection: "one or two items per call: today's value or price, plus its yearly growth or return over recent years and any published current rate, so low, base and high rates can be chosen",
 } as const;
 
-export function buildPrompt(state: RunState, request: string): string {
+export function buildPrompt(state: RunState, request: string, research: "sonnet" | "opus" = "opus"): string {
+  const agentModel = research === "opus" ? ` Start every price-researcher call with model "opus" (this build asked for the strongest research model).` : "";
   const file = `data/calculators/${state.slug}.json`;
   const task = state.previous
     ? `Update the existing calculator in ${file} to satisfy this follow-up request. Keep every option, id and price that the request doesn't affect.`
@@ -55,7 +62,7 @@ export function buildPrompt(state: RunState, request: string): string {
     ? `How to work:
 1. Read ${file} (the current spec, a "${state.previous.kind}" calculator) and agent/formats/${state.previous.kind}.md. Do not read other calculators or lib/spec.ts. Keep its "kind".
 2. Edit ${file} in place with small Edit calls; never rewrite the whole file.
-3. Research only what the request needs. A request about wording, structure, years, durations or the figures already in the file needs no web access at all: just edit. If a new option or price is needed, call the price-researcher sub-agent for that option only (foreground, never run_in_background), and wait for its notes.
+3. Research only what the request needs. A request about wording, structure, years, durations or the figures already in the file needs no web access at all: just edit. If a new option or price is needed, call the price-researcher sub-agent for that option only (foreground, never run_in_background), and wait for its notes.${agentModel}
 4. Run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error until it passes.`
     : `How to work:
 1. Pick the calculator kind that fits the topic, then read only that kind's notes in agent/formats/ and its worked example. Do not read lib/spec.ts or other calculators.
@@ -64,7 +71,9 @@ export function buildPrompt(state: RunState, request: string): string {
    - projection: the topic is about the future: a price or value growing over time ("future price of X", "how much will Y be worth"), or saving or investing toward a goal.
    If a topic could fit two, choose the one the reader most likely wants an answer from. Set "kind" to your choice. Notes: ${Object.entries(FORMAT_EXAMPLES).map(([k, f]) => `agent/formats/${k}.md with ${f}`).join("; ")}.
 2. Plan the calculator yourself, as the kind's notes describe, with real options, lines or items people would recognise.
-3. Hand the price research to the price-researcher sub-agent, one or two options, lines or items per call, several calls in parallel. For this kind, ask for: compare = ${RESEARCH_BY_KIND.compare}; estimate = ${RESEARCH_BY_KIND.estimate}; projection = ${RESEARCH_BY_KIND.projection}. It runs on a cheaper model. Start every sub-agent in the foreground and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved. Never end your turn saying you will wait; the run is over when you stop.
+3. Hand the price research to the price-researcher sub-agent, one or two options, lines or items per call, several calls in parallel. For this kind, ask for: compare = ${RESEARCH_BY_KIND.compare}; estimate = ${RESEARCH_BY_KIND.estimate}; projection = ${RESEARCH_BY_KIND.projection}. ${research === "opus" ? agentModel.trim() : "It runs on a cheaper model."} Start every sub-agent in the foreground and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved. Never end your turn saying you will wait; the run is over when you stop.
+   Past prices: whenever the calculator needs a provider's or option's own price history (a provider with a "history", or a projection item's past prices), do not settle for today's figure. For each provider's own pricing page or profile (including its Hometrust, Qanvast or similar listing) run \`npx tsx agent/datasets.ts archive-prices "<url>" --from <three years ago> --to <this year>\` yourself, which prints dated Internet Archive snapshots and the price lines in them, and have the price-researcher find dated reviews, quotes and articles for years the archive lacks. Use these real dated figures as the history, quote the snapshot URL, and mark a year ESTIMATE only after both searches found nothing, saying so in its rationale.
+   For property prices in Singapore, use the official data tools in agent/formats/projection.md (HDB resale and URA indices) instead of researching those figures.
 4. Read its notes. Only a price marked UNCONFIRMED, or where sources clash, may be researched again, and only with a WebSearch; do not open pages yourself.
 5. Write the file. Give each source its best URL, today's date as "verified", and "official", "secondary" or "estimate" as its type, and say in the notes how each figure was found, with dates. Write "scope" and "limits" so a reader knows exactly what is and isn't included.
 6. Run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error it reports until it passes.`;
@@ -78,7 +87,7 @@ ${request}
 
 ${how}
 
-Rules: you must finish by writing ${file} and passing validate in this same run; never end your turn with research still pending. Change no file except ${file}. Leave "version", "updated" and "buildLog" alone; the workflow sets them. Do not invent URLs or prices. The page HTML is rendered from the JSON by the site, so never write HTML, and never print the whole file back in your reply.`;
+Rules: follow the request exactly, including any minimum number of options, providers, locations or categories it asks for; every assumption gets a "rationale" (hover text). You must finish by writing ${file} and passing validate in this same run; never end your turn with research still pending. Change no file except ${file}. Leave "version", "updated" and "buildLog" alone; the workflow sets them. Do not invent URLs or prices. The page HTML is rendered from the JSON by the site, so never write HTML, and never print the whole file back in your reply.`;
 }
 
 function prepare() {
@@ -101,7 +110,7 @@ function prepare() {
   }
   fs.writeFileSync(STATE_FILE, JSON.stringify(state));
   // Refinements patch an existing spec, so the cheaper model leads; a new build keeps Opus for planning.
-  output({ slug: state.slug, prompt: buildPrompt(state, request), model: state.previous ? "claude-sonnet-5-5" : "claude-opus-5-5" });
+  output({ slug: state.slug, prompt: buildPrompt(state, request, researchModel()), model: state.previous ? "claude-sonnet-5-5" : "claude-opus-5-5" });
 }
 
 function validate(slug: string) {

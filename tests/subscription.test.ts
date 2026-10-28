@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import { buildPrompt, FORMAT_EXAMPLES, usageFromExecution } from "@/agent/subscription";
-import { readCalculator } from "@/lib/data";
+import { readExample } from "@/lib/data";
 import { callCostSgd } from "@/lib/pricing";
 
 describe("usageFromExecution", () => {
@@ -50,7 +50,7 @@ describe("buildPrompt", () => {
     expect(p).toContain("Do not read lib/spec.ts");
   });
   it("asks a refinement to keep what the request doesn't touch", () => {
-    const previous = readCalculator("ev-vs-petrol-car")!;
+    const previous = readExample("compare");
     const p = buildPrompt({ slug: previous.id, round: "Refinement 1: x", previous }, "Add a hybrid car");
     expect(p).toContain("Keep every option");
     expect(p).toContain("never rewrite the whole file");

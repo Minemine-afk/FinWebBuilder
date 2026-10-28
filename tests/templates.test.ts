@@ -1,6 +1,6 @@
 import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
-import { listCalculators, readCalculator } from "@/lib/data";
+import { listCalculators, readExample } from "@/lib/data";
 import { renderCalculatorHtml } from "@/lib/render";
 import { EstimateSpecSchema, ProjectionSpecSchema, SpecSchema, describeSpec } from "@/lib/spec";
 
@@ -40,7 +40,7 @@ describe("breakEven", () => {
 });
 
 describe("estimate engine", () => {
-  const spec = EstimateSpecSchema.parse(readCalculator("hdb-renovation-cost"));
+  const spec = EstimateSpecSchema.parse(readExample("estimate"));
   const state = (over = {}) => ({ tier: "standard", inputs: { area: 90 }, qty: {}, on: {}, contingency: 0, ...over });
   it("scales per-area lines by the input and fixed lines by quantity", () => {
     const e = estimate(spec, state());
@@ -97,15 +97,17 @@ describe("projection engine", () => {
 
 describe("spec kinds", () => {
   it("treats files without a kind as comparisons", () => {
-    expect(listCalculators().find((s) => s.id === "dog-vs-cat")!.kind).toBe("compare");
+    const { kind: _k, ...noKind } = JSON.parse(JSON.stringify(readExample("compare")));
+    void _k;
+    expect(SpecSchema.parse(noKind).kind).toBe("compare");
   });
   it("ships one seed for each new kind that passes its schema", () => {
-    for (const id of ["hdb-renovation-cost"]) expect(EstimateSpecSchema.safeParse(readCalculator(id)).success).toBe(true);
-    for (const id of ["future-hdb-resale-price"]) expect(ProjectionSpecSchema.safeParse(readCalculator(id)).success).toBe(true);
-    expect(describeSpec(readCalculator("hdb-renovation-cost")!)).toContain("Cost estimate");
+    expect(EstimateSpecSchema.safeParse(readExample("estimate")).success).toBe(true);
+    expect(ProjectionSpecSchema.safeParse(readExample("projection")).success).toBe(true);
+    expect(describeSpec(readExample("estimate"))).toContain("Cost estimate");
   });
   it("rejects mistakes the agent could make", () => {
-    const est = JSON.parse(JSON.stringify(readCalculator("hdb-renovation-cost")));
+    const est = JSON.parse(JSON.stringify(readExample("estimate")));
     est.lines[0].per = "no-such-input";
     est.lines[1].prices.standard = { low: 10, high: 5 };
     delete est.lines[2].prices.basic;
@@ -115,13 +117,13 @@ describe("spec kinds", () => {
     expect(msgs).toContain("unknown input");
     expect(msgs).toContain("no price for");
     expect(msgs).toContain("low must not exceed high");
-    const proj = JSON.parse(JSON.stringify(readCalculator("future-hdb-resale-price")));
+    const proj = JSON.parse(JSON.stringify(readExample("projection")));
     proj.items[0].rates = { low: 0.05, base: 0.02, high: 0.01 };
     delete proj.items[0].value;
     expect(JSON.stringify(SpecSchema.safeParse(proj).error!.issues)).toContain("low <= base <= high");
   });
   it("rejects a driver that is unknown or on a one-off component", () => {
-    const car = JSON.parse(JSON.stringify(readCalculator("ev-vs-petrol-car")));
+    const car = JSON.parse(JSON.stringify(readExample("compare")));
     car.components[0].driver = "km";
     car.components[2].driver = "nope";
     const msgs = JSON.stringify(SpecSchema.safeParse(car).error!.issues);
@@ -132,7 +134,7 @@ describe("spec kinds", () => {
 
 describe("rendering each kind", () => {
   it("fills every placeholder and uses the kind's own page", () => {
-    for (const s of listCalculators()) {
+    for (const s of [...listCalculators(), readExample("compare"), readExample("estimate"), readExample("projection")]) {
       const html = renderCalculatorHtml(s);
       for (const ph of ["__SPEC_JSON__", "__BASE_CSS__", "__COMMON_JS__", "__ENGINE_JS__", "__TITLE__"]) expect(html, `${s.id} ${ph}`).not.toContain(ph);
       expect(html).toContain(s.kind === "compare" ? "calcPicker" : s.kind === "estimate" ? "Cost estimate" : "Projection");

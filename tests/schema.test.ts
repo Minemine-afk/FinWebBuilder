@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { planFromSpec, toSpec, type Plan } from "@/agent/schema";
-import { readCompare } from "@/lib/data";
+import { readExample } from "@/lib/data";
 import { CompareSpecSchema, SpecSchema } from "@/lib/spec";
 
 const plan: Plan = {
@@ -22,7 +22,7 @@ describe("toSpec", () => {
     expect(spec.version).toBe(1);
   });
   it("keeps unchanged items and bumps the version on a refinement", () => {
-    const current = readCompare("ev-vs-petrol-car")!;
+    const current = readExample("compare");
     const next = toSpec({ slug: current.id, currency: "SGD", plan: planFromSpec(current), extracted: [], fx: {}, today: "2026-10-26", previous: current });
     expect(next.items.map((i) => i.costs)).toEqual(current.items.map((i) => i.costs));
     expect(next.version).toBe(current.version + 1);
