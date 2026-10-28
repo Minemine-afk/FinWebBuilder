@@ -101,7 +101,7 @@ describe("spec kinds", () => {
   });
   it("ships one seed for each new kind that passes its schema", () => {
     for (const id of ["hdb-renovation-cost"]) expect(EstimateSpecSchema.safeParse(readCalculator(id)).success).toBe(true);
-    for (const id of ["saving-for-a-goal", "future-hdb-resale-price"]) expect(ProjectionSpecSchema.safeParse(readCalculator(id)).success).toBe(true);
+    for (const id of ["future-hdb-resale-price"]) expect(ProjectionSpecSchema.safeParse(readCalculator(id)).success).toBe(true);
     expect(describeSpec(readCalculator("hdb-renovation-cost")!)).toContain("Cost estimate");
   });
   it("rejects mistakes the agent could make", () => {

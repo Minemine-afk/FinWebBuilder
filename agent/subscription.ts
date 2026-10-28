@@ -37,7 +37,7 @@ function output(values: Record<string, string>) {
 export const FORMAT_EXAMPLES = {
   compare: "data/calculators/ev-vs-petrol-car.json",
   estimate: "data/calculators/hdb-renovation-cost.json",
-  projection: "data/calculators/saving-for-a-goal.json",
+  projection: "data/calculators/future-hdb-resale-price.json",
 } as const;
 
 const RESEARCH_BY_KIND = {
