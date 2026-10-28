@@ -21,6 +21,12 @@ on:
       prompt:
         description: "What should change"
         required: false
+      research_model:
+        description: "Model for the price-research sub-agents"
+        required: false
+        default: sonnet
+        type: choice
+        options: [sonnet, opus]
 
 permissions:
   contents: write
@@ -33,13 +39,14 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 120
     env:
       USE_API: ${{ secrets.ANTHROPIC_API_KEY != '' }}
       USE_SUBSCRIPTION: ${{ secrets.ANTHROPIC_API_KEY == '' && secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
       TOPIC: ${{ inputs.topic }}
       SLUG: ${{ inputs.slug }}
       PROMPT: ${{ inputs.prompt }}
+      RESEARCH_MODEL: ${{ inputs.research_model }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -89,8 +96,8 @@ jobs:
           show_full_output: true
           claude_args: |
             --model ${{ steps.prep.outputs.model }}
-            --max-turns 80
-            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Agent,Task,Bash(npx tsx agent/subscription.ts validate:*)"
+            --max-turns 200
+            --allowedTools "Read,Write,Edit,Glob,Grep,WebSearch,WebFetch,Agent,Task,Bash(npx tsx agent/subscription.ts validate:*),Bash(npx tsx agent/datasets.ts:*)"
       - name: Record the subscription run
         id: record
         if: env.USE_SUBSCRIPTION == 'true'

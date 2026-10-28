@@ -177,8 +177,30 @@ const NumberInputSchema = z
     max: z.number(),
     step: z.number().positive().default(1),
     note: z.string().optional(),
+    /** Why the default and limits are what they are; shown as hover text. */
+    rationale: z.string().optional(),
+    /** Quick picks that fill the input, e.g. a flat type that sets the floor area. */
+    choices: z.array(z.object({ label: z.string().min(1), value: z.number() })).optional(),
   })
   .refine((d) => d.min <= d.default && d.default <= d.max && d.min < d.max, { message: "An input's default must sit between its min and max." });
+
+/** A dated figure in a price history, e.g. a provider's package price in 2023. */
+const HistoryPointSchema = z.object({
+  year: z.number().int(),
+  value: z.number().positive(),
+  /** What the figure is, e.g. "4-room BTO package" or "median of 1,210 sales". */
+  label: z.string().optional(),
+  url: z.string().optional(),
+});
+
+/** Yearly compound growth between the first and last point of a history (null when it can't be worked out). */
+export function historyCagr(history: { year: number; value: number }[]): number | null {
+  const pts = [...history].sort((a, b) => a.year - b.year);
+  if (pts.length < 2) return null;
+  const first = pts[0], last = pts[pts.length - 1];
+  if (last.year === first.year || first.value <= 0) return null;
+  return Math.pow(last.value / first.value, 1 / (last.year - first.year)) - 1;
+}
 
 const RangeSchema = z.object({ low: z.number().nonnegative(), high: z.number().nonnegative() }).refine((r) => r.low <= r.high, { message: "low must not exceed high." });
 
@@ -194,7 +216,48 @@ const EstimateSpecSchema = z
     inputs: z.array(NumberInputSchema).max(4).default([]),
     /** Quality levels. Every line prices each one. Omit for a single "default" level. */
     tiers: z
-      .object({ label: z.string(), options: z.array(z.object({ id: z.string(), label: z.string(), note: z.string().optional() })).min(1), default: z.string() })
+      .object({ label: z.string(), options: z.array(z.object({ id: z.string(), label: z.string(), note: z.string().optional(), rationale: z.string().optional() })).min(1), default: z.string() })
+      .optional(),
+    /** Kinds of job, e.g. "Full renovation of a new BTO flat" or "Kitchen only". Each switches on its own set of lines. */
+    presets: z
+      .object({
+        label: z.string(),
+        default: z.string(),
+        options: z.array(z.object({ id: z.string().min(1), label: z.string().min(1), note: z.string().optional(), rationale: z.string().optional(), lines: z.array(z.string()).min(1) })).min(2),
+      })
+      .optional(),
+    /**
+     * Who does the work. Each provider prices the lines at its own level (factor x the line range) and its prices
+     * move at the yearly rate of its own price history, so the viewer can price a job for a future year.
+     */
+    providers: z
+      .object({
+        label: z.string().default("Provider"),
+        default: z.string(),
+        /** Furthest year the viewer can price a job for. */
+        maxYear: z.number().int(),
+        options: z
+          .array(
+            z.object({
+              id: z.string().min(1),
+              name: z.string().min(1),
+              /** e.g. "Interior design firm", "Contractor", "Design-and-build". */
+              type: z.string().default(""),
+              url: z.string().optional(),
+              /** Price level against the line ranges: 1 = market, 1.2 = 20% dearer. */
+              factor: z.number().min(0.3).max(3),
+              /** Why this factor: which of its prices were compared with which market figure. */
+              factorBasis: z.string().min(1),
+              /** At least three years of this provider's own prices (same scope each year), oldest first. Its yearly rate is the compound growth across them. */
+              history: z.array(HistoryPointSchema).min(3),
+              /** Why these figures show this provider's price trend, and what was assumed. */
+              rationale: z.string().min(1),
+              source: SourceSchema,
+              notes: z.string().default(""),
+            }),
+          )
+          .min(2),
+      })
       .optional(),
     /** Buffer added on top of the sum, as a fraction. The viewer can change it between 0 and max. */
     contingency: z.object({ default: z.number().min(0).max(1), max: z.number().min(0).max(1) }).default({ default: 0.1, max: 0.3 }),
@@ -218,6 +281,8 @@ const EstimateSpecSchema = z
           prices: z.record(z.string(), RangeSchema),
           source: SourceSchema,
           notes: z.string().default(""),
+          /** Why the range is what it is, and anything assumed; shown as hover text. */
+          rationale: z.string().optional(),
         }),
       )
       .min(2),
@@ -237,6 +302,22 @@ const EstimateSpecSchema = z
       if (l.per !== "fixed" && !inputIds.has(l.per)) issue(`"${l.label}" scales with unknown input "${l.per}".`);
       for (const t of tierIds) if (!l.prices[t]) issue(`"${l.label}" has no price for "${t}".`);
       for (const k of Object.keys(l.prices)) if (!tierIds.includes(k)) issue(`"${l.label}" prices unknown tier "${k}".`);
+    }
+    if (s.presets) {
+      const presetIds = s.presets.options.map((o) => o.id);
+      if (!presetIds.includes(s.presets.default)) issue(`Default preset "${s.presets.default}" is not one of the options.`);
+      for (const o of s.presets.options) for (const id of o.lines) if (!ids.has(id)) issue(`Preset "${o.label}" switches on unknown line "${id}".`);
+    }
+    if (s.providers) {
+      const pids = new Set<string>();
+      for (const p of s.providers.options) {
+        if (pids.has(p.id)) issue(`Duplicate provider id "${p.id}".`);
+        pids.add(p.id);
+        const years = p.history.map((h) => h.year);
+        if (new Set(years).size !== years.length) issue(`Provider "${p.name}" has two history points for the same year.`);
+      }
+      if (!pids.has(s.providers.default)) issue(`Default provider "${s.providers.default}" is not one of the options.`);
+      if (s.providers.maxYear < s.priceYear) issue("providers.maxYear is before priceYear.");
     }
   });
 
@@ -278,14 +359,43 @@ const ProjectionSpecSchema = z
           priceYear: z.number().int().optional(),
           source: SourceSchema,
           notes: z.string().default(""),
+          /** Filter id -> option id, e.g. {"location": "clementi", "type": "hdb-4-room"}. */
+          tags: z.record(z.string(), z.string()).optional(),
+          /** Past values, oldest first, e.g. the median price in each of the last few years. */
+          history: z.array(HistoryPointSchema).optional(),
+          /** Why the value and rates are what they are, and what was assumed; shown as hover text. */
+          rationale: z.string().optional(),
         }),
       )
       .min(1),
     defaults: z.object({ item: z.string().optional() }).default({}),
+    /**
+     * Ways to narrow a long list of items, e.g. location and property type. Each item names its option for every
+     * filter in "tags", and the page shows one select per filter.
+     */
+    filters: z
+      .array(z.object({ id: z.string().min(1), label: z.string().min(1), options: z.array(z.object({ id: z.string().min(1), label: z.string().min(1), group: z.string().optional(), rationale: z.string().optional() })).min(1) }))
+      .max(3)
+      .default([]),
+    /** "history": every item's base rate must be the compound yearly growth across its own price history. */
+    baseRateFrom: z.enum(["history", "judgement"]).default("judgement"),
   })
   .superRefine((s, ctx) => {
     const issue = (message: string) => ctx.addIssue({ code: "custom", message });
     if (s.startMode === "input" && !s.start) issue('startMode "input" needs a "start" input.');
+    const filterOptions = new Map(s.filters.map((f) => [f.id, new Set(f.options.map((o) => o.id))]));
+    for (const it of s.items) {
+      for (const [fid, opts] of filterOptions) {
+        const tag = it.tags?.[fid];
+        if (!tag) issue(`"${it.name}" has no "${fid}" tag.`);
+        else if (!opts.has(tag)) issue(`"${it.name}" is tagged with unknown ${fid} "${tag}".`);
+      }
+      if (s.baseRateFrom === "history") {
+        const g = historyCagr(it.history ?? []);
+        if (g === null) issue(`"${it.name}" needs at least two history points, since base rates come from history.`);
+        else if (Math.abs(g - it.rates.base) > 0.0006) issue(`"${it.name}" base rate ${it.rates.base} should be its history's yearly growth, ${g.toFixed(4)}.`);
+      }
+    }
     const ids = new Set<string>();
     for (const it of s.items) {
       if (ids.has(it.id)) issue(`Duplicate item id "${it.id}".`);

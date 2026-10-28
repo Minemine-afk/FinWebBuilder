@@ -22,8 +22,10 @@ __ENGINE_JS__
 const spec = window.SPEC;
 const CUR = spec.currency;
 const SCEN = [["low", "Low", "var(--series-2)"], ["base", "Base", "var(--series-1)"], ["high", "High", "var(--series-3)"], ["own", "My rate", "var(--series-4)"]];
+const FILTERS = spec.filters || [];
 const state = {
   item: (spec.defaults && spec.defaults.item) || spec.items[0].id,
+  filters: {}, compareBy: FILTERS.length ? FILTERS[0].id : null,
   scenario: "base", ownText: "", real: false,
   startText: spec.start ? String(spec.start.default) : "",
   depText: spec.contribution ? String(spec.contribution.default) : "",
@@ -33,6 +35,24 @@ const state = {
 };
 const RATE_PCT = { min: spec.rateLimits.min * 100, max: spec.rateLimits.max * 100 };
 const curItem = () => spec.items.find((i) => i.id === state.item) || spec.items[0];
+const optLabel = (fid, oid) => { const f = FILTERS.find((x) => x.id === fid); const o = f && f.options.find((x) => x.id === oid); return o ? o.label : oid; };
+const matches = (it, sel, skip) => FILTERS.every((f) => f.id === skip || !sel[f.id] || (it.tags || {})[f.id] === sel[f.id]);
+/** Options of filter `k` that still have items, given the choices made in the filters before it. */
+function availableOptions(k) {
+  const before = {};
+  for (let j = 0; j < k; j++) before[FILTERS[j].id] = state.filters[FILTERS[j].id];
+  const used = new Set(spec.items.filter((it) => matches(it, before)).map((it) => (it.tags || {})[FILTERS[k].id]));
+  return FILTERS[k].options.filter((o) => used.has(o.id));
+}
+/** Keeps every filter on an option that has items, then picks the item they point at. */
+function settleFilters(fromItem) {
+  if (!FILTERS.length) return;
+  if (fromItem) { const it = curItem(); for (const f of FILTERS) state.filters[f.id] = (it.tags || {})[f.id]; return; }
+  FILTERS.forEach((f, k) => { const opts = availableOptions(k); if (!opts.some((o) => o.id === state.filters[f.id])) state.filters[f.id] = opts.length ? opts[0].id : undefined; });
+  const hit = spec.items.filter((it) => matches(it, state.filters));
+  if (hit.length && !hit.some((it) => it.id === state.item)) state.item = hit[0].id;
+}
+const yearOf = (it, i) => (it.priceYear ? it.priceYear + i : null);
 const errP = (key) => `<p class="err" data-err="${key}" style="margin:0" hidden></p>`;
 function syncErrors() { document.querySelectorAll("[data-err]").forEach((el) => { const m = state.errors[el.dataset.err]; el.hidden = !m; el.textContent = m || ""; }); }
 const numField = (id, inp, text, label) => `<label class="field" for="${id}"><span class="small">${esc(label || inp.label)}${inp.unit ? " (" + esc(inp.unit) + ")" : ""}</span>
@@ -42,8 +62,19 @@ const numField = (id, inp, text, label) => `<label class="field" for="${id}"><sp
 function renderSidebar() {
   const it = curItem();
   let h = "";
-  if (spec.items.length > 1) h += `<label class="field" for="itemSel"><span>${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</span><select id="itemSel">${spec.items.map((i) => `<option value="${esc(i.id)}"${i.id === state.item ? " selected" : ""}>${esc(i.name)}${i.option ? " · " + esc(i.option) : ""}</option>`).join("")}</select></label>`;
-  h += `<fieldset><legend>Starting point</legend>${spec.startMode === "input" ? numField("start", spec.start, state.startText, spec.valueLabel) : `<p style="margin:0"><span class="small muted">${esc(spec.valueLabel)}</span><br><b class="num" id="startShown"></b></p>`}
+  if (FILTERS.length) {
+    h += FILTERS.map((f, k) => {
+      const opts = availableOptions(k);
+      const groups = [...new Set(opts.map((o) => o.group || ""))];
+      const optHtml = (o) => `<option value="${esc(o.id)}"${o.id === state.filters[f.id] ? " selected" : ""}>${esc(o.label)}</option>`;
+      const body = groups.length > 1 ? groups.map((g) => `<optgroup label="${esc(g || "Other")}">${opts.filter((o) => (o.group || "") === g).map(optHtml).join("")}</optgroup>`).join("") : opts.map(optHtml).join("");
+      const cur = f.options.find((o) => o.id === state.filters[f.id]);
+      return `<label class="field" for="flt-${esc(f.id)}"><span>${esc(f.label)}${tip(cur && cur.rationale)}</span><select id="flt-${esc(f.id)}" data-filter="${esc(f.id)}">${body}</select></label>`;
+    }).join("");
+    const hit = spec.items.filter((i) => matches(i, state.filters));
+    if (hit.length > 1) h += `<label class="field" for="itemSel"><span>${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</span><select id="itemSel">${hit.map((i) => `<option value="${esc(i.id)}"${i.id === state.item ? " selected" : ""}>${esc(i.name)}${i.option ? " · " + esc(i.option) : ""}</option>`).join("")}</select></label>`;
+  } else if (spec.items.length > 1) h += `<label class="field" for="itemSel"><span>${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</span><select id="itemSel">${spec.items.map((i) => `<option value="${esc(i.id)}"${i.id === state.item ? " selected" : ""}>${esc(i.name)}${i.option ? " · " + esc(i.option) : ""}</option>`).join("")}</select></label>`;
+  h += `<fieldset><legend>Starting point${tip(it.rationale)}</legend>${spec.startMode === "input" ? numField("start", spec.start, state.startText, spec.valueLabel) : `<p style="margin:0"><span class="small muted">${esc(spec.valueLabel)}</span><br><b class="num" id="startShown"></b></p>`}
     ${spec.contribution ? numField("dep", spec.contribution, state.depText, spec.contribution.label + " (per " + spec.contribution.period + ")") : ""}
     ${spec.goal ? numField("goal", spec.goal, state.goalText) : ""}
     <label class="field" for="years"><span class="small">Years ahead</span><input id="years" type="number" inputmode="numeric" min="${spec.years.min}" max="${spec.years.max}" step="1" value="${esc(state.yearsText)}" class="num"><span class="muted small">Range ${spec.years.min} to ${spec.years.max}.</span></label>${errP("years")}
@@ -81,10 +112,11 @@ function refresh() {
   const pick = runs[state.scenario], rate = v.rates[state.scenario];
   if ($("startShown")) $("startShown").textContent = money(v.start, CUR) + (it.priceYear ? " (" + it.priceYear + ")" : "");
   $("rateList").innerHTML = SCEN.filter(([k]) => k !== "own").map(([k, l]) => `<li><span>${l}</span><span class="num"><b>${pct(v.rates[k])}</b><span class="muted">/yr</span></span></li>`).join("");
-  $("rateBasis").textContent = it.rateBasis || "";
+  $("rateBasis").innerHTML = esc(it.rateBasis || "") + (spec.baseRateFrom === "history" && it.history && it.history.length > 1 ? tip(`Base rate = compound yearly growth across this ${spec.subject}'s own history: (${money(it.history[it.history.length - 1].value, CUR)} ÷ ${money(it.history[0].value, CUR)}) ^ (1 ÷ ${it.history[it.history.length - 1].year - it.history[0].year}) − 1 = ${pct(cagr(it.history))}. Low and high are the weakest and strongest single year in that history.`) : "");
   $("ownBox").hidden = state.scenario !== "own";
   const final = (r) => (state.real ? r.rows[r.rows.length - 1].real : r.final);
-  let h = `<div class="panel"><p class="eyebrow">After ${v.years} ${v.years === 1 ? "year" : "years"} at ${pct(rate)} a year${state.real ? " · today's money" : ""}</p>
+  const endYear = yearOf(it, v.years);
+  let h = `<div class="panel"><p class="eyebrow">${esc(it.name)}${it.option ? " · " + esc(it.option) : ""}</p><p class="eyebrow">${endYear ? "In " + endYear + " (" + v.years + (v.years === 1 ? " year" : " years") + " ahead)" : "After " + v.years + (v.years === 1 ? " year" : " years")} at ${pct(rate)} a year${state.real ? " · today's money" : ""}</p>
     <p class="range-big num">${money(final(pick), CUR)}</p>
     <p class="muted" style="margin:0">${state.scenario === "own" ? "" : `Range across Low to High: <b class="num">${money(final(runs.low), CUR)} – ${money(final(runs.high), CUR)}</b> · `}${v.start > 0 ? `<b class="num">${final(pick) >= v.start ? "+" : ""}${((final(pick) / v.start - 1) * 100).toFixed(0)}%</b> vs the starting ${money(v.start, CUR)}` : ""}</p></div>`;
   h += `<div class="tiles">
@@ -98,19 +130,32 @@ function refresh() {
       ? `<b>Not reached</b> within ${v.years} years at ${pct(rate)}.${spec.contribution ? ` You would need about <b class="num">${money(need, CUR)}</b> a month${v.monthlyDep > 0 ? " (you have " + money(v.monthlyDep, CUR) + ")" : ""} to reach it in ${v.years} years.` : ""}`
       : `<b>Reached after ${yrs(gm)}</b> at ${pct(rate)} a year.${spec.contribution ? ` To reach it by year ${v.years} you need at least ${money(need, CUR)} a month.` : ""}`}</p></div>`;
   }
+  if (it.history && it.history.length) h += historyPanel(it);
   if (spec.items.length > 1) h += compareTable(v);
-  h += `<div class="panel chart"><div class="panel-head"><h3>Value over time</h3></div>${lineChart(runs, v)}
+  h += `<div class="panel chart"><div class="panel-head"><h3>Value over time</h3>${it.history && it.history.length && !state.real ? '<span class="muted small">Grey: past prices</span>' : ""}</div>${lineChart(runs, v)}
     <div class="legend">${SCEN.filter(([k]) => k !== "own" || state.scenario === "own").map(([k, l, c]) => `<span><i style="background:${c}"></i>${l} (${pct(v.rates[k])})</span>`).join("")}${spec.goal && v.goal > 0 ? `<span><i style="background:var(--fg)"></i>Goal</span>` : ""}</div></div>`;
   h += yearTable(pick);
   const su = safeUrl((it.source || {}).url);
-  h += `<p class="limits">${esc(it.name)}${it.option ? " (" + esc(it.option) + ")" : ""}: ${esc(it.notes || "")} Source: ${su ? `<a href="${esc(su)}" target="_blank" rel="noopener">${esc(hostOf(su))}</a>` : "not given"}${it.source && it.source.verified ? ", checked " + esc(it.source.verified) : ""}${it.source && it.source.type === "estimate" ? " (estimate)" : ""}.</p>`;
+  h += `<p class="limits">${esc(it.name)}${it.option ? " (" + esc(it.option) + ")" : ""}: ${esc(it.notes || "")} Source: ${su ? sourceBadge(it.source) : "not given"}${it.source && it.source.verified ? ", checked " + esc(it.source.verified) : ""}.</p>`;
   $("summary").innerHTML = h;
   syncErrors();
 }
 
 /** Every item at the viewer's inputs, so options can be ranked without switching one by one. A row click selects that item. */
+function historyPanel(it) {
+  const hs = it.history.slice().sort((a, b) => a.year - b.year);
+  const rows = hs.map((p, i) => `<tr><td>${p.year}</td><td class="l" style="white-space:normal;text-align:left">${esc(p.label || "")}</td><td>${money(p.value, CUR)}</td><td>${i ? ((p.value / hs[i - 1].value - 1) >= 0 ? "+" : "") + pct(p.value / hs[i - 1].value - 1) : "–"}</td></tr>`).join("");
+  return `<div class="panel"><div class="panel-head"><h3>Past prices</h3><span class="muted small">Yearly change over the last ${hs[hs.length - 1].year - hs[0].year} years: <b>${pct(cagr(hs))}</b> a year</span></div><div class="tablewrap"><table><thead><tr><th>Year</th><th style="text-align:left">Figure</th><th>Value</th><th>Change</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+
+/** Every item at the viewer's inputs, so options can be ranked without switching one by one. A row click selects that item. */
 function compareTable(v) {
-  const rows = spec.items.map((it) => {
+  const by = state.compareBy;
+  const pool = FILTERS.length ? spec.items.filter((it) => matches(it, state.filters, by)) : spec.items;
+  const others = FILTERS.filter((f) => f.id !== by).map((f) => optLabel(f.id, state.filters[f.id])).join(", ");
+  const byF = FILTERS.find((f) => f.id === by);
+  const toggle = FILTERS.length > 1 ? `<div class="seg" role="group" aria-label="Compare by">${FILTERS.map((f) => `<button type="button" data-cmp="${esc(f.id)}" aria-pressed="${f.id === by}">By ${esc(f.label.toLowerCase())}</button>`).join("")}</div>` : "";
+  const rows = pool.map((it) => {
     const start = spec.startMode === "input" ? v.start : it.value;
     const run = (rate) => project({ ...params(rate), start });
     const end = (r) => (state.real ? r.rows[r.rows.length - 1].real : r.final);
@@ -118,40 +163,53 @@ function compareTable(v) {
     return { it, low: end(run(it.rates.low)), base: end(base), high: end(run(it.rates.high)), goalMonths: base.goalMonths };
   }).sort((a, b) => b.base - a.base);
   const max = Math.max(1, ...rows.map((r) => r.high));
-  let h = `<div class="panel"><div class="panel-head"><h3>All options after ${v.years} ${v.years === 1 ? "year" : "years"}</h3><span class="muted small">Base rate, with the low to high range${state.real ? " · today's money" : ""}. Pick a row to see it in detail.</span></div><div class="tablewrap"><table class="compare-all"><thead><tr><th>${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</th><th>Base rate</th><th>Value at base</th><th>Low to high</th>${spec.goal && v.goal > 0 ? "<th>Goal reached</th>" : ""}</tr></thead><tbody>`;
+  const title = byF ? `Every ${esc(byF.label.toLowerCase())}${others ? " · " + esc(others) : ""}` : "All options";
+  const endY = yearOf(curItem(), v.years);
+  let h = `<div class="panel"><div class="panel-head"><h3>${title}${endY ? ", " + endY : ` after ${v.years} ${v.years === 1 ? "year" : "years"}`}</h3>${toggle}<span class="muted small" style="flex-basis:100%">Today's value, then the value at the base rate with the low to high range${state.real ? " · today's money" : ""}. Highest first; pick a row to see it in detail.</span></div><div class="tablewrap"><table class="compare-all"><thead><tr><th>${byF ? esc(byF.label) : esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</th><th>${esc(spec.valueLabel)}</th><th>Base rate</th><th>Value at base</th><th>Low to high</th>${spec.goal && v.goal > 0 ? "<th>Goal reached</th>" : ""}</tr></thead><tbody>`;
   for (const r of rows) {
     const sel = r.it.id === state.item;
-    h += `<tr data-item="${esc(r.it.id)}" tabindex="0" style="cursor:pointer${sel ? ";font-weight:600" : ""}"${sel ? ' aria-current="true"' : ""}><td>${esc(r.it.name)}</td><td class="num">${pct(r.it.rates.base)}</td><td class="num">${money(r.base, CUR)}<div aria-hidden="true" style="height:6px;margin-top:4px;border-radius:3px;background:var(--border);position:relative"><span style="position:absolute;left:${((r.low / max) * 100).toFixed(1)}%;width:${(((r.high - r.low) / max) * 100).toFixed(1)}%;top:0;bottom:0;border-radius:3px;background:var(--series-1);opacity:.35"></span><span style="position:absolute;left:calc(${((r.base / max) * 100).toFixed(1)}% - 1px);width:2px;top:-2px;bottom:-2px;background:var(--series-1)"></span></div></td><td class="num">${money(r.low, CUR)} – ${money(r.high, CUR)}</td>${spec.goal && v.goal > 0 ? `<td>${r.goalMonths === null ? `<span class="muted">Not within ${v.years} years</span>` : yrs(r.goalMonths)}</td>` : ""}</tr>`;
+    h += `<tr data-item="${esc(r.it.id)}" tabindex="0" style="cursor:pointer${sel ? ";font-weight:600" : ""}"${sel ? ' aria-current="true"' : ""}><td style="white-space:normal">${byF ? esc(optLabel(by, (r.it.tags || {})[by])) : esc(r.it.name)}${r.it.source && r.it.source.type === "estimate" ? ` <span class="pill warn">AI estimate</span>` : ""}</td><td class="num">${spec.startMode === "item" ? money(r.it.value, CUR) : "–"}</td><td class="num">${pct(r.it.rates.base)}</td><td class="num">${money(r.base, CUR)}<div aria-hidden="true" style="height:6px;margin-top:4px;border-radius:3px;background:var(--border);position:relative"><span style="position:absolute;left:${((r.low / max) * 100).toFixed(1)}%;width:${(((r.high - r.low) / max) * 100).toFixed(1)}%;top:0;bottom:0;border-radius:3px;background:var(--series-1);opacity:.35"></span><span style="position:absolute;left:calc(${((r.base / max) * 100).toFixed(1)}% - 1px);width:2px;top:-2px;bottom:-2px;background:var(--series-1)"></span></div></td><td class="num">${money(r.low, CUR)} – ${money(r.high, CUR)}</td>${spec.goal && v.goal > 0 ? `<td>${r.goalMonths === null ? `<span class="muted">Not within ${v.years} years</span>` : yrs(r.goalMonths)}</td>` : ""}</tr>`;
   }
   return h + `</tbody></table></div></div>`;
 }
 
 function yearTable(run) {
   const real = state.real, v = state.v;
-  let h = `<div class="panel"><div class="panel-head"><h3>Year by year</h3><span class="muted small">${state.scenario === "own" ? "Your rate" : SCEN.find(([k]) => k === state.scenario)[1] + " rate"}</span></div><div class="tablewrap"><table><thead><tr><th>Year</th><th>Start</th>${spec.contribution ? "<th>Added</th>" : ""}<th>Growth</th><th>End</th>${real ? "<th>Today's money</th>" : ""}<th>Change vs start</th></tr></thead><tbody>`;
+  let h = `<div class="panel"><div class="panel-head"><h3>Year by year</h3><span class="muted small">${state.scenario === "own" ? "Your rate" : SCEN.find(([k]) => k === state.scenario)[1] + " rate"}</span></div><div class="tablewrap"><table><thead><tr><th>Year</th>${curItem().priceYear ? "<th>Calendar year</th>" : ""}<th>Start</th>${spec.contribution ? "<th>Added</th>" : ""}<th>Growth</th><th>End</th>${real ? "<th>Today's money</th>" : ""}<th>Change vs start</th></tr></thead><tbody>`;
   run.rows.forEach((r, i) => {
-    h += `<tr${i === run.rows.length - 1 ? ' class="last"' : ""}><td>${i + 1}</td><td>${money(r.open, CUR)}</td>${spec.contribution ? `<td>${money(r.deposits, CUR)}</td>` : ""}<td>${money(r.growth, CUR)}</td><td>${money(r.close, CUR)}</td>${real ? `<td>${money(r.real, CUR)}</td>` : ""}<td>${v.start > 0 ? ((r.close / v.start - 1) * 100).toFixed(0) + "%" : "–"}</td></tr>`;
+    h += `<tr${i === run.rows.length - 1 ? ' class="last"' : ""}><td>${i + 1}</td>${curItem().priceYear ? `<td>${curItem().priceYear + i + 1}</td>` : ""}<td>${money(r.open, CUR)}</td>${spec.contribution ? `<td>${money(r.deposits, CUR)}</td>` : ""}<td>${money(r.growth, CUR)}</td><td>${money(r.close, CUR)}</td>${real ? `<td>${money(r.real, CUR)}</td>` : ""}<td>${v.start > 0 ? ((r.close / v.start - 1) * 100).toFixed(0) + "%" : "–"}</td></tr>`;
   });
   return h + `</tbody></table></div></div>`;
 }
 
 function lineChart(runs, v) {
   const W = 640, H = 300, L = 72, R = 14, T = 16, B = 34;
+  const it = curItem();
+  // Past values (when the item has a dated history) sit left of "now" in grey.
+  const past = it.priceYear && it.history && !state.real ? it.history.filter((p) => p.year < it.priceYear).sort((a, b) => a.year - b.year) : [];
+  const back = past.length ? it.priceYear - past[0].year : 0;
   const keys = SCEN.map(([k]) => k).filter((k) => k !== "own" || state.scenario === "own");
   const val = (r, i) => (i === 0 ? v.start : state.real ? r.rows[i - 1].real : r.rows[i - 1].close);
-  const max = Math.max(1, ...keys.map((k) => val(runs[k], v.years)), v.goal || 0);
+  const max = Math.max(1, ...keys.map((k) => val(runs[k], v.years)), v.goal || 0, ...past.map((p) => p.value));
   const step = niceStep(max / 4), top = Math.ceil(max / step) * step;
-  const x = (i) => L + (W - L - R) * (i / v.years), y = (a) => T + (H - T - B) * (1 - a / top);
-  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Projected value over time">`;
+  const span = v.years + back;
+  const x = (i) => L + (W - L - R) * ((i + back) / span), y = (a) => T + (H - T - B) * (1 - a / top);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Past and projected value over time">`;
   for (let a = 0; a <= top + 1e-9; a += step) svg += `<line x1="${L}" x2="${W - R}" y1="${y(a)}" y2="${y(a)}" stroke="var(--border)"/><text x="${L - 8}" y="${y(a) + 4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--font-mono)">${shortMoney(a)}</text>`;
-  const every = Math.max(1, Math.ceil(v.years / 8));
-  for (let i = 0; i <= v.years; i += every) svg += `<text x="${x(i)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--muted)">${i === 0 ? "Now" : "Yr " + i}</text>`;
+  const every = Math.max(1, Math.ceil(span / 8));
+  for (let i = -back; i <= v.years; i += every) svg += `<text x="${x(i)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--muted)">${yearOf(it, i) || (i === 0 ? "Now" : "Yr " + i)}</text>`;
+  if (back) svg += `<line x1="${x(0)}" x2="${x(0)}" y1="${T}" y2="${H - B}" stroke="var(--border)" stroke-dasharray="4 4"/><text x="${x(0) + 4}" y="${T + 10}" font-size="11" fill="var(--muted)">Projection →</text>`;
   if (v.goal > 0) svg += `<line class="goal" x1="${L}" x2="${W - R}" y1="${y(v.goal)}" y2="${y(v.goal)}" stroke="var(--fg)" stroke-width="1.5"/>`;
+  if (past.length) {
+    const pts = past.map((p) => [x(p.year - it.priceYear), y(p.value), p]).concat([[x(0), y(v.start), { year: it.priceYear, value: v.start }]]);
+    svg += `<polyline fill="none" stroke="var(--muted)" stroke-width="2" points="${pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ")}"/>`;
+    for (const p of pts.slice(0, -1)) svg += `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--muted)"><title>${p[2].year}${p[2].label ? " (" + esc(p[2].label) + ")" : ""}: ${money(p[2].value, CUR)}</title></circle>`;
+  }
   for (const k of keys) {
     const color = SCEN.find(([s]) => s === k)[2];
     const pts = Array.from({ length: v.years + 1 }, (_, i) => [x(i), y(val(runs[k], i)), val(runs[k], i)]);
     svg += `<polyline fill="none" stroke="${color}" stroke-width="${k === state.scenario ? 3 : 1.75}" points="${pts.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ")}"/>`;
-    if (v.years <= 25) for (const [i, p] of pts.entries()) svg += `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${color}"><title>${SCEN.find(([s]) => s === k)[1]}, year ${i}: ${money(p[2], CUR)}</title></circle>`;
+    if (v.years <= 25) for (const [i, p] of pts.entries()) svg += `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="${color}"><title>${SCEN.find(([s]) => s === k)[1]}, ${yearOf(it, i) || "year " + i}: ${money(p[2], CUR)}</title></circle>`;
   }
   return svg + `</svg>`;
 }
@@ -160,12 +218,15 @@ document.title = spec.title;
 $("title").textContent = spec.title;
 $("scope").textContent = spec.scope || "";
 $("limits").textContent = spec.limits || "";
+initTips();
+settleFilters(true);
 renderSidebar();
 refresh();
 
 $("sidebar").addEventListener("change", (e) => {
   const t = e.target;
-  if (t.id === "itemSel") { state.item = t.value; state.ownText = ""; renderSidebar(); }
+  if (t.dataset.filter) { state.filters[t.dataset.filter] = t.value; state.ownText = ""; settleFilters(false); renderSidebar(); }
+  else if (t.id === "itemSel") { state.item = t.value; state.ownText = ""; settleFilters(true); renderSidebar(); }
   else if (t.id === "real") state.real = t.checked;
   else return;
   refresh();
@@ -182,9 +243,13 @@ $("sidebar").addEventListener("input", (e) => {
 });
 function pickItem(row) {
   if (!row || row.dataset.item === state.item) return;
-  state.item = row.dataset.item; state.ownText = ""; renderSidebar(); refresh();
+  state.item = row.dataset.item; state.ownText = ""; settleFilters(true); renderSidebar(); refresh();
 }
-$("summary").addEventListener("click", (e) => pickItem(e.target.closest("tr[data-item]")));
+$("summary").addEventListener("click", (e) => {
+  const c = e.target.closest("[data-cmp]");
+  if (c) { state.compareBy = c.dataset.cmp; refresh(); return; }
+  pickItem(e.target.closest("tr[data-item]"));
+});
 $("summary").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { const row = e.target.closest("tr[data-item]"); if (row) { e.preventDefault(); pickItem(row); } } });
 $("sidebar").addEventListener("click", (e) => {
   const b = e.target.closest("[data-scen]");

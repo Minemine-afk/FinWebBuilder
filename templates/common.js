@@ -13,6 +13,56 @@ function money(v, cur) {
 function niceStep(raw) { const p = Math.pow(10, Math.floor(Math.log10(raw))); const n = raw / p; return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p; }
 function shortMoney(v) { if (v >= 1e6) return (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + "M"; if (v >= 1e3) return (v / 1e3).toFixed(0) + "k"; return Math.round(v).toString(); }
 
+/** A small "i" button whose text (the reasoning behind a figure) shows on hover, focus or tap. Empty text gives nothing. */
+function tip(text) {
+  const t = String(text ?? "").trim();
+  return t ? `<button type="button" class="tip" data-tip="${esc(t)}" aria-label="Why: ${esc(t)}" aria-expanded="false">i</button>` : "";
+}
+
+/** Wires the hover-text boxes for every tip() on the page, now and later. Call once. */
+function initTips() {
+  if (typeof document === "undefined") return;
+  const box = document.createElement("div");
+  box.id = "tipBox"; box.setAttribute("role", "tooltip"); box.hidden = true;
+  document.body.appendChild(box);
+  let pinned = null;
+  const show = (el) => {
+    box.textContent = el.dataset.tip; box.hidden = false;
+    const r = el.getBoundingClientRect(), b = box.getBoundingClientRect();
+    const left = Math.min(window.innerWidth - b.width - 12, Math.max(12, r.left + r.width / 2 - b.width / 2));
+    const top = r.bottom + 8 + b.height > window.innerHeight ? r.top - b.height - 8 : r.bottom + 8;
+    box.style.left = left + "px"; box.style.top = Math.max(8, top) + "px";
+    el.setAttribute("aria-expanded", "true");
+  };
+  const hide = (el) => { if (pinned && pinned !== el) return; box.hidden = true; if (el) el.setAttribute("aria-expanded", "false"); };
+  document.addEventListener("mouseover", (e) => { const el = e.target.closest && e.target.closest(".tip"); if (el && !pinned) show(el); });
+  document.addEventListener("mouseout", (e) => { const el = e.target.closest && e.target.closest(".tip"); if (el && !pinned) hide(el); });
+  document.addEventListener("focusin", (e) => { if (e.target.classList && e.target.classList.contains("tip")) show(e.target); });
+  document.addEventListener("focusout", (e) => { if (e.target.classList && e.target.classList.contains("tip") && pinned !== e.target) hide(e.target); });
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest && e.target.closest(".tip");
+    if (el) { e.preventDefault(); e.stopPropagation(); if (pinned === el) { pinned = null; hide(el); } else { if (pinned) pinned.setAttribute("aria-expanded", "false"); pinned = el; show(el); } return; }
+    if (pinned) { const p = pinned; pinned = null; hide(p); }
+  }, true);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !box.hidden) { const p = pinned || document.querySelector('.tip[aria-expanded="true"]'); pinned = null; hide(p); } });
+  window.addEventListener("scroll", () => { if (!box.hidden) { const p = pinned; pinned = null; hide(p); } }, { passive: true });
+}
+
+/** Source badge and link, shared by every kind of page. */
+function sourceBadge(src) {
+  src = src || {};
+  const su = safeUrl(src.url);
+  const pill = src.type === "estimate" ? `<span class="pill warn" title="Worked out by the research agent from the sources it found, not a published figure">AI estimate</span>` : src.type === "secondary" ? `<span class="pill warn">Unofficial</span>` : src.type === "official" ? `<span class="pill good">Official</span>` : "";
+  return pill + (su ? ` <a href="${esc(su)}" target="_blank" rel="noopener">${esc(hostOf(su))}</a>` : "");
+}
+
+/** Yearly compound growth across a history (oldest to newest), or 0. Same rule as lib/spec.ts historyCagr. */
+function cagr(history) {
+  const pts = (history || []).slice().sort((a, b) => a.year - b.year);
+  if (pts.length < 2 || pts[0].value <= 0 || pts[pts.length - 1].year === pts[0].year) return 0;
+  return Math.pow(pts[pts.length - 1].value / pts[0].value, 1 / (pts[pts.length - 1].year - pts[0].year)) - 1;
+}
+
 /**
  * Reads a number typed into a limited input. Out-of-range or non-numeric text still gives a usable
  * value (clamped, or the fallback) so results keep showing, plus a message to show under the field.
@@ -53,4 +103,4 @@ function breakEven(a, b) {
   return { years: null, over: n, cheaper: last < 0 ? "a" : last > 0 ? "b" : "same" };
 }
 
-if (typeof module !== "undefined" && module.exports) module.exports = { esc, safeUrl, hostOf, pct, money, niceStep, shortMoney, clampInput, cumulative, breakEven };
+if (typeof module !== "undefined" && module.exports) module.exports = { esc, tip, initTips, sourceBadge, cagr, safeUrl, hostOf, pct, money, niceStep, shortMoney, clampInput, cumulative, breakEven };
