@@ -14,6 +14,18 @@ Cost-comparison calculators that build themselves. Type a topic, and a research 
 3. The result is saved as `data/calculators/<slug>.json`. A new calculator or a refinement is committed straight to `main` and goes live when the site redeploys, with no approval step. Older versions are kept in `data/history/<slug>/`. The **Remove a calculator** box dispatches `Remove calculator`, which deletes the calculator and its saved versions from `main` (git history still has them). The home page's **Build in progress** panel shows the loading bar and current step of any build or removal running right now (through `app/api/builds`), and disappears when none is.
 4. Every page shows **How this page was built**: each API call with its model, tokens, web searches and estimated cost in SGD, with a subtotal for each round and a running total. Prices are in `lib/pricing.ts`.
 
+## Working from vague prompts
+
+A short topic like "renovation costs" is turned into a good calculator in these steps (each is cheap, and none changes what a precise prompt does):
+
+1. **Scope first.** *Scope it first* on the home page runs a Haiku step (`agent/plan.ts`, workflow `Plan calculator`, or one direct API call when the site has `ANTHROPIC_API_KEY`). It reads the topic, picks the calculator kind, and either proposes a scope or asks at most two multiple-choice questions. The plan is saved to the `builder-plans` branch (one small file each, so no site deploy) and the page polls for it. If the step fails, a built-in fallback plan from the topic's playbook is used. *Build straight away* skips all of this.
+2. **Kind shown, with a switch.** The plan names the suggested kind (comparison, cost estimate or projection) and why; the reader can change it before building. A published page shows its kind in the *Suggest a change* panel, which can rebuild it as another kind and keeps the prices.
+3. **Scope preview with cost.** The reader ticks or unticks the options to research, adds their own, picks research depth (Opus careful, Sonnet about half the cost) and sees an estimated cost range before the expensive run starts. Items already in the price cache are marked and cost less. The confirmed scope goes to the build as the workflow's `plan` input.
+4. **Playbooks** (`agent/playbooks.ts`): property, renovation, travel, cars and education. Each has a checklist, official sources to try first, things to watch for and a minimum item count, and is added to the build prompt when the topic matches.
+5. **Quality check** (`lib/quality.ts`): `validate` now also checks option counts, a source URL and verified date on every price, a hover rationale on every figure and the maths (zero prices, tiers that fall, rates outside their limits, outliers). Claude must fix every error before it finishes, and `record` runs the check again, so a failing build is not published. On a refinement only problems the edit added are errors.
+6. **Chat refinement.** Every page has a *Suggest a change* panel. It sends the request to the refine path, which runs on Sonnet (about S$0.20), with an optional *no new research* box that blocks web access, and shows the run's progress.
+7. **Price cache** (`lib/price-cache.ts`, `data/price-cache.json`): every build saves each option's, line's or item's figure, source and date. A new build gets the entries most like its topic and reuses those verified in the last 180 days instead of researching them again. Rebuild it with `npx tsx agent/subscription.ts rebuild-cache`. Figures the official data tools regenerate for free are not cached.
+
 ## Calculator kinds
 
 Each calculator JSON has a `kind`, and the builder picks one per topic (files with no `kind` are comparisons):
