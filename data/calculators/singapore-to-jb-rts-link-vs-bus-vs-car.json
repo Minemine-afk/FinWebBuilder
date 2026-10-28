@@ -214,31 +214,6 @@
         "type": "official"
       },
       "notes": "Regulated fares from 4 May 2026 (MOT joint statement, 30 Apr 2026): S$80 for a standard 4-seater from Ban San Street to Larkin or any point within 35 km, plus a S$0.80 driver fee until 30 Nov 2026; RM240 (about S$75.71) back from Larkin. Round trip about S$156.51 for the whole car. Grab's cross-border SG-JB pilot (from May 2026) uses the same regulated rates, sometimes with an introductory discount. A 6-seater costs S$120 and RM360. ERP is extra."
-    },
-    {
-      "id": "grab-cross-border",
-      "group": "road",
-      "name": "Grab cross-border ride",
-      "option": "Grab SG-JB booking, standard car, whole car, undiscounted estimate",
-      "currency": "SGD",
-      "duration": 1,
-      "priceYear": 2026,
-      "locked": false,
-      "costs": {
-        "default": {
-          "fares": 11714,
-          "border": 0,
-          "running": 0,
-          "setup": 0
-        }
-      },
-      "history": [],
-      "source": {
-        "url": "https://thesmartlocal.com/read/grab-cross-border-taxis-sg-jb/",
-        "verified": "2026-10-28",
-        "type": "estimate"
-      },
-      "notes": "ESTIMATE: Grab quotes a fixed price at booking and no October 2026 fare was found. TheSmartLocal (updated 3 Jun 2026) reports a test booking of S$100.50 from Punggol to JB City Square after an automatic 20% pilot discount, so about S$125 before it; TripZilla (5 May 2026) quotes about S$100 to S$120 from Kranji MRT before the discount. Uses S$112.50 going. Back from JB, RM333.72 (about S$108.04) after the discount, so about RM417 (about S$131.55) before it. Round trip about S$244 for the whole car, 4 round trips a month. ERP and tolls are said to be included; a S$20 cancellation fee applies after a driver is assigned. Gojek was not found to offer any SG-JB service. The pilot discounts have likely expired, so the undiscounted fare is used."
     }
   ],
   "defaults": {
@@ -248,7 +223,7 @@
       "own-car"
     ]
   },
-  "version": 2,
+  "version": 3,
   "updated": "2026-10-28",
   "buildLog": [
     {
@@ -315,6 +290,34 @@
       "fetches": 0,
       "billing": "subscription",
       "at": "2026-10-28T08:26:37.736Z"
+    },
+    {
+      "round": "Refinement 2: Remove the 'Grab cross-border ride' option; the existing 'Cr",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 1820,
+      "output": 27,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 0.0001955,
+      "at": "2026-10-28T08:31:01.543Z"
+    },
+    {
+      "round": "Refinement 2: Remove the 'Grab cross-border ride' option; the existing 'Cr",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 10,
+      "output": 1329,
+      "cacheRead": 115161,
+      "cacheWrite": 13610,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 0.0792661,
+      "at": "2026-10-28T08:31:01.543Z"
     }
   ]
 }
