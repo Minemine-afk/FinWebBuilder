@@ -1,0 +1,614 @@
+{
+  "kind": "estimate",
+  "id": "cost-of-having-a-baby-in-singapore",
+  "title": "Cost of having a baby in Singapore",
+  "currency": "SGD",
+  "scope": "What having a baby in Singapore costs from pregnancy to the first birthday: prenatal check-ups and scans, delivery, confinement, baby gear, diapers, formula, vaccinations and childcare after maternity leave, plus optional extras (caesarean, cord blood banking, newborn photoshoot, full-month celebration, postnatal massage). Prices are ranges in Singapore dollars before any government support, at budget (public subsidised ward, polyclinic, anchor-operator infant care), mid-range (public hospital as a private patient) and premium (private hospital, confinement centre, private paediatrician) levels.",
+  "limits": "Totals are what you pay before government support. For a Singapore citizen baby born from 18 Feb 2025 to 31 Mar 2027, the Baby Bonus Cash Gift is S$11,000 for a first or second child and S$13,000 for a third or later child, paid in instalments (S$3,000 to S$4,000 soon after birth) into the Child Savings Account until age 6.5. The Child Development Account (CDA) First Step Grant is S$5,000 (S$10,000 from the third child), and the government matches parents' CDA savings dollar for dollar up to S$4,000 for a first child, S$7,000 for a second, S$9,000 for a third or fourth and S$15,000 from the fifth; CDA money can pay for infant care, clinic bills and approved items. For babies born from 1 Apr 2027 the SG Child Support Package (announced Aug 2026) replaces this with a S$10,000 Baby Gift paid in the first year, a S$5,000 First Step Grant and co-matching up to S$5,000. The MediSave Maternity Package lets parents use up to S$900 for pre-delivery check-ups and scans and, with the delivery limit, up to S$2,020 in total for a normal delivery or S$3,280 for a caesarean, plus daily ward charges (S$1,130 a day for the first two days, then S$400 a day); each citizen newborn also gets a S$5,000 MediSave Grant for Newborns. Childcare is shown after the S$600 Basic Subsidy for working mothers but before the income-tested Additional Subsidy (up to S$710 a month). Delivery figures are MOH 25th to 75th percentile bills for citizens; PRs and foreigners pay more in public wards. Complicated births, NICU stays, NIPT, fertility treatment, maternity clothes, insurance, lost income and housing are excluded. Some lines combine items (stroller and car seat; carrier, bottles and steriliser) or are our estimates where shops and clinics do not publish prices. Formula assumes full formula feeding for 12 months. Get quotes before budgeting.",
+  "version": 1,
+  "updated": "2026-10-27",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 800571,
+      "output": 70183,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 51,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:26:54.859Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 18,
+      "output": 26365,
+      "cacheRead": 479634,
+      "cacheWrite": 73254,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:26:54.859Z"
+    },
+    {
+      "round": "First build",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 66,
+      "output": 39214,
+      "cacheRead": 212088,
+      "cacheWrite": 87906,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:26:54.859Z"
+    }
+  ],
+  "subject": "baby",
+  "priceYear": 2026,
+  "inputs": [
+    {
+      "id": "months",
+      "label": "Months of childcare before the first birthday",
+      "unit": "months",
+      "default": 8,
+      "min": 0,
+      "max": 12,
+      "step": 1,
+      "note": "Maternity leave is 16 weeks, so about 8 months of paid care is typical if both parents go back to work."
+    }
+  ],
+  "tiers": {
+    "label": "Spending level",
+    "options": [
+      {
+        "id": "budget",
+        "label": "Budget",
+        "note": "Subsidised public ward and polyclinic, confinement food delivery, basic gear, anchor-operator infant care or a helper."
+      },
+      {
+        "id": "mid",
+        "label": "Mid-range",
+        "note": "Public hospital as a private patient, live-in confinement nanny, mainstream brands, private infant care."
+      },
+      {
+        "id": "premium",
+        "label": "Premium",
+        "note": "Private hospital and paediatrician, confinement centre, premium brands, premium infant care or a full-time nanny."
+      }
+    ],
+    "default": "mid"
+  },
+  "contingency": {
+    "default": 0.1,
+    "max": 0.3
+  },
+  "groups": [
+    {
+      "id": "birth",
+      "label": "Pregnancy and delivery"
+    },
+    {
+      "id": "conf",
+      "label": "Confinement"
+    },
+    {
+      "id": "gear",
+      "label": "Baby gear"
+    },
+    {
+      "id": "year",
+      "label": "First-year essentials"
+    },
+    {
+      "id": "care",
+      "label": "Childcare"
+    },
+    {
+      "id": "extra",
+      "label": "Optional extras"
+    }
+  ],
+  "lines": [
+    {
+      "id": "checkups",
+      "group": "birth",
+      "label": "Prenatal check-ups",
+      "description": "Obstetrician consultations from about week 8 to delivery, monthly at first and every two weeks near the end.",
+      "per": "fixed",
+      "unit": "per visit",
+      "qty": 12,
+      "qtyMax": 20,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 35,
+          "high": 85
+        },
+        "mid": {
+          "low": 100,
+          "high": 130
+        },
+        "premium": {
+          "low": 150,
+          "high": 400
+        }
+      },
+      "source": {
+        "url": "https://www.singsaver.com.sg/health-insurance/blog/cost-of-pregnancy-in-singapore",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Private O&G S$150 to S$400 a visit from SingSaver (updated 3 Jan 2025). Subsidised (about S$35 to S$85) and public private-patient (about S$100 to S$130) visit fees at KKH and NUH from MoneySmart's newborn cost guide (undated), found by search on 27 Oct 2026. A typical pregnancy has 10 to 14 visits. KKH's antenatal package starts at about S$804 for 6 visits plus scans and tests."
+    },
+    {
+      "id": "scans",
+      "group": "birth",
+      "label": "Scans and screening tests",
+      "description": "First-trimester screening (OSCAR), detailed anomaly scan, routine ultrasounds and blood tests for the whole pregnancy. Excludes NIPT, which costs about S$1,000 to S$2,500 more.",
+      "per": "fixed",
+      "unit": "per pregnancy",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 450,
+          "high": 800
+        },
+        "mid": {
+          "low": 800,
+          "high": 1500
+        },
+        "premium": {
+          "low": 1000,
+          "high": 2000
+        }
+      },
+      "source": {
+        "url": "https://www.singsaver.com.sg/health-insurance/blog/cost-of-pregnancy-in-singapore",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Our estimate, built from SingSaver (Jan 2025: screening tests S$650 to over S$1,500), a 2018 subsidised bill of S$466 for screening, NT, anomaly and Doppler scans (girleatworld.net), OSCAR at about S$300 to S$400 (Income blog) and a Level 3 anomaly scan of about S$403 on a Thomson bill. No official price list exists. Researched 27 Oct 2026."
+    },
+    {
+      "id": "delivery",
+      "group": "birth",
+      "label": "Delivery (normal birth)",
+      "description": "Hospital bill with doctor's fees for an uncomplicated vaginal delivery and a 2 to 3 day stay. Budget is a public subsidised ward (B2/C), mid a public private-patient ward (B1/A), premium a private hospital 1-bed room.",
+      "per": "fixed",
+      "unit": "per birth",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 770,
+          "high": 2091
+        },
+        "mid": {
+          "low": 3808,
+          "high": 7474
+        },
+        "premium": {
+          "low": 7854,
+          "high": 14636
+        }
+      },
+      "source": {
+        "url": "https://www.moh.gov.sg/managing-expenses/bills-and-fee-benchmarks/cost-financing/tosp-si836u-bill-information/",
+        "verified": "2026-10-27",
+        "type": "official"
+      },
+      "notes": "MOH bill information for SI836U vaginal delivery, read 27 Oct 2026. Ranges are 25th to 75th percentile bills: public B2/C wards at KKH, NUH and SGH S$770 to S$2,091; public B1/A wards S$3,808 to S$7,474; private 1-bed rooms from Parkway East (S$7,854) to Gleneagles (S$14,636). Shared private rooms such as Thomson 4-bed start lower, at about S$5,385."
+    },
+    {
+      "id": "caesarean",
+      "group": "birth",
+      "label": "Extra for a caesarean",
+      "description": "What an uncomplicated caesarean adds to the normal delivery bill (surgery and a 3 to 4 day stay). Switch on if you expect or plan a C-section.",
+      "per": "fixed",
+      "unit": "per birth",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "budget": {
+          "low": 900,
+          "high": 2700
+        },
+        "mid": {
+          "low": 3500,
+          "high": 4400
+        },
+        "premium": {
+          "low": 5600,
+          "high": 9350
+        }
+      },
+      "source": {
+        "url": "https://www.moh.gov.sg/managing-expenses/bills-and-fee-benchmarks/cost-financing/tosp-si834u-bill-information/",
+        "verified": "2026-10-27",
+        "type": "official"
+      },
+      "notes": "Worked out from MOH bill information for SI834U uncomplicated caesarean (read 27 Oct 2026) minus the normal-delivery figures. Caesarean bills are S$1,659 to S$4,763 in public B2/C wards, S$7,288 to S$11,828 in B1/A wards and about S$13,500 to S$24,000 in private 1-bed rooms."
+    },
+    {
+      "id": "confinement",
+      "group": "conf",
+      "label": "Confinement help (28 days)",
+      "description": "Budget: confinement food delivery, lunch and dinner for 28 days. Mid: a live-in confinement nanny for 28 days. Premium: a 28-day confinement centre stay.",
+      "per": "fixed",
+      "unit": "per 28 days",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 1600,
+          "high": 2130
+        },
+        "mid": {
+          "low": 2500,
+          "high": 4500
+        },
+        "premium": {
+          "low": 15888,
+          "high": 27988
+        }
+      },
+      "source": {
+        "url": "https://www.singsaver.com.sg/blog/post-pregnancy-confinement-cost",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Found by search on 27 Oct 2026. Food delivery: Dollars and Sense (set aside at least S$1,600) and caterers Chilli Padi, Mama J's, NouRiche and Thomson Nutri at about S$1,688 to S$2,130. Nanny: Income blog S$2,500 to S$3,500, Aunty.sg (Dec 2025) S$3,500 to S$4,500; add an ang bao of S$180 to S$500 and the levy (SingSaver). Centres: The Clover Suites S$15,888 to My Queen at Oasia Sentosa S$27,988 (Women's Weekly, HoneyKids, SassyMama)."
+    },
+    {
+      "id": "massage",
+      "group": "conf",
+      "label": "Postnatal massage package",
+      "description": "About 5 to 7 home sessions of postnatal (jamu) massage, often with a bengkung wrap.",
+      "per": "fixed",
+      "unit": "per package",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "budget": {
+          "low": 800,
+          "high": 1000
+        },
+        "mid": {
+          "low": 1000,
+          "high": 1500
+        },
+        "premium": {
+          "low": 1500,
+          "high": 1900
+        }
+      },
+      "source": {
+        "url": "https://www.singsaver.com.sg/blog/best-pre-post-natal-massages",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "SingSaver (Feb 2021) listed 7-session packages from S$718 to S$778 and 5 sessions from S$988; Mummy's Market fair listings show S$1,045 (5 x 90 min) and S$1,498 (7 x 60 min, usually S$2,688); one premium therapist charges S$1,850 for 7 days. Budget low raised for inflation since 2021. Found by search on 27 Oct 2026."
+    },
+    {
+      "id": "stroller",
+      "group": "gear",
+      "label": "Stroller and car seat",
+      "description": "One stroller plus one infant or convertible car seat. Budget: Joie lightweight stroller with a Maxi-Cosi or Joie seat. Premium: Cybex, Nuna or UPPAbaby.",
+      "per": "fixed",
+      "unit": "per set",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 350,
+          "high": 550
+        },
+        "mid": {
+          "low": 630,
+          "high": 1250
+        },
+        "premium": {
+          "low": 1850,
+          "high": 3400
+        }
+      },
+      "source": {
+        "url": "https://shopee.sg/blog/best-baby-car-seats-singapore/",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Sum of stroller and car seat prices found by search on 27 Oct 2026. Strollers: Joie Nitro S$109 to Joie Mirus S$256 (Mummy's Market, iShopChangi), Joie Mytrax Flex S$302 to UPPAbaby Minu S$749, Cybex Mios, Nuna and UPPAbaby Vista from S$1,198 (SassyMama). Car seats from Shopee's 2024 guide: Maxi-Cosi Cabriofix S$239, Joie Stage S$332 to Every Stage FX S$485, Cybex Cloud T S$659. Premium highs (S$2,500 stroller, S$900 seat) are our estimate from US prices."
+    },
+    {
+      "id": "cot",
+      "group": "gear",
+      "label": "Cot and mattress",
+      "description": "A baby cot or convertible cot with mattress.",
+      "per": "fixed",
+      "unit": "each",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 100,
+          "high": 270
+        },
+        "mid": {
+          "low": 430,
+          "high": 540
+        },
+        "premium": {
+          "low": 690,
+          "high": 1000
+        }
+      },
+      "source": {
+        "url": "https://thesmartlocal.com/read/baby-cot-singapore/",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Found by search on 27 Oct 2026: second-hand cots from about S$100 on Carousell; Happy Cot 5-in-1 with mattress S$269, Bonbijou Osito with mattress S$429 and Palette Box 7-in-1 with King Koil mattress S$538 (Mummy's Market fair prices); Polini convertible cot from S$689 (TheSmartLocal). The S$1,000 premium high is our estimate."
+    },
+    {
+      "id": "feeding",
+      "group": "gear",
+      "label": "Carrier, bottles and steriliser",
+      "description": "A baby carrier, a starter set of 4 to 6 bottles and a steriliser or steriliser-dryer.",
+      "per": "fixed",
+      "unit": "per set",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 210,
+          "high": 340
+        },
+        "mid": {
+          "low": 400,
+          "high": 660
+        },
+        "premium": {
+          "low": 880,
+          "high": 1430
+        }
+      },
+      "source": {
+        "url": "https://honeykidsasia.com/best-sterilisers-in-singapore/",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Our sum of prices found by search on 27 Oct 2026. Carriers: basic hip seats about S$60 to S$150 (estimate), Ergobaby Omni 360 S$199 to Omni Breeze S$323, BabyBjorn Carrier 1 about S$396. Bottles: Pigeon SofTouch 2-pack S$45 (FairPrice), Hegen 2-pack S$57 to S$62. Sterilisers: Avent 2-in-1 S$89 (HoneyKids), Avent steriliser-dryer S$135 to S$249, Haenim UV S$368 to S$518 (FairPrice, Metro)."
+    },
+    {
+      "id": "diapers",
+      "group": "year",
+      "label": "Diapers and wipes",
+      "description": "About 7 diapers a day on average over the first year, plus wipes.",
+      "per": "fixed",
+      "unit": "per month",
+      "qty": 12,
+      "qtyMax": 12,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 55,
+          "high": 90
+        },
+        "mid": {
+          "low": 70,
+          "high": 100
+        },
+        "premium": {
+          "low": 75,
+          "high": 120
+        }
+      },
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/merries-first-premium-tape-diaper-s-4-8kg-4-x-54-per-pack-ctn-12712853",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "FairPrice carton prices seen by search on 27 Oct 2026: Drypers S$0.22 to S$0.33 a piece, Merries S$0.27 to S$0.47 a piece; mid-range brands (Huggies, MamyPoko) estimated at S$0.28 to S$0.38. Times about 210 diapers a month, plus S$8 to S$20 of wipes (estimate)."
+    },
+    {
+      "id": "formula",
+      "group": "year",
+      "label": "Infant formula",
+      "description": "Formula for a fully formula-fed baby, about 3.6 kg (4 to 5 tins) a month on average. Switch off or lower the months if you breastfeed.",
+      "per": "fixed",
+      "unit": "per month",
+      "qty": 12,
+      "qtyMax": 12,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 70,
+          "high": 140
+        },
+        "mid": {
+          "low": 230,
+          "high": 320
+        },
+        "premium": {
+          "low": 250,
+          "high": 360
+        }
+      },
+      "source": {
+        "url": "https://www.singsaver.com.sg/page/blog/milk-powder-baby-formula",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Prices per 100 g from SingSaver (July 2021, FairPrice prices, likely low today): Dumex Dulac S$1.85, FairPrice Gold S$3.22, Similac and Enfamil about S$6.60 to S$6.80, Bellamy's S$6.10, Kendamil S$6.99, Holle goat S$9.98; Little Steps Asia lists Enfamil 800 g from S$71.75. Times about 3.6 kg a month. Found by search on 27 Oct 2026."
+    },
+    {
+      "id": "medical",
+      "group": "year",
+      "label": "Vaccinations and baby check-ups",
+      "description": "Visits for the national childhood vaccinations and developmental checks in year one. Budget: polyclinic or CHAS GP. Mid and premium: private paediatrician, with optional vaccines such as rotavirus.",
+      "per": "fixed",
+      "unit": "per visit",
+      "qty": 6,
+      "qtyMax": 15,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 0,
+          "high": 20
+        },
+        "mid": {
+          "low": 150,
+          "high": 250
+        },
+        "premium": {
+          "low": 330,
+          "high": 400
+        }
+      },
+      "source": {
+        "url": "https://polyclinic.singhealth.com.sg/clinic-visit/charges-and-payment",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "MOH (updated 9 Apr 2026): national schedule vaccines are fully subsidised for Singapore citizen children at polyclinics and CHAS GPs, and developmental screenings are free. A polyclinic consultation for a citizen child is S$8.50 (SingHealth and NUP fee pages, Sept 2025). Raffles Medical's 0 to 6 month package costs S$1,008 to S$1,117 for about 3 paediatrician visits, about S$330 to S$400 a visit; rotavirus adds S$194 to S$245. The mid range is our estimate. Found 27 Oct 2026."
+    },
+    {
+      "id": "childcare",
+      "group": "care",
+      "label": "Childcare after maternity leave",
+      "description": "Monthly cost of care once maternity leave ends. Budget: anchor-operator infant care after the S$600 Basic Subsidy, or a domestic helper. Mid: private infant care centre after the Basic Subsidy. Premium: premium infant care or a full-time nanny.",
+      "per": "months",
+      "unit": "per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 700,
+          "high": 1100
+        },
+        "mid": {
+          "low": 1100,
+          "high": 2000
+        },
+        "premium": {
+          "low": 2200,
+          "high": 3500
+        }
+      },
+      "source": {
+        "url": "https://www.ecda.gov.sg/parents/choosing-a-preschool/aop",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "ECDA anchor-operator cap for full-day infant care is S$1,235 a month before GST (about S$1,346 with GST); less the S$600 Basic Subsidy for working mothers that is about S$750. Helper: S$600 to S$1,000 salary (SingSaver 2025) plus the S$60 concessionary levy (MOM) and insurance, about S$675 to S$1,100. Private centres charge S$1,500 to S$2,800 gross (blogs), less S$600. Full-time nanny S$3,000 to S$3,500 (sgfinancecalculators.com, 2026). Found by search on 27 Oct 2026."
+    },
+    {
+      "id": "cordblood",
+      "group": "extra",
+      "label": "Cord blood banking",
+      "description": "Collection, processing and the first year's storage of the baby's cord blood (premium includes cord tissue).",
+      "per": "fixed",
+      "unit": "per baby",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "budget": {
+          "low": 1000,
+          "high": 1250
+        },
+        "mid": {
+          "low": 1500,
+          "high": 1800
+        },
+        "premium": {
+          "low": 2500,
+          "high": 3000
+        }
+      },
+      "source": {
+        "url": "https://www.cordlife.com/sg/price-plan",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Cordlife lists storage at S$250 a year for ages 1 to 20, plus GST, but does not publish its upfront fee. Little Day Out puts enrolment and processing at about S$1,000 to S$2,000, and blood plus tissue from about S$2,500. Ranges are our estimate, checked 27 Oct 2026. Storage to age 21 adds about S$5,000."
+    },
+    {
+      "id": "photoshoot",
+      "group": "extra",
+      "label": "Newborn photoshoot",
+      "description": "A studio or home newborn photo session package.",
+      "per": "fixed",
+      "unit": "per shoot",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "budget": {
+          "low": 300,
+          "high": 450
+        },
+        "mid": {
+          "low": 450,
+          "high": 700
+        },
+        "premium": {
+          "low": 800,
+          "high": 2000
+        }
+      },
+      "source": {
+        "url": "https://blog.moneysmart.sg/family/newborn-photography-singapore",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "MoneySmart and Shopee guides (2019 or undated): Littleones S$300, White Room and Tomato Photo S$450, The Studio Loft S$688, Sealey Brandt S$850 and Bambooshoots S$2,000. Found by search on 27 Oct 2026; prices may have risen."
+    },
+    {
+      "id": "fullmonth",
+      "group": "extra",
+      "label": "Full-month celebration",
+      "description": "One full-month gift box (red eggs, ang ku kueh, cake) and one buffet meal per guest.",
+      "per": "fixed",
+      "unit": "per guest",
+      "qty": 30,
+      "qtyMax": 150,
+      "optional": true,
+      "prices": {
+        "budget": {
+          "low": 20,
+          "high": 26
+        },
+        "mid": {
+          "low": 47,
+          "high": 62
+        },
+        "premium": {
+          "low": 78,
+          "high": 118
+        }
+      },
+      "source": {
+        "url": "https://sethlui.com/baby-full-month-caterers-guide-singapore/",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Buffet per person before GST from Seth Lui's guide (July 2026): budget S$14 to S$16, mid S$18 to S$23, premium S$28 to S$38. Gift boxes from Miss Lobang's 2026 round-up and retailer pages: S$6 to S$10, S$29 to S$39 (Edith Patisserie, Fieldnotes, Sweetest Moments), premium S$50 to S$80. Found 27 Oct 2026."
+    }
+  ]
+}

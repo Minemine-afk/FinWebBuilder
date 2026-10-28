@@ -1,0 +1,269 @@
+{
+  "kind": "compare",
+  "id": "singapore-to-jb-rts-link-vs-bus-vs-car",
+  "title": "Singapore to JB: RTS Link vs bus vs car",
+  "subject": "way to travel",
+  "currency": "SGD",
+  "periodLabel": "Year of travel",
+  "scope": "Yearly cost for one adult of round trips between Singapore and Johor Bahru city, starting in Singapore. Fares for the RTS Link, KTM Shuttle Tebrau, Causeway Link CW1 and public bus 170 or 950. For driving your own Singapore-registered car: the Malaysian VEP road charge, Causeway tolls on both sides, petrol bought in Malaysia, JB mall parking and the one-off VEP RFID tag. For a cross-border taxi: the regulated whole-car fare each way. Fares paid in ringgit on the way back are converted at about RM3.17 to S$1.",
+  "limits": "Car ownership costs are excluded: the calculator assumes you already own a car, so COE, depreciation, insurance, road tax and servicing are not counted. The RTS Link fare has not been officially announced (opening planned for February 2027); S$6 each way is an estimate from the S$5 to S$7 reported in Feb 2026. The KTM Shuttle Tebrau is due to stop six months after the RTS Link opens, so it is only an option for part of 2027. Malaysian Causeway tolls are based on the last published rates and JB parking is an estimate. Fares within Singapore or JB to reach the terminals, ERP, the exchange-rate margin and travel time are not included. Taxi fares are for the whole car, so sharing divides them.",
+  "fx": {},
+  "minStartYear": 2026,
+  "defaultGrowth": 0.02,
+  "components": [
+    {
+      "id": "fares",
+      "label": "Fares",
+      "kind": "recurring",
+      "driver": "trips"
+    },
+    {
+      "id": "border",
+      "label": "VEP road charge and tolls",
+      "kind": "recurring",
+      "driver": "trips"
+    },
+    {
+      "id": "running",
+      "label": "Petrol and JB parking",
+      "kind": "recurring",
+      "driver": "trips"
+    },
+    {
+      "id": "setup",
+      "label": "One-off setup",
+      "kind": "oneoff"
+    }
+  ],
+  "drivers": [
+    {
+      "id": "trips",
+      "label": "Round trips",
+      "unit": "round trips a month",
+      "default": 4,
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "note": "Fares, tolls, petrol and parking scale with the number of round trips; the one-off RFID tag does not. Use 1 or 2 for an occasional shopper and about 22 for a weekday commuter."
+    }
+  ],
+  "groups": [
+    {
+      "id": "rail",
+      "label": "Train",
+      "growth": 0.02
+    },
+    {
+      "id": "bus",
+      "label": "Bus",
+      "growth": 0.02
+    },
+    {
+      "id": "road",
+      "label": "Car or taxi",
+      "growth": 0.03
+    }
+  ],
+  "items": [
+    {
+      "id": "rts-link",
+      "group": "rail",
+      "name": "RTS Link",
+      "option": "Woodlands North to Bukit Chagar, fare estimated",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "fares": 576,
+          "border": 0,
+          "running": 0,
+          "setup": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://mothership.sg/2026/02/johor-singapore-rts-fares/",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE: the fare is not yet announced. Malaysia's Transport Minister Anthony Loke told Sin Chew Daily the fare would be about S$5 to S$7 (RM15.50 to RM21.70) per trip (Mothership, 15 Feb 2026). Malay Mail (20 Oct 2026) reports fares will be announced by end-2026 and opening is planned for February 2027. Uses the midpoint, S$6 each way, S$12 a round trip, 4 round trips a month. No monthly pass has been confirmed; a RM300 pass was only proposed (Oct 2026)."
+    },
+    {
+      "id": "ktm-shuttle-tebrau",
+      "group": "rail",
+      "name": "KTM Shuttle Tebrau",
+      "option": "Woodlands to JB Sentral, until it stops in 2027",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "fares": 316,
+          "border": 0,
+          "running": 0,
+          "setup": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://wise.com/sg/blog/train-to-jb",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "S$5 one way from Woodlands Train Checkpoint and RM5 (about S$1.58) back from JB Sentral, as listed by Wise and Bernama; checked Oct 2026. Round trip about S$6.58. Malay Mail (8 Oct 2026) says Budget 2027 will bring cheaper shuttle fares, figure not yet given, and that the service ends six months after the RTS Link starts, so around August 2027 if RTS opens in February."
+    },
+    {
+      "id": "causeway-link-cw1",
+      "group": "bus",
+      "name": "Causeway Link CW bus",
+      "option": "CW1 Kranji or Woodlands to JB CIQ, cashless",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "fares": 135,
+          "border": 0,
+          "running": 0,
+          "setup": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://landtransportguru.net/jbbuscw2/",
+        "verified": "2026-10-27",
+        "type": "secondary"
+      },
+      "notes": "Adult cashless fare S$2.00 from Kranji MRT or Woodlands Checkpoint, and RM2.60 (about S$0.82) back from JB CIQ, from the Land Transport Guru fare table (page updated 29 Sep 2026). Round trip about S$2.82. CW2 from Queen Street costs S$4.80 one way and CW5 from Newton S$4.60. Causeway Link went cashless from 1 Oct 2026; boarding at Larkin adds an RM2 facilities charge. No monthly pass found."
+    },
+    {
+      "id": "public-bus-170-950",
+      "group": "bus",
+      "name": "Public bus 170 or 950",
+      "option": "SBS 170 Queen Street to Larkin, card fare",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "fares": 270,
+          "border": 0,
+          "running": 0,
+          "setup": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://landtransportguru.net/bus170/",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE: a July 2026 fare table quoted in search results gives S$2.50 by card from Larkin to Queen Street (RM3.20 cash); the Queen Street to Larkin card fare was not found and is assumed the same. Plus the RM2 Larkin facilities charge for Singapore-bound passengers from 1 Jul 2026. Round trip about S$5.63. SMRT 950 from Woodlands to JB Checkpoint is cheaper, about S$2.30 cash each way (Land Transport Guru, Dec 2025)."
+    },
+    {
+      "id": "own-car",
+      "group": "road",
+      "name": "Own Singapore car",
+      "option": "Via the Causeway to JB city, ownership costs excluded",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "fares": 0,
+          "border": 591,
+          "running": 330,
+          "setup": 3
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://onemotoring.lta.gov.sg/content/onemotoring/home/driving/entering_and_exiting_singapore/vehicles-registered-in-singapore.html",
+        "verified": "2026-10-27",
+        "type": "estimate"
+      },
+      "notes": "Per round trip: Malaysian VEP road charge RM20 per entry, paid by Touch 'n Go (carz.com.my, Jul 2025); Singapore exit toll S$0.80 at Woodlands, entry free (LTA OneMotoring, checked Oct 2026); Malaysian Causeway tolls RM6.80 out and RM9.70 in, the last published rates (paultan.org, Jul 2014), so an estimate. Petrol: foreign cars may only buy RON97, RM4.80 a litre for 22 to 28 Oct 2026 (The Vibes, 21 Oct 2026); assumes 50 km at 7 L/100 km, RM16.80. JB mall parking about RM5 a visit, an estimate, as no mall rate was found (street parking is RM0.60 an hour). One-off VEP RFID tag RM10, valid 5 years. All ringgit at RM3.17 to S$1 (Jul 2026 rate). Car ownership costs are not included."
+    },
+    {
+      "id": "cross-border-taxi",
+      "group": "road",
+      "name": "Cross-border taxi or Grab",
+      "option": "Standard 4-seater, Ban San Street to Larkin, whole car",
+      "currency": "SGD",
+      "duration": 1,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "fares": 7512,
+          "border": 0,
+          "running": 0,
+          "setup": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.cdgtaxi.com.sg/fares/",
+        "verified": "2026-10-27",
+        "type": "official"
+      },
+      "notes": "Regulated fares from 4 May 2026 (MOT joint statement, 30 Apr 2026): S$80 for a standard 4-seater from Ban San Street to Larkin or any point within 35 km, plus a S$0.80 driver fee until 30 Nov 2026; RM240 (about S$75.71) back from Larkin. Round trip about S$156.51 for the whole car. Grab's cross-border SG-JB pilot (from May 2026) uses the same regulated rates, sometimes with an introductory discount. A 6-seater costs S$120 and RM360. ERP is extra."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "rts-link",
+      "causeway-link-cw1",
+      "own-car"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-10-27",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 390553,
+      "output": 34147,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 22,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:20:22.838Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 18,
+      "output": 11255,
+      "cacheRead": 321716,
+      "cacheWrite": 38851,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:20:22.838Z"
+    },
+    {
+      "round": "First build",
+      "label": "Price research (sub-agents)",
+      "model": "claude-sonnet-5-5",
+      "input": 30,
+      "output": 13544,
+      "cacheRead": 71490,
+      "cacheWrite": 36023,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "at": "2026-10-27T15:20:22.838Z"
+    }
+  ]
+}

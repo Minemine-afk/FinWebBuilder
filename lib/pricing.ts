@@ -2,11 +2,13 @@ import type { BuildLogEntry } from "./spec";
 
 /**
  * Published Claude API prices in US dollars (per million tokens, and per web search).
- * Source: platform.claude.com pricing, checked 2026-10-25. Update here when prices change.
+ * Source: platform.claude.com pricing, checked 2026-10-27. Update here when prices change.
  */
 export const MODEL_PRICES_USD: Record<string, { name: string; input: number; output: number }> = {
   "claude-opus-5-5": { name: "Opus 5.5", input: 4, output: 20 },
   "claude-sonnet-5-5": { name: "Sonnet 5.5", input: 2, output: 10 },
+  // Claude Code reads each fetched web page with Haiku. Rate for prompts up to 100K tokens ($0.50/$2.50 above that).
+  "claude-haiku-5-5": { name: "Haiku 5.5", input: 0.1, output: 0.5 },
   // Models a refusal fallback may hand a request to.
   "claude-opus-5": { name: "Opus 5", input: 5, output: 25 },
   "claude-opus-4-8": { name: "Opus 4.8", input: 5, output: 25 },

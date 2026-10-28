@@ -77,6 +77,11 @@ jobs:
         id: claude
         if: env.USE_SUBSCRIPTION == 'true'
         uses: anthropics/claude-code-action@v1
+        env:
+          # Claude Code now starts sub-agents in the background unless told otherwise, and a
+          # non-interactive run then ends before their notes arrive. This keeps every sub-agent
+          # in the foreground, so the lead waits for the research.
+          CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: "1"
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ github.token }}

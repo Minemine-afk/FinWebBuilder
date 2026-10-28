@@ -37,7 +37,7 @@ function output(values: Record<string, string>) {
 export const FORMAT_EXAMPLES = {
   compare: "data/calculators/ev-vs-petrol-car.json",
   estimate: "data/calculators/hdb-renovation-cost.json",
-  projection: "data/calculators/saving-for-a-goal.json",
+  projection: "data/calculators/future-hdb-resale-price.json",
 } as const;
 
 const RESEARCH_BY_KIND = {
@@ -64,7 +64,7 @@ export function buildPrompt(state: RunState, request: string): string {
    - projection: the topic is about the future: a price or value growing over time ("future price of X", "how much will Y be worth"), or saving or investing toward a goal.
    If a topic could fit two, choose the one the reader most likely wants an answer from. Set "kind" to your choice. Notes: ${Object.entries(FORMAT_EXAMPLES).map(([k, f]) => `agent/formats/${k}.md with ${f}`).join("; ")}.
 2. Plan the calculator yourself, as the kind's notes describe, with real options, lines or items people would recognise.
-3. Hand the price research to the price-researcher sub-agent, one or two options, lines or items per call, several calls in parallel. For this kind, ask for: compare = ${RESEARCH_BY_KIND.compare}; estimate = ${RESEARCH_BY_KIND.estimate}; projection = ${RESEARCH_BY_KIND.projection}. It runs on a cheaper model. Start every sub-agent in the foreground (never with run_in_background) and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved.
+3. Hand the price research to the price-researcher sub-agent, one or two options, lines or items per call, several calls in parallel. For this kind, ask for: compare = ${RESEARCH_BY_KIND.compare}; estimate = ${RESEARCH_BY_KIND.estimate}; projection = ${RESEARCH_BY_KIND.projection}. It runs on a cheaper model. Start every sub-agent in the foreground and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved. Never end your turn saying you will wait; the run is over when you stop.
 4. Read its notes. Only a price marked UNCONFIRMED, or where sources clash, may be researched again, and only with a WebSearch; do not open pages yourself.
 5. Write the file. Give each source its best URL, today's date as "verified", and "official", "secondary" or "estimate" as its type, and say in the notes how each figure was found, with dates. Write "scope" and "limits" so a reader knows exactly what is and isn't included.
 6. Run \`npx tsx agent/subscription.ts validate ${state.slug}\` and fix every error it reports until it passes.`;
@@ -132,7 +132,7 @@ export function usageFromExecution(messages: unknown[], round: string): BuildLog
   const byModel = (result.modelUsage ?? {}) as Record<string, ModelUsage>;
   return Object.entries(byModel).map(([model, u]) => ({
     round,
-    label: /sonnet/.test(model) ? "Price research (sub-agents)" : /haiku/.test(model) ? "Background tasks" : "Planning, checking and writing",
+    label: /sonnet/.test(model) ? "Price research (sub-agents)" : /haiku/.test(model) ? "Reading fetched pages" : "Planning, checking and writing",
     model,
     input: u.inputTokens ?? 0,
     output: u.outputTokens ?? 0,
