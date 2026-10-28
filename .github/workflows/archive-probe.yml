@@ -1,0 +1,12 @@
+name: Archive probe (temporary)
+on:
+  push:
+    branches: [claude/project-thread-9mrd6u]
+    paths: [".github/probe/**"]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 .github/probe/archive-probe.py
