@@ -1,0 +1,2822 @@
+{
+  "kind": "estimate",
+  "id": "hdb-renovation-cost",
+  "title": "HDB renovation cost calculator",
+  "currency": "SGD",
+  "scope": "What renovating an HDB flat in Singapore costs in 2026, line by line across 12 trades: hacking and masonry, flooring, wall tiling and waterproofing, ceilings and cove lighting, carpentry, countertops, electrical, plumbing and sanitary ware, doors, gates and windows, painting, aircon and kitchen appliances, and design fees, permits, protection, haulage and cleaning. Pick a renovation type, flat size, bedrooms, bathrooms and finish level, choose who does the work and the year, and add a contingency buffer. Prices are SGD ranges for supply and installation unless a line says supply only.",
+  "limits": "Published prices: the per-unit ranges for vinyl and timber flooring, false ceilings, power points, DB boxes, quartz and sintered countertops, main, bedroom and bathroom doors, invisible grilles, aircon systems, built-in ovens, debris haulage, PE endorsement, design fees and the HDB permit come straight from the cited guides, retailers and supplier listings (2024-2026, some undated). Estimates (marked 'AI estimate'): every line whose tiers we split from a single range, converted from per sqft or per flat to per sqm, or built up from item plus labour prices. That covers hacking, floor and wall tiling, waterproofing, cove lighting, bathroom ceilings, most carpentry premium tiers, rewiring, sanitary ware, piping, windows, gates, painting, hob and hood, protection and cleaning. Provider factors are our ratio of each firm's average or package price (Qanvast, Hometrust or its own site) to Qanvast's market midpoints. No dated package pages or web.archive.org copies could be retrieved, so most firms' 2023-2025 history is back-cast from one current figure using Qanvast's market trend; only Starry Homestead, U-Home, Fineline and Renozone have more than one or an older own figure. Future-year prices are trend scenarios, not forecasts. Excludes loose furniture, curtains, fridge and washer, digital locks, a separate project management fee (usually built into quotes), GST where sources quote before GST, and Home Improvement Programme works paid by HDB. Get itemised quotes from an HDB-registered contractor before budgeting.",
+  "version": 1,
+  "updated": "2026-10-28",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 3264933,
+      "output": 233360,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 172,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 2.1631732999999995,
+      "at": "2026-10-28T09:27:02.562Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 298,
+      "output": 186650,
+      "cacheRead": 3551008,
+      "cacheWrite": 540300,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 7.6326946,
+      "at": "2026-10-28T09:27:02.562Z"
+    }
+  ],
+  "subject": "flat",
+  "priceYear": 2026,
+  "inputs": [
+    {
+      "id": "area",
+      "label": "Floor area",
+      "unit": "sqm",
+      "default": 90,
+      "min": 30,
+      "max": 200,
+      "step": 1,
+      "note": "A 4-room HDB flat is about 90 sqm.",
+      "rationale": "Internal floor area drives the per-sqm lines (flooring, rewiring, painting, cleaning). Quick picks follow HDB/MND and gov.sg sizes: 2-room Flexi 36-46 sqm, 3-room 60-66, 4-room 90-93, 5-room 110-113, Executive about 130 (some older ones up to 150).",
+      "choices": [
+        {
+          "label": "2-room Flexi",
+          "value": 45
+        },
+        {
+          "label": "3-room",
+          "value": 65
+        },
+        {
+          "label": "4-room",
+          "value": 90
+        },
+        {
+          "label": "5-room",
+          "value": 110
+        },
+        {
+          "label": "Executive",
+          "value": 130
+        }
+      ]
+    },
+    {
+      "id": "bedrooms",
+      "label": "Bedrooms",
+      "unit": "rooms",
+      "default": 3,
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "note": "3 for a 4-room or 5-room flat.",
+      "rationale": "Sets the number of bedroom doors. 2-room Flexi 1, 3-room 2, 4-room and 5-room 3 (gov.sg Factually, Feb 2024; HDB resale listings)."
+    },
+    {
+      "id": "bathrooms",
+      "label": "Bathrooms",
+      "unit": "rooms",
+      "default": 2,
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "note": "2 for most 3-room to 5-room flats.",
+      "rationale": "Multiplies every per-bathroom line (hacking, tiling, waterproofing, sanitary ware, doors). 2-room Flexi has 1; 3-room to Executive usually 2 (HDB resale listings)."
+    }
+  ],
+  "tiers": {
+    "label": "Finish level",
+    "options": [
+      {
+        "id": "basic",
+        "label": "Basic",
+        "note": "Entry tiles or vinyl, laminate carpentry, budget fittings.",
+        "rationale": "Low end of the published ranges: entry ceramic tiles, standard laminate, budget brands (e.g. Aerogaz hob, 4-tick aircon)."
+      },
+      {
+        "id": "standard",
+        "label": "Standard",
+        "note": "Mid-grade porcelain, better laminate with soft-close, mid brands.",
+        "rationale": "Middle of the published ranges, matching the typical jobs behind Qanvast's 4-room averages."
+      },
+      {
+        "id": "premium",
+        "label": "Premium",
+        "note": "Large-format tiles or stone, spray-paint or veneer carpentry, premium brands.",
+        "rationale": "Top of the published ranges; where no premium price was found we applied Smart Calculator's finish multipliers (veneer 1.3x, 2-pac spray paint 1.45x) and marked the line an estimate."
+      }
+    ],
+    "default": "standard"
+  },
+  "presets": {
+    "label": "Type of renovation",
+    "default": "resale-full",
+    "options": [
+      {
+        "id": "bto-full",
+        "label": "New BTO full renovation",
+        "note": "Carpentry, vinyl, ceiling, lighting, aircon; no hacking.",
+        "rationale": "BTO flats come with tiled floors, finished bathrooms and (under the Optional Component Scheme) doors and sanitary ware, so there is no hacking. Qanvast's 2026 guide puts a 4-room BTO at S$50,000-60,000.",
+        "lines": [
+          "floor-vinyl",
+          "false-ceiling",
+          "cove",
+          "kitchen-cab",
+          "ct-quartz",
+          "kitchen-sink",
+          "hob-hood",
+          "wardrobe",
+          "tv-console",
+          "shoe-cab",
+          "vanity",
+          "shower-screen",
+          "heater",
+          "power-pt",
+          "light-pt",
+          "light-fittings",
+          "main-gate",
+          "painting",
+          "ac-sys4",
+          "design-fee",
+          "protection",
+          "cleaning",
+          "permit"
+        ]
+      },
+      {
+        "id": "resale-full",
+        "label": "Resale full renovation",
+        "note": "Hack and retile, rewire, re-pipe, new carpentry, doors, windows and aircon.",
+        "rationale": "A typical full resale job; Qanvast's 2026 guide puts a 4-room resale at S$70,000-81,600. Includes the 'old flat' items BTOs don't need: hacking, rewiring, piping, windows.",
+        "lines": [
+          "hack-floor",
+          "hack-bath",
+          "hack-kitchen",
+          "dismantle",
+          "floor-tile",
+          "bath-wall-tile",
+          "bath-floor-tile",
+          "kitchen-wall-tile",
+          "waterproof",
+          "false-ceiling",
+          "cove",
+          "bath-ceiling",
+          "kitchen-cab",
+          "wardrobe",
+          "tv-console",
+          "shoe-cab",
+          "vanity",
+          "ct-quartz",
+          "rewire",
+          "power-pt",
+          "light-pt",
+          "db-box",
+          "light-fittings",
+          "toilet-bowl",
+          "basin",
+          "shower-screen",
+          "shower-set",
+          "heater",
+          "piping",
+          "kitchen-sink",
+          "main-door",
+          "main-gate",
+          "bedroom-door",
+          "bath-door",
+          "windows",
+          "painting",
+          "ac-sys4",
+          "hob-hood",
+          "design-fee",
+          "protection",
+          "haulage",
+          "cleaning",
+          "permit"
+        ]
+      },
+      {
+        "id": "resale-refresh",
+        "label": "Resale minimal refresh",
+        "note": "Vinyl over old tiles, paint, new sanitary ware and lights.",
+        "rationale": "A cosmetic refresh that avoids hacking and permit-heavy works (vinyl needs no HDB permit); the scope is our judgment of a common budget resale job.",
+        "lines": [
+          "floor-vinyl",
+          "painting",
+          "light-fittings",
+          "power-pt",
+          "toilet-bowl",
+          "basin",
+          "shower-set",
+          "bath-door",
+          "protection",
+          "haulage",
+          "cleaning"
+        ]
+      },
+      {
+        "id": "kitchen",
+        "label": "Kitchen only",
+        "note": "Hack, retile, new cabinets, quartz top, sink, hob and hood.",
+        "rationale": "One kitchen remodel with the usual trades; a few new points are included because most kitchen jobs move sockets and lights.",
+        "lines": [
+          "hack-kitchen",
+          "kitchen-wall-tile",
+          "kitchen-cab",
+          "ct-quartz",
+          "kitchen-sink",
+          "hob-hood",
+          "power-pt",
+          "light-pt",
+          "protection",
+          "haulage",
+          "cleaning",
+          "permit"
+        ]
+      },
+      {
+        "id": "bath-one",
+        "label": "One bathroom",
+        "note": "Full redo of one bathroom. Set Bathrooms to 1.",
+        "rationale": "Bathroom lines are priced per bathroom, so set the Bathrooms input to 1. Qanvast's bathroom guide gives S$3,000-5,900 per bathroom before fittings.",
+        "lines": [
+          "hack-bath",
+          "bath-wall-tile",
+          "bath-floor-tile",
+          "waterproof",
+          "bath-ceiling",
+          "vanity",
+          "toilet-bowl",
+          "basin",
+          "shower-screen",
+          "shower-set",
+          "heater",
+          "bath-door",
+          "protection",
+          "haulage",
+          "cleaning",
+          "permit"
+        ]
+      },
+      {
+        "id": "bath-two",
+        "label": "Two bathrooms",
+        "note": "Full redo of both bathrooms. Keep Bathrooms at 2.",
+        "rationale": "The same lines as one bathroom, doubled through the Bathrooms input (default 2), as in most 3-room to 5-room flats.",
+        "lines": [
+          "hack-bath",
+          "bath-wall-tile",
+          "bath-floor-tile",
+          "waterproof",
+          "bath-ceiling",
+          "vanity",
+          "toilet-bowl",
+          "basin",
+          "shower-screen",
+          "shower-set",
+          "heater",
+          "bath-door",
+          "protection",
+          "haulage",
+          "cleaning",
+          "permit"
+        ]
+      },
+      {
+        "id": "kitchen-bath",
+        "label": "Partial: kitchen + bathrooms",
+        "note": "Kitchen and all bathrooms, the wet areas only.",
+        "rationale": "The common 'wet areas' job for resale buyers who keep the rest of the flat.",
+        "lines": [
+          "hack-kitchen",
+          "kitchen-wall-tile",
+          "kitchen-cab",
+          "ct-quartz",
+          "kitchen-sink",
+          "hob-hood",
+          "hack-bath",
+          "bath-wall-tile",
+          "bath-floor-tile",
+          "waterproof",
+          "bath-ceiling",
+          "vanity",
+          "toilet-bowl",
+          "basin",
+          "shower-screen",
+          "shower-set",
+          "heater",
+          "bath-door",
+          "power-pt",
+          "light-pt",
+          "protection",
+          "haulage",
+          "cleaning",
+          "permit"
+        ]
+      },
+      {
+        "id": "flooring",
+        "label": "Flooring only",
+        "note": "Hack and retile the floor; tick vinyl or overlay instead for less.",
+        "rationale": "Replacing floor tiles needs an HDB permit and hacking; vinyl or tile overlay are cheaper lines you can switch to.",
+        "lines": [
+          "hack-floor",
+          "floor-tile",
+          "protection",
+          "haulage",
+          "cleaning",
+          "permit"
+        ]
+      },
+      {
+        "id": "carpentry",
+        "label": "Carpentry only",
+        "note": "Kitchen cabinets, wardrobes, TV console, shoe cabinet, study, bed.",
+        "rationale": "Built-ins only, the largest single cost in most BTO jobs (Smart Calculator 2026: about S$10,000-22,000 for a 4-room).",
+        "lines": [
+          "kitchen-cab",
+          "ct-quartz",
+          "wardrobe",
+          "tv-console",
+          "shoe-cab",
+          "study",
+          "platform-bed",
+          "vanity",
+          "protection",
+          "cleaning"
+        ]
+      },
+      {
+        "id": "painting",
+        "label": "Painting only",
+        "note": "Repaint the whole flat.",
+        "rationale": "Whole-flat repaint with protection and cleaning; many painters include protection in their price, so you may untick it.",
+        "lines": [
+          "painting",
+          "protection",
+          "cleaning"
+        ]
+      },
+      {
+        "id": "electrical",
+        "label": "Rewiring / electrical only",
+        "note": "Rewire, new points, DB box and fittings.",
+        "rationale": "A typical resale rewiring scope (The Moneybees 2026: S$3,000-5,500 for a 4-room).",
+        "lines": [
+          "rewire",
+          "power-pt",
+          "light-pt",
+          "db-box",
+          "light-fittings",
+          "protection",
+          "cleaning"
+        ]
+      },
+      {
+        "id": "aircon",
+        "label": "Aircon only",
+        "note": "One multi-split system; tick System 2 or 3 instead for smaller flats.",
+        "rationale": "System 4 suits a living room plus 3 bedrooms (4-room and 5-room); System 2 or 3 fits 2-room and 3-room flats.",
+        "lines": [
+          "ac-sys4"
+        ]
+      }
+    ]
+  },
+  "providers": {
+    "label": "Who does the work",
+    "default": "market",
+    "maxYear": 2031,
+    "options": [
+      {
+        "id": "market",
+        "name": "Market average",
+        "type": "Market average",
+        "url": "https://qanvast.com/sg/articles/what-are-the-expected-renovation-costs-for-hdb-flats-in-2026-3568",
+        "factor": 1,
+        "factorBasis": "The line ranges themselves. History is Qanvast's yearly expected 4-room resale renovation cost (midpoint of each year's range).",
+        "history": [
+          {
+            "year": 2023,
+            "value": 66610,
+            "label": "Qanvast 2023: 4-room resale S$60,720-72,500 (midpoint)",
+            "url": "https://qanvast.com/sg/articles/how-much-is-a-3-4-and-5-room-hdb-flat-renovation-in-2023-3053"
+          },
+          {
+            "year": 2024,
+            "value": 65100,
+            "label": "Qanvast 2024: 4-room resale S$58,000-72,200 (midpoint)",
+            "url": "https://qanvast.com/sg/articles/4-room-resale-hdb-flat-renovations-from-sgd35k-to-sgd140k-2661"
+          },
+          {
+            "year": 2025,
+            "value": 72300,
+            "label": "Qanvast 2025: 4-room resale S$64,300-80,300 (midpoint)",
+            "url": "https://qanvast.com/sg/articles/-3384"
+          },
+          {
+            "year": 2026,
+            "value": 75800,
+            "label": "Qanvast 2026: 4-room resale S$70,000-81,600 (midpoint)",
+            "url": "https://qanvast.com/sg/articles/what-are-the-expected-renovation-costs-for-hdb-flats-in-2026-3568"
+          }
+        ],
+        "rationale": "Qanvast publishes the same measure each year from its platform's medians: 4-room resale midpoints rose from about S$66,600 (2023) to S$75,800 (2026), about 4.4% a year. Its 4-room BTO midpoints were flat (S$56,150 to S$55,000), and BCA's tender price index rose 4.1% (2023), 1.2% (2024) and 1.8% (2025).",
+        "source": {
+          "url": "https://qanvast.com/sg/articles/what-are-the-expected-renovation-costs-for-hdb-flats-in-2026-3568",
+          "verified": "2026-10-28",
+          "type": "secondary"
+        },
+        "notes": "The 2026 article (12 Feb 2026) was opened; the 2023-2025 figures come from Qanvast articles read via search excerpts. Midpoints computed by us."
+      },
+      {
+        "id": "starry",
+        "name": "Starry Homestead",
+        "type": "Interior design firm",
+        "url": "https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd",
+        "factor": 1,
+        "factorBasis": "Hometrust average for its new 4-room HDB jobs (S$54,806, Oct 2026) vs Qanvast's 2026 4-room BTO midpoint (S$55,000).",
+        "history": [
+          {
+            "year": 2023,
+            "value": 49800,
+            "label": "Hometrust new 4-room average, 2023 data (search excerpt)",
+            "url": "https://hometrust.sg/interior-designers/starry-homestead-pte-ltd/review/687"
+          },
+          {
+            "year": 2025,
+            "value": 52185,
+            "label": "Hometrust new 4-room average, early-2026 snapshot (search excerpt)",
+            "url": "https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd"
+          },
+          {
+            "year": 2026,
+            "value": 54806,
+            "label": "Hometrust new 4-room average, page updated 26 Oct 2026",
+            "url": "https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd"
+          }
+        ],
+        "rationale": "About market price for BTO jobs (Qanvast's own Starry average of S$74,923 would put it nearer 1.36x). Its own averages rose about 3% a year. No 2024 average was found, and the 2023 and 2025 figures come from search excerpts, so the source is marked an estimate.",
+        "source": {
+          "url": "https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "HDB-registered (HB-08-4738-B); Hometrust lists CaseTrust-RCMA 2017-2021. No published packages; Qanvast's Dec 2024 roundup shows a S$39,000 4-room BTO at Plantation Village."
+      },
+      {
+        "id": "uhome",
+        "name": "U-Home Interior Design",
+        "type": "Interior design firm",
+        "url": "https://www.u-home.com.sg/",
+        "factor": 1.03,
+        "factorBasis": "New 4-room average S$53,000 vs the BTO midpoint S$55,000 (0.96), and resale 4-room average S$83,571 vs the resale midpoint S$75,800 (1.10), averaged.",
+        "history": [
+          {
+            "year": 2023,
+            "value": 51175,
+            "label": "Estimate: 2024 figure scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.hometrust.sg/interior-designers/u-home-interior-design-pte-ltd"
+          },
+          {
+            "year": 2024,
+            "value": 54000,
+            "label": "Hometrust new 4-room average (labelled 2024 in a search summary)",
+            "url": "https://www.hometrust.sg/interior-designers/u-home-interior-design-pte-ltd"
+          },
+          {
+            "year": 2026,
+            "value": 53000,
+            "label": "Qanvast new 4-room average, past year",
+            "url": "https://qanvast.com/sg/interior-designers-architects/u-home-interior-design-342"
+          }
+        ],
+        "rationale": "Near market for BTO, above it for resale. No 2023 or 2025 own figure was found, so 2023 is back-cast from 2024 using Qanvast's BTO trend (estimate).",
+        "source": {
+          "url": "https://qanvast.com/sg/interior-designers-architects/u-home-interior-design-342",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "Founded 1999; its site shows CaseTrust, RCMA and HDB Registered Renovation Contractor logos. No prices on its own site."
+      },
+      {
+        "id": "fineline",
+        "name": "Fineline Design",
+        "type": "Interior design firm",
+        "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd",
+        "factor": 1.1,
+        "factorBasis": "New 4-room average S$68,325 vs the BTO midpoint S$55,000 (1.24), and resale S$71,233 vs S$75,800 (0.94), averaged and rounded.",
+        "history": [
+          {
+            "year": 2024,
+            "value": 62340,
+            "label": "Earlier Hometrust new 4-room average (undated; year is our estimate)",
+            "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd"
+          },
+          {
+            "year": 2025,
+            "value": 64850,
+            "label": "Later Hometrust new 4-room average (undated; year is our estimate)",
+            "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd/review/911"
+          },
+          {
+            "year": 2026,
+            "value": 68325,
+            "label": "Hometrust new 4-room average, updated 26 Oct 2026",
+            "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd"
+          }
+        ],
+        "rationale": "Above market for new flats, near market for resale. The two older averages are undated page versions that we placed in 2024 and 2025 by order (estimate); together they imply about 4.7% a year. No 2023 figure was found.",
+        "source": {
+          "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "HDB-registered and CaseTrust per Qanvast and Megafurniture. Qanvast's own past-year figures: S$62,500 new, S$85,000 resale."
+      },
+      {
+        "id": "weiken",
+        "name": "Weiken.com",
+        "type": "Interior design firm",
+        "url": "https://qanvast.com/professional/1049/weiken-com",
+        "factor": 1.15,
+        "factorBasis": "Qanvast new 4-room average S$75,000 (3 projects) vs the BTO midpoint S$55,000 (1.36), and resale S$65,500 vs S$75,800 (0.86); weighted towards its overall HDB average of S$75,053.",
+        "history": [
+          {
+            "year": 2023,
+            "value": 76568,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://qanvast.com/professional/1049/weiken-com"
+          },
+          {
+            "year": 2024,
+            "value": 80795,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://qanvast.com/professional/1049/weiken-com"
+          },
+          {
+            "year": 2025,
+            "value": 76909,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://qanvast.com/professional/1049/weiken-com"
+          },
+          {
+            "year": 2026,
+            "value": 75000,
+            "label": "Qanvast new 4-room average (current profile)",
+            "url": "https://qanvast.com/professional/1049/weiken-com"
+          }
+        ],
+        "rationale": "Mid-to-high priced, on a small sample. No dated own prices were found for 2023-2025, so those years are back-cast from its current average using Qanvast's BTO trend (estimate).",
+        "source": {
+          "url": "https://qanvast.com/professional/1049/weiken-com",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "Qanvast lists it as HDB-registered with CaseTrust Gold. Two Qanvast versions disagree on its resale average (S$40,000 vs S$65,500)."
+      },
+      {
+        "id": "livspace",
+        "name": "Livspace",
+        "type": "Design-and-build platform",
+        "url": "https://hometrust.sg/interior-designers/livspace",
+        "factor": 0.75,
+        "factorBasis": "Hometrust 4-room averages: S$45,219 new vs S$55,000 (0.82) and S$52,239 resale vs S$75,800 (0.69), averaged.",
+        "history": [
+          {
+            "year": 2023,
+            "value": 46165,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://hometrust.sg/interior-designers/livspace"
+          },
+          {
+            "year": 2024,
+            "value": 48713,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://hometrust.sg/interior-designers/livspace"
+          },
+          {
+            "year": 2025,
+            "value": 46370,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://hometrust.sg/interior-designers/livspace"
+          },
+          {
+            "year": 2026,
+            "value": 45219,
+            "label": "Hometrust new 4-room average, updated 26 Oct 2026",
+            "url": "https://hometrust.sg/interior-designers/livspace"
+          }
+        ],
+        "rationale": "Below market. Its 2021 IKEA x Livspace 4-room package (from S$15,600, Mothership Jan 2021) is not the same scope, so 2023-2025 are back-cast from the current average with Qanvast's BTO trend (estimate).",
+        "source": {
+          "url": "https://hometrust.sg/interior-designers/livspace",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "HDB-registered, not CaseTrust (Qanvast listing)."
+      },
+      {
+        "id": "ovon",
+        "name": "Ovon Design",
+        "type": "Interior design firm",
+        "url": "https://qanvast.com/sg/interior-designers-architects/1555",
+        "factor": 1.3,
+        "factorBasis": "New 4-room averages S$69,000 (Qanvast) and S$76,667 (Hometrust) vs the BTO midpoint S$55,000 (1.25-1.39).",
+        "history": [
+          {
+            "year": 2023,
+            "value": 78270,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
+          },
+          {
+            "year": 2024,
+            "value": 82591,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
+          },
+          {
+            "year": 2025,
+            "value": 78619,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
+          },
+          {
+            "year": 2026,
+            "value": 76667,
+            "label": "Hometrust new 4-room average, updated 26 Oct 2026",
+            "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
+          }
+        ],
+        "rationale": "Mid-to-high end. Its dated projects cover different scopes (about S$100,000 for an old 4-room during HIP in 2023, S$28,000 for a Tengah BTO in 2026), so 2023-2025 are back-cast from the current average with Qanvast's BTO trend (estimate).",
+        "source": {
+          "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "HDB-registered and CaseTrust per Qanvast; S$40,000 minimum budget."
+      },
+      {
+        "id": "dotsntots",
+        "name": "Dots 'n' Tots Interior",
+        "type": "Design-and-build firm",
+        "url": "https://dotsntots.com.sg/",
+        "factor": 0.68,
+        "factorBasis": "Hometrust new 4-room average S$36,545-38,500 vs the BTO midpoint S$55,000.",
+        "history": [
+          {
+            "year": 2023,
+            "value": 37309,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+          },
+          {
+            "year": 2024,
+            "value": 39369,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+          },
+          {
+            "year": 2025,
+            "value": 37475,
+            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
+            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+          },
+          {
+            "year": 2026,
+            "value": 36545,
+            "label": "Hometrust new 4-room average (current page)",
+            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+          }
+        ],
+        "rationale": "A budget option. No dated own prices were found, so 2023-2025 are back-cast from the current average with Qanvast's BTO trend (estimate).",
+        "source": {
+          "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "Lists itself as HDB registered and a BCA licensed builder; its site carries a CCS public apology about buying fake reviews."
+      },
+      {
+        "id": "renozone",
+        "name": "Renozone Interior Design House",
+        "type": "Interior design firm",
+        "url": "https://renozone.com.sg/",
+        "factor": 0.89,
+        "factorBasis": "2023 homeowner-reported 4-room budgets of S$40,000-60,000 (midpoint S$50,000) vs Qanvast's 2023 4-room BTO midpoint S$56,150.",
+        "history": [
+          {
+            "year": 2023,
+            "value": 50000,
+            "label": "HomeRenoGuru reviews: 4-room budgets S$40,000-60,000 (Aug 2023)",
+            "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
+          },
+          {
+            "year": 2024,
+            "value": 52761,
+            "label": "Estimate: 2023 figure scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
+          },
+          {
+            "year": 2025,
+            "value": 50223,
+            "label": "Estimate: 2023 figure scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
+          },
+          {
+            "year": 2026,
+            "value": 48976,
+            "label": "Estimate: 2023 figure scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
+          }
+        ],
+        "rationale": "Slightly below market. Only 2023 has its own figure (self-reported budgets, BTO or resale not stated); 2024-2026 follow Qanvast's BTO trend (estimate).",
+        "source": {
+          "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "Operating since 1998; directories list it as RCMA, CaseTrust and HDB-registered (third-party listings, not checked against registries)."
+      },
+      {
+        "id": "carpenters",
+        "name": "Carpenters 匠 (Carpenters.com.sg)",
+        "type": "Design-and-build firm",
+        "url": "https://carpenters.com.sg/",
+        "factor": 1.16,
+        "factorBasis": "Qanvast past-year HDB average S$76,091 (all flat types) vs the average of Qanvast's 2026 4-room BTO and resale midpoints (S$65,400).",
+        "history": [
+          {
+            "year": 2023,
+            "value": 66866,
+            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
+            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
+          },
+          {
+            "year": 2024,
+            "value": 65350,
+            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
+            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
+          },
+          {
+            "year": 2025,
+            "value": 72578,
+            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
+            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
+          },
+          {
+            "year": 2026,
+            "value": 76091,
+            "label": "Qanvast HDB average, past year",
+            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
+          }
+        ],
+        "rationale": "Above market, with an in-house carpentry factory. It publishes no packages (quotes are itemised per project), so 2023-2025 are back-cast with Qanvast's resale trend (estimate).",
+        "source": {
+          "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "Its own site says CaseTrust accredited and HDB registered (HB-10-4334E per a directory)."
+      },
+      {
+        "id": "absolook",
+        "name": "Absolook Interior Design",
+        "type": "Interior design firm",
+        "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439",
+        "factor": 1.04,
+        "factorBasis": "Qanvast past-year HDB average S$78,800 (all flat types) vs Qanvast's 2026 4-room resale midpoint S$75,800.",
+        "history": [
+          {
+            "year": 2023,
+            "value": 69246,
+            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
+            "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
+          },
+          {
+            "year": 2024,
+            "value": 67677,
+            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
+            "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
+          },
+          {
+            "year": 2025,
+            "value": 75162,
+            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
+            "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
+          },
+          {
+            "year": 2026,
+            "value": 78800,
+            "label": "Qanvast HDB average, past year",
+            "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
+          }
+        ],
+        "rationale": "About market for resale-sized jobs. No dated own prices were found, so 2023-2025 are back-cast with Qanvast's resale trend (estimate).",
+        "source": {
+          "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439",
+          "verified": "2026-10-28",
+          "type": "estimate"
+        },
+        "notes": "Qanvast says it is not under the CaseTrust scheme; its HDB registration status conflicts between Qanvast pages."
+      },
+      {
+        "id": "fcid",
+        "name": "FC Interior Design",
+        "type": "Design-and-build firm",
+        "url": "https://www.fcinteriordesign.net/bto-renovation-packages/",
+        "factor": 0.7,
+        "factorBasis": "Its published 4-room BTO package from S$35,800 (3D design, carpentry for kitchen and 3 bedrooms, flooring, bathroom overlay, fittings) vs Qanvast's 2026 4-room BTO midpoint S$55,000 (0.65), raised to 0.70 because 'from' prices rise with add-ons.",
+        "history": [
+          {
+            "year": 2023,
+            "value": 36549,
+            "label": "Estimate: 2026 package scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
+          },
+          {
+            "year": 2024,
+            "value": 38566,
+            "label": "Estimate: 2026 package scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
+          },
+          {
+            "year": 2025,
+            "value": 36711,
+            "label": "Estimate: 2026 package scaled by Qanvast's 4-room BTO trend",
+            "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
+          },
+          {
+            "year": 2026,
+            "value": 35800,
+            "label": "Published 4-room BTO package, from S$35,800 (site 2026)",
+            "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
+          }
+        ],
+        "rationale": "Below market, with published packages (3-room S$29,800, 5-room S$42,800). Earlier package prices could not be found (the web archive was unreachable), so 2023-2025 are back-cast with Qanvast's BTO trend (estimate).",
+        "source": {
+          "url": "https://www.fcinteriordesign.net/bto-renovation-packages/",
+          "verified": "2026-10-28",
+          "type": "official"
+        },
+        "notes": "Operating since 1990; its own site lists HDB licence HB-09-2619C, CaseTrust and bizSAFE Star."
+      }
+    ]
+  },
+  "contingency": {
+    "default": 0.1,
+    "max": 0.3
+  },
+  "groups": [
+    {
+      "id": "hack",
+      "label": "Hacking, demolition and masonry"
+    },
+    {
+      "id": "floor",
+      "label": "Flooring"
+    },
+    {
+      "id": "wet",
+      "label": "Wall tiling and waterproofing"
+    },
+    {
+      "id": "ceiling",
+      "label": "Ceiling and cove lighting"
+    },
+    {
+      "id": "carp",
+      "label": "Carpentry"
+    },
+    {
+      "id": "counter",
+      "label": "Countertops"
+    },
+    {
+      "id": "elec",
+      "label": "Electrical"
+    },
+    {
+      "id": "plumb",
+      "label": "Plumbing and sanitary"
+    },
+    {
+      "id": "doors",
+      "label": "Doors, gates and windows"
+    },
+    {
+      "id": "paint",
+      "label": "Painting"
+    },
+    {
+      "id": "appl",
+      "label": "Aircon and kitchen appliances"
+    },
+    {
+      "id": "fees",
+      "label": "Design, permits, protection and cleaning"
+    }
+  ],
+  "lines": [
+    {
+      "id": "hack-floor",
+      "group": "hack",
+      "label": "Hack existing floor tiles",
+      "description": "Remove old floor tiles and screed and cart the debris away (replacing tiles needs an HDB permit).",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 32,
+          "high": 43
+        },
+        "standard": {
+          "low": 43,
+          "high": 65
+        },
+        "premium": {
+          "low": 65,
+          "high": 86
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/flooring-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Smart Calculator flooring guide (16 Jul 2026): hacking floor tiles incl. disposal S$3-8/sqft. Converted at 10.764 sqft per sqm and split into thirds for the tiers by us.",
+      "rationale": "The source gives one S$3-8/sqft range; the basic/standard/premium split is our estimate. It is applied to the whole floor area, so lower the quantity if some rooms keep their tiles."
+    },
+    {
+      "id": "hack-bath",
+      "group": "hack",
+      "label": "Hack bathroom tiles and fixtures",
+      "description": "Strip a bathroom's floor and wall tiles, old sanitary ware and fittings.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 100,
+          "high": 400
+        },
+        "standard": {
+          "low": 400,
+          "high": 900
+        },
+        "premium": {
+          "low": 900,
+          "high": 1500
+        }
+      },
+      "source": {
+        "url": "https://blog.moneysmart.sg/renovation-loans/kitchen-bathroom-living-room-renovation-cost-singapore/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "MoneySmart room-by-room guide (2026, read via search excerpt): bathroom hacking light S$100-400, moderate S$400-900, extensive S$900+. Income blog (7 Feb 2025) agrees on S$100-500 for light hacking. The premium high of S$1,500 is our cap; MoneySmart's S$6,700 top includes rebuilding.",
+      "rationale": "Basic is light hacking (fixtures and a few tiles), standard a full floor-and-wall strip, premium an extensive strip incl. kerbs. BTO owners normally must wait 3 years before hacking bathroom finishes."
+    },
+    {
+      "id": "hack-kitchen",
+      "group": "hack",
+      "label": "Hack kitchen tiles and old cabinets",
+      "description": "Dismantle old kitchen cabinets and hob, and hack the kitchen floor and wall tiles.",
+      "per": "fixed",
+      "unit": "per kitchen",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 500,
+          "high": 900
+        },
+        "standard": {
+          "low": 1200,
+          "high": 1800
+        },
+        "premium": {
+          "low": 1800,
+          "high": 2500
+        }
+      },
+      "source": {
+        "url": "https://www.moneysmart.sg/personal-loan/hdb-renovation-cost-loan-guide-singapore-ms",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Basic from the MoneySmart HDB guide (2026, search excerpt): dismantle cabinets and hob with minor hacking S$500-900. Standard and premium are our estimate: about 97 sqft of floor x S$3-8 plus about 270 sqft of wall tile x S$3-6 (Smart Calculator rates) plus about S$500 for cabinets.",
+      "rationale": "Only basic is a published price; full kitchen hacking is built up from per-sqft hacking rates, so standard and premium are estimates."
+    },
+    {
+      "id": "hack-wall",
+      "group": "hack",
+      "label": "Hack a non-structural wall (HDB approval)",
+      "description": "Demolish part or all of a non-structural wall; HDB's prior written approval is required.",
+      "per": "fixed",
+      "unit": "per wall",
+      "qty": 1,
+      "qtyMax": 4,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 400,
+          "high": 600
+        },
+        "standard": {
+          "low": 500,
+          "high": 800
+        },
+        "premium": {
+          "low": 600,
+          "high": 900
+        }
+      },
+      "source": {
+        "url": "https://uchify.com/wall-hacking/",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Uchify wall-hacking guide (undated): S$400-900 per wall; 99.co (search excerpt) S$40-60 per foot run; EdgeProp about S$50 per foot run. Tier split ours. PE endorsement, where needed, is a separate line under fees.",
+      "rationale": "Assumes a typical internal brick wall 8-15 ft long. HDB only allows hacking of walls it marks as non-structural."
+    },
+    {
+      "id": "dismantle",
+      "group": "hack",
+      "label": "Dismantle and dispose old carpentry",
+      "description": "Remove old wardrobes, cabinets and built-ins across the flat.",
+      "per": "fixed",
+      "unit": "per flat",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 300,
+          "high": 600
+        },
+        "standard": {
+          "low": 500,
+          "high": 1000
+        },
+        "premium": {
+          "low": 1000,
+          "high": 1500
+        }
+      },
+      "source": {
+        "url": "https://blog.moneysmart.sg/renovation-loans/kitchen-bathroom-living-room-renovation-cost-singapore/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "No standalone published price found. Scaled by us from MoneySmart's room figures (S$500-900 to dismantle a kitchen, S$400-700 for a living room; 2026 excerpt). Smart Calculator (16 Jul 2026) gives S$2,500-5,500 for hacking, dismantling and haulage together.",
+      "rationale": "Our estimate for a resale flat with several old built-ins; the tiers reflect how much old carpentry there is, not finish quality."
+    },
+    {
+      "id": "new-wall",
+      "group": "hack",
+      "label": "Build a new partition wall",
+      "description": "New drywall or gypsum partition (basic, standard) or a plastered brick wall (premium).",
+      "per": "fixed",
+      "unit": "per sqm of wall",
+      "qty": 8,
+      "qtyMax": 40,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 86,
+          "high": 108
+        },
+        "standard": {
+          "low": 108,
+          "high": 161
+        },
+        "premium": {
+          "low": 161,
+          "high": 269
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/renovation-quotation-guide-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "No direct published per-sqm price found. Our estimate: drywall at 1.3-2x Smart Calculator's gypsum false-ceiling rate of S$6-12/sqft (two faces plus insulation); brick at S$15-25/sqft. Indesignlive (2022) quotes S$580 to about S$7,600 per partition wall.",
+      "rationale": "Default 8 sqm is one wall about 3 m long and 2.6 m high. All tiers are estimates."
+    },
+    {
+      "id": "floor-tile",
+      "group": "floor",
+      "label": "Floor tiling (porcelain or homogeneous) incl. screed",
+      "description": "Supply and lay new floor tiles on fresh cement screed.",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 75,
+          "high": 140
+        },
+        "standard": {
+          "low": 118,
+          "high": 194
+        },
+        "premium": {
+          "low": 172,
+          "high": 269
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/flooring-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Smart Calculator flooring guide (16 Jul 2026): porcelain/ceramic installed S$10-22/sqft excluding hacking and screed; its quotation guide says S$6-12/sqft mid-grade; Qanvast via Income (7 Feb 2025) ceramic S$3.50-9.50/sqft. Re-screed adds S$1-3/sqft. We set tile-plus-screed tiers of S$7-13, S$11-18 and S$16-25/sqft across these sources.",
+      "rationale": "Sources clash (S$3.50 to S$22/sqft); basic is entry ceramic, premium large-format porcelain. Marble runs S$15-40/sqft and can exceed premium."
+    },
+    {
+      "id": "floor-overlay",
+      "group": "floor",
+      "label": "Tile overlay on existing floor",
+      "description": "Lay new tiles over the old ones without hacking or new screed.",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 32,
+          "high": 54
+        },
+        "standard": {
+          "low": 54,
+          "high": 75
+        },
+        "premium": {
+          "low": 75,
+          "high": 97
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/flooring-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Smart Calculator flooring guide and flooring calculator (2026): overlay S$3-9/sqft (calculator S$3.50-9). Converted to per sqm and split into tiers by us.",
+      "rationale": "Overlay is cheaper than hacking and retiling but raises the floor level; the tier split is our estimate."
+    },
+    {
+      "id": "floor-vinyl",
+      "group": "floor",
+      "label": "SPC / vinyl flooring",
+      "description": "Click-lock SPC or vinyl planks laid over the existing floor; no HDB permit needed.",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 43,
+          "high": 65
+        },
+        "standard": {
+          "low": 65,
+          "high": 97
+        },
+        "premium": {
+          "low": 86,
+          "high": 108
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/flooring-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Smart Calculator (16 Jul 2026) S$4-10/sqft, embossed S$8-10; Floor Xpert 2026 price guide from S$4, mid-range S$6-9/sqft; Income (Feb 2025) S$4-8/sqft; Qanvast: S$3,000-5,000 for a 4-room of about 850 sqft. Converted at 10.764 sqft per sqm.",
+      "rationale": "Ranges are sourced; basic is 4-5 mm SPC, premium thicker embossed planks with better underlay."
+    },
+    {
+      "id": "floor-timber",
+      "group": "floor",
+      "label": "Laminate, engineered timber or parquet",
+      "description": "Laminate (basic), engineered timber (standard) or solid parquet (premium).",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 54,
+          "high": 86
+        },
+        "standard": {
+          "low": 108,
+          "high": 194
+        },
+        "premium": {
+          "low": 323,
+          "high": 538
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/flooring-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Smart Calculator flooring guide (16 Jul 2026): laminate S$5-12/sqft, engineered timber S$10-18, solid parquet S$30-50; PropertyGuru and Income give laminate S$4-11/sqft. Converted at 10.764 sqft per sqm.",
+      "rationale": "Each tier is a different, sourced material. Usually laid in bedrooms only, so lower the quantity (e.g. 0.4 of the flat)."
+    },
+    {
+      "id": "bath-wall-tile",
+      "group": "wet",
+      "label": "Bathroom wall tiling (full height)",
+      "description": "Supply and lay wall tiles to full height in one bathroom (about 17 sqm or 180 sqft of wall).",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 650,
+          "high": 1100
+        },
+        "standard": {
+          "low": 1100,
+          "high": 2200
+        },
+        "premium": {
+          "low": 2700,
+          "high": 7200
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/renovation-quotation-guide-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Rates: Smart Calculator quotation guide (16 Jul 2026) S$6-12/sqft mid-grade; ceramic S$3.50-9.50 (Qanvast via Income, 2025); marble S$15-40/sqft. Per-bathroom totals are our arithmetic on about 180 sqft of wall. SBO.sg (2025) quotes S$3,000-4,000 for fully tiling one bathroom.",
+      "rationale": "The per-bathroom figure is our estimate from per-sqft rates; premium is stone or large-format tiles."
+    },
+    {
+      "id": "bath-floor-tile",
+      "group": "wet",
+      "label": "Bathroom floor tiling",
+      "description": "Supply and lay anti-slip floor tiles in one bathroom (about 3.3 sqm or 35 sqft).",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 150,
+          "high": 330
+        },
+        "standard": {
+          "low": 250,
+          "high": 450
+        },
+        "premium": {
+          "low": 525,
+          "high": 1400
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/renovation-quotation-guide-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Our arithmetic on about 35 sqft at S$3.50-9.50 (basic, Qanvast via Income), S$6-12 (standard, Smart Calculator 16 Jul 2026) and S$15-40/sqft (premium stone), with a small labour minimum added at basic and standard.",
+      "rationale": "An estimate built from per-sqft rates; contractors often bundle it with wall tiling and waterproofing."
+    },
+    {
+      "id": "kitchen-wall-tile",
+      "group": "wet",
+      "label": "Kitchen wall tiling / backsplash",
+      "description": "Backsplash only (basic) or full kitchen wall tiling (standard, premium).",
+      "per": "fixed",
+      "unit": "per kitchen",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 150,
+          "high": 300
+        },
+        "standard": {
+          "low": 600,
+          "high": 1250
+        },
+        "premium": {
+          "low": 1250,
+          "high": 2500
+        }
+      },
+      "source": {
+        "url": "https://www.polybldg.com.sg/tag/poly-granite/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Polybldg (undated, search excerpt): tile S$4.50-9.50/sqft plus labour S$3-6, so S$7.50-15.50/sqft. Basic = about 20 sqft of backsplash; standard = about 80 sqft of wall; premium = large-format or feature tiles. Totals are ours.",
+      "rationale": "All per-kitchen figures are our estimates from one supplier's per-sqft rate."
+    },
+    {
+      "id": "waterproof",
+      "group": "wet",
+      "label": "Bathroom waterproofing membrane",
+      "description": "Waterproofing membrane on the floor with an upturn on the walls, required by HDB after bathroom floor tiles are hacked.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 400,
+          "high": 600
+        },
+        "standard": {
+          "low": 500,
+          "high": 800
+        },
+        "premium": {
+          "low": 700,
+          "high": 1000
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/renovation-quotation-guide-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "No reliable standalone price found. Our estimate is about a quarter of Smart Calculator's (16 Jul 2026) S$3,100-4,700 'hack + waterproof + retile' bathroom bundle; an unidentified snippet gave S$200-400 for the membrane only.",
+      "rationale": "An estimate. HDB requires a membrane when bathroom floors are redone; the required wall upturn differs between sources (100-200 mm vs 150 mm), so check with your contractor."
+    },
+    {
+      "id": "false-ceiling",
+      "group": "ceiling",
+      "label": "False ceiling (gypsum board)",
+      "description": "Plasterboard false ceiling to hide wiring or create levels.",
+      "per": "fixed",
+      "unit": "per sqm of ceiling",
+      "qty": 20,
+      "qtyMax": 150,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 54,
+          "high": 86
+        },
+        "standard": {
+          "low": 86,
+          "high": 129
+        },
+        "premium": {
+          "low": 129,
+          "high": 194
+        }
+      },
+      "source": {
+        "url": "https://www.helpling.com.sg/ceiling-works",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Helpling ceiling works (9 Oct 2025): flat gypsum S$5-8/sqft, layered S$8-12, coffered S$12-18. Smart Calculator (2026) S$6-12/sqft and 99.co S$4-10/sqft agree. Converted at 10.764 sqft per sqm.",
+      "rationale": "The tiers match published ceiling types (flat, layered, coffered). Default 20 sqm covers a living and dining area."
+    },
+    {
+      "id": "cove",
+      "group": "ceiling",
+      "label": "Cove lighting / L-box",
+      "description": "L-box or cove along the walls with a recess for LED strip lighting.",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 30,
+      "qtyMax": 200,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 15,
+          "high": 20
+        },
+        "standard": {
+          "low": 20,
+          "high": 25
+        },
+        "premium": {
+          "low": 25,
+          "high": 30
+        }
+      },
+      "source": {
+        "url": "https://www.helpling.com.sg/ceiling-works",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Helpling (9 Oct 2025): cove ceiling with lighting S$10-15/sqft. Our per-foot-run estimate assumes a band 1.5-2 ft wide. LED strips and lighting points are separate lines.",
+      "rationale": "An estimate; no per-foot-run price was found."
+    },
+    {
+      "id": "bath-ceiling",
+      "group": "ceiling",
+      "label": "Bathroom ceiling",
+      "description": "Moisture-resistant ceiling that hides the storage heater and pipes.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 140,
+          "high": 270
+        },
+        "standard": {
+          "low": 175,
+          "high": 360
+        },
+        "premium": {
+          "low": 300,
+          "high": 700
+        }
+      },
+      "source": {
+        "url": "https://www.helpling.com.sg/ceiling-works",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Helpling (9 Oct 2025): PVC ceiling S$4-6/sqft. Our estimate for a 35-45 sqft bathroom ceiling: PVC (basic), moisture-resistant board (standard), aluminium (premium, rate assumed S$8-15/sqft).",
+      "rationale": "An estimate; no Singapore aluminium-ceiling price was found."
+    },
+    {
+      "id": "kitchen-cab",
+      "group": "carp",
+      "label": "Kitchen cabinets (top and bottom)",
+      "description": "Custom kitchen cabinets, top and bottom rows: laminate (basic, standard) or spray paint or veneer with Blum fittings (premium).",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 12,
+      "qtyMax": 40,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 150,
+          "high": 210
+        },
+        "standard": {
+          "low": 200,
+          "high": 320
+        },
+        "premium": {
+          "low": 290,
+          "high": 464
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/carpentry-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Smart Calculator carpentry guide (16 Jul 2026): S$200-320/ft run for top and bottom, 12 ft typical for a 4-room; cabinets.sg (2025 list) S$150; Uncle Carpenter (2026) from S$105 top plus S$105 bottom. Premium = 1.45x for 2-pac spray paint (same guide), our arithmetic.",
+      "rationale": "Check whether a quote is per row or for both rows, as sources differ. The premium tier is our estimate."
+    },
+    {
+      "id": "wardrobe",
+      "group": "carp",
+      "label": "Wardrobes (full height)",
+      "description": "Full-height swing (basic) or sliding and upgraded (standard, premium) wardrobes.",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 20,
+      "qtyMax": 60,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 210,
+          "high": 240
+        },
+        "standard": {
+          "low": 250,
+          "high": 400
+        },
+        "premium": {
+          "low": 363,
+          "high": 580
+        }
+      },
+      "source": {
+        "url": "https://uchify.com/carpenters-customised-wardrobe-singapore/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Uchify carpenter comparison (10 Oct 2024): swing S$210-280/ft, sliding S$230-380; cabinets.sg S$300-320; Smart Calculator (16 Jul 2026) sliding S$250-400. Premium = 1.45x the sliding range (Smart Calculator finish multiplier), our estimate.",
+      "rationale": "Default 20 ft = master bedroom 8 ft plus two common bedrooms of 6 ft each (Smart Calculator's 4-room typical)."
+    },
+    {
+      "id": "tv-console",
+      "group": "carp",
+      "label": "TV console",
+      "description": "Low or feature TV console, laminate to premium finishes.",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 8,
+      "qtyMax": 20,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 110,
+          "high": 170
+        },
+        "standard": {
+          "low": 170,
+          "high": 320
+        },
+        "premium": {
+          "low": 247,
+          "high": 464
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/carpentry-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Uncle Carpenter (2026) from S$110/ft and cabinets.sg S$150-170 (basic); Smart Calculator (16 Jul 2026) S$170-320 (standard); premium = 1.45x, our estimate.",
+      "rationale": "Default 8 ft is a typical 4-room console length."
+    },
+    {
+      "id": "shoe-cab",
+      "group": "carp",
+      "label": "Shoe cabinet",
+      "description": "Half or full height shoe cabinet by the entrance.",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 4,
+      "qtyMax": 12,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 120,
+          "high": 200
+        },
+        "standard": {
+          "low": 150,
+          "high": 300
+        },
+        "premium": {
+          "low": 218,
+          "high": 435
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/carpentry-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Uncle Carpenter (2026) S$120-200/ft; Smart Calculator (16 Jul 2026) S$150-300/ft, which clashes with 99.co's S$250-350 (search excerpt); premium = 1.45x, our estimate.",
+      "rationale": "Default 4 ft; sources clash on the standard range."
+    },
+    {
+      "id": "study",
+      "group": "carp",
+      "label": "Study table with shelves",
+      "description": "Built-in desk with drawers and wall shelves (about 8 ft of carpentry).",
+      "per": "fixed",
+      "unit": "per set",
+      "qty": 1,
+      "qtyMax": 4,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 500,
+          "high": 1000
+        },
+        "standard": {
+          "low": 1040,
+          "high": 2080
+        },
+        "premium": {
+          "low": 1500,
+          "high": 3000
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/carpentry-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Our estimate: basic from Uncle Carpenter desk rates (S$80-110/ft); standard = 8 ft x Smart Calculator's study rate of S$130-260/ft (16 Jul 2026); premium = 1.45x.",
+      "rationale": "All tiers are estimates built from per-foot rates."
+    },
+    {
+      "id": "platform-bed",
+      "group": "carp",
+      "label": "Platform bed with storage",
+      "description": "Queen-size platform bed with drawers or hydraulic storage.",
+      "per": "fixed",
+      "unit": "per bed",
+      "qty": 1,
+      "qtyMax": 4,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 600,
+          "high": 2000
+        },
+        "standard": {
+          "low": 2450,
+          "high": 2800
+        },
+        "premium": {
+          "low": 2800,
+          "high": 4000
+        }
+      },
+      "source": {
+        "url": "https://cabinets.sg/carpentry-price-list-singapore/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Uncle Carpenter queen bed box S$600; cabinets.sg queen platform S$2,000 without storage and S$2,450 with storage; MoneySmart 2026 guide from S$2,800. The premium high of S$4,000 is our estimate.",
+      "rationale": "The premium tier is an estimate; MoneySmart's higher figures (to S$8,800) include extra base cabinetry."
+    },
+    {
+      "id": "vanity",
+      "group": "carp",
+      "label": "Bathroom vanity cabinet",
+      "description": "Under-basin vanity of about 3 ft in waterproof board.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 450,
+          "high": 645
+        },
+        "standard": {
+          "low": 645,
+          "high": 840
+        },
+        "premium": {
+          "low": 840,
+          "high": 1220
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/carpentry-cost-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Our arithmetic: 3 ft x Smart Calculator's (16 Jul 2026) S$150-215/ft (basic) and S$215-280/ft (standard); premium = 1.45x.",
+      "rationale": "An estimate built from per-foot rates."
+    },
+    {
+      "id": "ct-quartz",
+      "group": "counter",
+      "label": "Countertop: quartz",
+      "description": "Quartz countertop, supplied and installed.",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 12,
+      "qtyMax": 30,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 95,
+          "high": 120
+        },
+        "standard": {
+          "low": 120,
+          "high": 180
+        },
+        "premium": {
+          "low": 150,
+          "high": 220
+        }
+      },
+      "source": {
+        "url": "https://qanvast.com/sg/articles/the-best-countertop-pick-sintered-surface-quartz-granite-or-marble-3327",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Qanvast/Melmer (13 Sep 2024) and Smart Calculator (16 Jul 2026) agree on S$120-180/ft; cabinets.sg S$100 and Carousell ads from S$95 (basic); Houzz SG up to S$220 (premium).",
+      "rationale": "Default 12 ft matches the bottom kitchen run. Quartz is the most common HDB choice."
+    },
+    {
+      "id": "ct-compact",
+      "group": "counter",
+      "label": "Countertop: compact or sintered stone",
+      "description": "Sintered stone or compact panels (e.g. Dekton at premium).",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 12,
+      "qtyMax": 30,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 100,
+          "high": 160
+        },
+        "standard": {
+          "low": 160,
+          "high": 250
+        },
+        "premium": {
+          "low": 250,
+          "high": 380
+        }
+      },
+      "source": {
+        "url": "https://qanvast.com/sg/articles/comparing-sintered-stone-vs-quartz-the-differences-and-the-verdict-2873",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "cabinets.sg S$120-220/ft; Melmer via Qanvast (2024) S$160-240; Qanvast 'from S$250'; Smart Calculator (2026) S$220-380 for Dekton-class. Compact panels had no separate Singapore price, so they share this range.",
+      "rationale": "Tick instead of quartz. Sources clash on how much dearer it is than quartz (S$50/ft more, or double)."
+    },
+    {
+      "id": "ct-granite",
+      "group": "counter",
+      "label": "Countertop: granite",
+      "description": "Natural granite countertop.",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 12,
+      "qtyMax": 30,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 90,
+          "high": 160
+        },
+        "standard": {
+          "low": 160,
+          "high": 200
+        },
+        "premium": {
+          "low": 200,
+          "high": 250
+        }
+      },
+      "source": {
+        "url": "https://qanvast.com/sg/articles/the-best-countertop-pick-sintered-surface-quartz-granite-or-marble-3327",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Houzz SG (excerpt) S$90-160/ft; Melmer via Qanvast (13 Sep 2024) 'S$160 and upwards'. The standard high and premium are set by us at marble's S$200+ level.",
+      "rationale": "The standard high and premium are estimates; sources clash on whether granite is cheaper or dearer than quartz."
+    },
+    {
+      "id": "ct-solid",
+      "group": "counter",
+      "label": "Countertop: solid surface",
+      "description": "Solid surface countertop (e.g. KSS at basic and standard, Corian at premium).",
+      "per": "fixed",
+      "unit": "per ft run",
+      "qty": 12,
+      "qtyMax": 30,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 80,
+          "high": 110
+        },
+        "standard": {
+          "low": 100,
+          "high": 130
+        },
+        "premium": {
+          "low": 130,
+          "high": 180
+        }
+      },
+      "source": {
+        "url": "https://cabinets.sg/carpentry-price-list-singapore/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "cabinets.sg S$80-130/ft; metinterior S$80-150 for 'quartz or solid surface' (excerpt). Premium Corian at S$130-180 is our estimate.",
+      "rationale": "The premium tier is an estimate. Solid surface is seamless and repairable but scratches more easily than quartz."
+    },
+    {
+      "id": "rewire",
+      "group": "elec",
+      "label": "Full-flat rewiring",
+      "description": "Replace the old wiring of a resale flat (power and lighting circuits).",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 18,
+          "high": 29
+        },
+        "standard": {
+          "low": 33,
+          "high": 60
+        },
+        "premium": {
+          "low": 40,
+          "high": 71
+        }
+      },
+      "source": {
+        "url": "https://themoneybees.co/blog/electrician-singapore-electrical-services",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Per-sqm figures are ours: SK Electrical promo S$1,200 for a 3-room / 67 sqm; Uchify (6 May 2022) S$1,699-3,299 for 3-room to 5-room; The Moneybees (2026) S$3,000-5,500 for a 4-room / 92 sqm; hdbrenovation.sg (2026) S$3,500-6,500 incl. a new DB.",
+      "rationale": "Estimated from whole-flat quotes divided by typical areas; sources differ 2-3x, mainly by how many points are included."
+    },
+    {
+      "id": "power-pt",
+      "group": "elec",
+      "label": "Power points (13A sockets)",
+      "description": "Install new or replace 13A single or double sockets.",
+      "per": "fixed",
+      "unit": "per point",
+      "qty": 8,
+      "qtyMax": 40,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 50,
+          "high": 90
+        },
+        "standard": {
+          "low": 60,
+          "high": 120
+        },
+        "premium": {
+          "low": 120,
+          "high": 150
+        }
+      },
+      "source": {
+        "url": "https://themoneybees.co/blog/electrician-singapore-electrical-services",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "MoneySmart electrician guide (excerpt) S$50-90 per socket; The Moneybees (2026) S$60-120; premium = aircon or heater points at S$120-150 (MoneySmart).",
+      "rationale": "Default 8 new points for a typical 4-room; premium covers heavy-load points."
+    },
+    {
+      "id": "light-pt",
+      "group": "elec",
+      "label": "Lighting points",
+      "description": "New or relocated lighting points incl. switch.",
+      "per": "fixed",
+      "unit": "per point",
+      "qty": 12,
+      "qtyMax": 50,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 50,
+          "high": 80
+        },
+        "standard": {
+          "low": 80,
+          "high": 180
+        },
+        "premium": {
+          "low": 150,
+          "high": 250
+        }
+      },
+      "source": {
+        "url": "https://themoneybees.co/blog/electrician-singapore-electrical-services",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "The Moneybees (2026) S$80-180 per point; Helpling (9 Oct 2025) S$50-150 for lighting point wiring. Basic and premium widened by us.",
+      "rationale": "Standard is sourced; basic and premium are estimates."
+    },
+    {
+      "id": "db-box",
+      "group": "elec",
+      "label": "DB box (distribution board) upgrade",
+      "description": "Replace or upgrade the distribution board, breakers and RCCB.",
+      "per": "fixed",
+      "unit": "per unit",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 250,
+          "high": 450
+        },
+        "standard": {
+          "low": 400,
+          "high": 700
+        },
+        "premium": {
+          "low": 600,
+          "high": 800
+        }
+      },
+      "source": {
+        "url": "https://themoneybees.co/blog/electrician-singapore-electrical-services",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "MoneySmart (excerpt) S$400-700 for a new DB; The Moneybees (2026) S$250-800 for a DB rewire or upgrade. Tier split ours.",
+      "rationale": "Usually needed with a full rewire or when adding aircon or oven loads."
+    },
+    {
+      "id": "light-fittings",
+      "group": "elec",
+      "label": "Light fittings (downlights, pendants)",
+      "description": "Supply of light fittings; installation is in the lighting points line.",
+      "per": "fixed",
+      "unit": "per piece",
+      "qty": 15,
+      "qtyMax": 60,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 15,
+          "high": 40
+        },
+        "standard": {
+          "low": 30,
+          "high": 80
+        },
+        "premium": {
+          "low": 60,
+          "high": 200
+        }
+      },
+      "source": {
+        "url": "https://decor.lazada.sg/bto-lighting-plan-how-to-budget-for-every-room-without-overspending-20260806/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Lazada decor guide (Aug 2026): smart downlights S$40-120+ each, S$1,000-4,000 per flat. Basic LED downlights at S$15-40 and pendants at S$80-500 are our estimates from retail listings.",
+      "rationale": "An estimate; owners usually buy these themselves, so prices vary widely."
+    },
+    {
+      "id": "toilet-bowl",
+      "group": "plumb",
+      "label": "Toilet bowl",
+      "description": "Supply and install a new toilet bowl.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 280,
+          "high": 450
+        },
+        "standard": {
+          "low": 450,
+          "high": 800
+        },
+        "premium": {
+          "low": 880,
+          "high": 1650
+        }
+      },
+      "source": {
+        "url": "https://www.helpling.com.sg/hdb-toilet-bowl-replacement-cost-in-singapore",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Helpling (2026): budget bowls S$200-400, premium S$800-1,500+, plus plumber S$80-150. The installed totals and the standard tier are our arithmetic.",
+      "rationale": "An estimate built on Helpling's item and labour prices."
+    },
+    {
+      "id": "basin",
+      "group": "plumb",
+      "label": "Basin with tap",
+      "description": "Wash basin and mixer tap, supplied and installed.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 150,
+          "high": 300
+        },
+        "standard": {
+          "low": 300,
+          "high": 600
+        },
+        "premium": {
+          "low": 600,
+          "high": 1200
+        }
+      },
+      "source": {
+        "url": "https://www.lazada.sg/trending/Bathroom-Faucet-Top-Deals-This-Month/1339557819",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Our estimate from retail listings: a Hansgrohe basin mixer on Lazada at S$306 and Carousell taps at S$54-79, plus installation.",
+      "rationale": "An estimate; no installed basin-set price was published."
+    },
+    {
+      "id": "shower-screen",
+      "group": "plumb",
+      "label": "Shower screen",
+      "description": "Tempered glass shower screen.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 230,
+          "high": 450
+        },
+        "standard": {
+          "low": 600,
+          "high": 850
+        },
+        "premium": {
+          "low": 1000,
+          "high": 1500
+        }
+      },
+      "source": {
+        "url": "https://sbo.sg/?p=44847",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "SBO.sg (2025) S$600-850 per bathroom (standard); a Carousell fixed panel at S$230 (basic low); a homeowner report of S$1,000 for a sliding screen (premium low). The basic high and premium high are ours.",
+      "rationale": "Partly estimated; premium is a sliding or full-height frameless screen."
+    },
+    {
+      "id": "shower-set",
+      "group": "plumb",
+      "label": "Shower set / rain shower",
+      "description": "Shower mixer and set, incl. installation.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 150,
+          "high": 300
+        },
+        "standard": {
+          "low": 330,
+          "high": 500
+        },
+        "premium": {
+          "low": 600,
+          "high": 900
+        }
+      },
+      "source": {
+        "url": "https://www.homeanddecor.com.sg/shopping/best-rain-shower-set-head-singapore",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Home & Decor roundup: Starke and IKEA sets S$150-189, thermostatic S$329, HERA S$598; Carousell installation S$120-250. Installed ranges are ours.",
+      "rationale": "An estimate combining item prices and installation."
+    },
+    {
+      "id": "heater",
+      "group": "plumb",
+      "label": "Water heater",
+      "description": "Storage water heater (25-30 L) supplied and installed; instant heaters cost about S$150-500.",
+      "per": "fixed",
+      "unit": "per unit",
+      "qty": 1,
+      "qtyMax": 3,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 300,
+          "high": 450
+        },
+        "standard": {
+          "low": 370,
+          "high": 550
+        },
+        "premium": {
+          "low": 600,
+          "high": 900
+        }
+      },
+      "source": {
+        "url": "https://www.courts.com.sg/europace-esh2506-storage-water-heater-25l-installation-charges-applies-ip115255",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Courts and Lazada: 25 L units S$187-339 before installation; Ariston 30 L installed S$372-405 (Shopee blog); installation S$120-180+ (HardwareZone). Premium S$600-900 is our estimate incl. a ceiling cut.",
+      "rationale": "Partly estimated; one storage heater often serves both bathrooms."
+    },
+    {
+      "id": "piping",
+      "group": "plumb",
+      "label": "Water and waste piping replacement",
+      "description": "Re-pipe an older resale flat (water supply, plus the waste or soil stack where needed).",
+      "per": "fixed",
+      "unit": "per flat",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 1500,
+          "high": 2500
+        },
+        "standard": {
+          "low": 2500,
+          "high": 3500
+        },
+        "premium": {
+          "low": 3500,
+          "high": 5000
+        }
+      },
+      "source": {
+        "url": "https://www.edgeprop.sg/property-news/how-much-it-would-cost-renovate-your-hdb-flat",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "EdgeProp (undated): replacing one cast-iron pipe costs about S$1,500-2,000. An unidentified search snippet put a whole-flat plumbing overhaul at S$2,500-5,000. Tier split ours; no copper vs PPR price was found (searched 28 Oct 2026).",
+      "rationale": "An estimate. SingSaver advises re-piping resale flats older than 15-20 years."
+    },
+    {
+      "id": "kitchen-sink",
+      "group": "plumb",
+      "label": "Kitchen sink and tap",
+      "description": "Sink, tap and connection.",
+      "per": "fixed",
+      "unit": "per kitchen",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 150,
+          "high": 250
+        },
+        "standard": {
+          "low": 250,
+          "high": 600
+        },
+        "premium": {
+          "low": 600,
+          "high": 1500
+        }
+      },
+      "source": {
+        "url": "https://www.moneysmart.sg/personal-loan/hdb-renovation-cost-loan-guide-singapore-ms",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Our estimate from retail inputs: kitchen tap S$137 (Desertcart), tap installation S$32 (Carousell); MoneySmart (2026) gives S$200-500 for sink, piping, heater and filter together.",
+      "rationale": "An estimate."
+    },
+    {
+      "id": "main-door",
+      "group": "doors",
+      "label": "Main door (fire-rated)",
+      "description": "HDB-compliant fire-rated main door, 3x7 ft, supplied and installed.",
+      "per": "fixed",
+      "unit": "per door",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 800,
+          "high": 900
+        },
+        "standard": {
+          "low": 1000,
+          "high": 1200
+        },
+        "premium": {
+          "low": 1300,
+          "high": 2000
+        }
+      },
+      "source": {
+        "url": "https://www.homeanddecor.com.sg/renovation/best-fire-rated-door",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Home & Decor fire-rated door roundup (23 Aug 2025): Eazea S$800, Renovaid S$870, The Door S$899, Imperial S$1,000, Laminate Door S$1,188 incl. permit, stainless-steel laminate S$1,299-1,699. Home & Decor hidden-costs article: S$1,200-2,000.",
+      "rationale": "Sourced; replacing the frame can add more."
+    },
+    {
+      "id": "main-gate",
+      "group": "doors",
+      "label": "Main gate",
+      "description": "Mild steel (basic) to laser-cut designer gate (premium).",
+      "per": "fixed",
+      "unit": "per gate",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 430,
+          "high": 530
+        },
+        "standard": {
+          "low": 700,
+          "high": 900
+        },
+        "premium": {
+          "low": 880,
+          "high": 1500
+        }
+      },
+      "source": {
+        "url": "https://uchify.com/hdb-gate-door-contractors/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Carousell promos S$429-529 (mild steel); Uchify (11 Apr 2022) designs from S$699 and laser-cut from S$880. The standard high and premium high are our estimates.",
+      "rationale": "Partly estimated; the 2022 figures may be low today."
+    },
+    {
+      "id": "bedroom-door",
+      "group": "doors",
+      "label": "Bedroom doors",
+      "description": "Laminate (basic) to veneer (premium) bedroom door.",
+      "per": "bedrooms",
+      "unit": "per bedroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 230,
+          "high": 420
+        },
+        "standard": {
+          "low": 420,
+          "high": 600
+        },
+        "premium": {
+          "low": 600,
+          "high": 1200
+        }
+      },
+      "source": {
+        "url": "https://buddy.edgeprop.sg/discover/what-is-the-cost-of-re-installing-a-wall-for-a-bedroom-and-constructing-a-door-1cd62f93-7b7f-48c0-9e0c-914808e2ea39",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Carousell S$230-278 promo (usual price S$415); EdgeProp S$280-600 for solid laminate, up to S$1,200 for veneer. A new frame can add up to S$1,000 (Home & Decor).",
+      "rationale": "Sourced; the ranges exclude a new frame."
+    },
+    {
+      "id": "bath-door",
+      "group": "doors",
+      "label": "Bathroom doors",
+      "description": "Bi-fold (basic) or slide-and-swing (standard, premium) bathroom door.",
+      "per": "bathrooms",
+      "unit": "per bathroom",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 228,
+          "high": 330
+        },
+        "standard": {
+          "low": 380,
+          "high": 500
+        },
+        "premium": {
+          "low": 550,
+          "high": 680
+        }
+      },
+      "source": {
+        "url": "https://www.carousell.sg/bathroom-door/q/",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Carousell supplier listings (2026): PVC or aluminium bi-fold S$228-330; slide-and-swing acrylic S$380-500; tempered or fluted glass S$550-680; measuring and installation included.",
+      "rationale": "From one type of source (supplier ads)."
+    },
+    {
+      "id": "windows",
+      "group": "doors",
+      "label": "Window replacement (HDB-approved contractor)",
+      "description": "Replace aluminium windows; HDB requires a BCA-approved window contractor and a permit.",
+      "per": "fixed",
+      "unit": "per window panel",
+      "qty": 20,
+      "qtyMax": 40,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 120,
+          "high": 140
+        },
+        "standard": {
+          "low": 250,
+          "high": 380
+        },
+        "premium": {
+          "low": 440,
+          "high": 545
+        }
+      },
+      "source": {
+        "url": "https://www.propertyguru.com.sg/property-guides/hdb-window-15349",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Carousell aluminium panels S$120-136 (basic); project-grade casement S$254 per panel and S$280-380 per window (PropertyGuru); Euro-profile S$55-68/sqft x 8 sqft (premium). PropertyGuru also gives S$400-900 per sliding window, which clashes.",
+      "rationale": "An estimate; no prices from HDB-approved window contractors were found. The default of 20 panels for a 4-room is our guess."
+    },
+    {
+      "id": "grilles",
+      "group": "doors",
+      "label": "Window grilles (invisible)",
+      "description": "Invisible grilles for windows or the balcony.",
+      "per": "fixed",
+      "unit": "per sqft",
+      "qty": 60,
+      "qtyMax": 300,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 8,
+          "high": 10
+        },
+        "standard": {
+          "low": 12,
+          "high": 18
+        },
+        "premium": {
+          "low": 15,
+          "high": 18
+        }
+      },
+      "source": {
+        "url": "https://vocal.media/lifehack/invisible-grilles-in-singapore-prices-affordability-and-practicality-for-balconies-and-windows",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Blog and vendor sources (2025): basic S$8-10/sqft (CSA Group); standard S$12-18/sqft and S$900-1,800 for a balcony (Vocal).",
+      "rationale": "Default 60 sqft covers a few windows; conventional grilles were not priced."
+    },
+    {
+      "id": "painting",
+      "group": "paint",
+      "label": "Whole-flat painting",
+      "description": "Walls and ceilings, sealer plus two coats.",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 7,
+          "high": 12
+        },
+        "standard": {
+          "low": 10,
+          "high": 18
+        },
+        "premium": {
+          "low": 25,
+          "high": 49
+        }
+      },
+      "source": {
+        "url": "https://www.propertyguru.com.sg/property-guides/house-painting-services-singapore-price-39162",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Per-sqm figures are ours, from flat prices at 65, 90 and 110 sqm: PropertyGuru (undated) basic S$500-1,050; Uchify standard S$600-1,400; Smart Calculator (16 Jul 2026) premium S$1,600-5,200; Nippon Paint (2026) S$2,200-2,900 for 4-room and 5-room.",
+      "rationale": "An estimate; sources differ 3-4x by prep work, paint grade and number of coats."
+    },
+    {
+      "id": "feature-wall",
+      "group": "paint",
+      "label": "Feature wall / specialty paint",
+      "description": "Accent paint (basic) or limewash or texture (standard, premium) on one wall.",
+      "per": "fixed",
+      "unit": "per wall",
+      "qty": 1,
+      "qtyMax": 4,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 150,
+          "high": 400
+        },
+        "standard": {
+          "low": 840,
+          "high": 1260
+        },
+        "premium": {
+          "low": 1000,
+          "high": 1680
+        }
+      },
+      "source": {
+        "url": "https://qanvast.com/amp/sg/articles/everything-you-need-to-know-about-using-limewash-paint-in-your-home-3128",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Qanvast limewash article (Aug 2025): S$10-20/sqft incl. labour, a living-room feature wall from S$1,000; Renonation about S$10/sqft. Per-wall totals are ours for about 84 sqft.",
+      "rationale": "An estimate from per-sqft rates."
+    },
+    {
+      "id": "ac-sys2",
+      "group": "appl",
+      "label": "Aircon System 2",
+      "description": "Multi-split system with 2 fan coils, installed.",
+      "per": "fixed",
+      "unit": "per system",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 1599,
+          "high": 1800
+        },
+        "standard": {
+          "low": 1800,
+          "high": 2500
+        },
+        "premium": {
+          "low": 2669,
+          "high": 3189
+        }
+      },
+      "source": {
+        "url": "https://www.misslobang.com/article/best-system-3-aircon-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "MissLobang (18 Sep 2026): Silverback from S$1,599 installed; megafurniture Daikin System 2 S$1,800-2,500; Courts Mitsubishi Starmex 2x12k BTU S$2,669 (RRP S$3,189).",
+      "rationale": "Sourced. Brackets, extra piping and power points are often extra."
+    },
+    {
+      "id": "ac-sys3",
+      "group": "appl",
+      "label": "Aircon System 3",
+      "description": "Multi-split system with 3 fan coils, installed.",
+      "per": "fixed",
+      "unit": "per system",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 1799,
+          "high": 2200
+        },
+        "standard": {
+          "low": 2200,
+          "high": 2980
+        },
+        "premium": {
+          "low": 3520,
+          "high": 4349
+        }
+      },
+      "source": {
+        "url": "https://www.misslobang.com/article/best-system-3-aircon-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "MissLobang System 3 comparison (18 Sep 2026): Silverback and Midea S$1,799-1,899; FixMove S$2,200-2,600, AirconDeals from S$2,980; Mitsubishi 5-tick MXY-3H28VG S$3,520-4,349 installed.",
+      "rationale": "Sourced; the same model varies from S$2,890 to S$4,349 between shops."
+    },
+    {
+      "id": "ac-sys4",
+      "group": "appl",
+      "label": "Aircon System 4",
+      "description": "Multi-split system with 4 fan coils (living room plus 3 bedrooms), installed.",
+      "per": "fixed",
+      "unit": "per system",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 2499,
+          "high": 2800
+        },
+        "standard": {
+          "low": 2800,
+          "high": 3400
+        },
+        "premium": {
+          "low": 4290,
+          "high": 4410
+        }
+      },
+      "source": {
+        "url": "https://www.misslobang.com/article/best-system-3-aircon-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "MissLobang (2026): Silverback from S$2,499, FixMove S$2,800-3,400; Lazada Mitsubishi Starmex R32 System 4 S$4,290-4,410 installed.",
+      "rationale": "Sourced; the usual choice for a 4-room or 5-room flat."
+    },
+    {
+      "id": "hob-hood",
+      "group": "appl",
+      "label": "Hob and hood set",
+      "description": "Gas hob and cooker hood, supplied and installed.",
+      "per": "fixed",
+      "unit": "per set",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 440,
+          "high": 680
+        },
+        "standard": {
+          "low": 635,
+          "high": 870
+        },
+        "premium": {
+          "low": 1500,
+          "high": 3500
+        }
+      },
+      "source": {
+        "url": "https://www.carousell.sg/hood/q/",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Carousell seller bundles (2026): Aerogaz and Valenti S$439-678, Mayer S$635-799; Courts separately S$790-870. Premium S$1,500-3,500 is our estimate from megafurniture (a premium hob 'well over S$1,000') and Fujioh's Jan 2025 price list.",
+      "rationale": "The premium tier is an estimate."
+    },
+    {
+      "id": "oven",
+      "group": "appl",
+      "label": "Built-in oven",
+      "description": "Built-in oven, supply only (the cabinet maker usually installs it).",
+      "per": "fixed",
+      "unit": "per unit",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 498,
+          "high": 579
+        },
+        "standard": {
+          "low": 899,
+          "high": 1210
+        },
+        "premium": {
+          "low": 3499,
+          "high": 5199
+        }
+      },
+      "source": {
+        "url": "https://www.courts.com.sg/home-appliances/large-appliances/built-in-ovens-cookers",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Courts (2026): UNO 56 L S$498, Turbo 65 L S$579, Turbo and Fisher & Paykel 85 L S$899-1,210; Bosch HBJ559EB6M S$3,499 (official list price) to HBG7764B1B S$5,199.",
+      "rationale": "Sourced retail prices."
+    },
+    {
+      "id": "design-fee",
+      "group": "fees",
+      "label": "Interior design fee",
+      "description": "Design, 3D drawings and project coordination by an ID firm (often absorbed into the package).",
+      "per": "fixed",
+      "unit": "per flat",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 0,
+          "high": 1500
+        },
+        "standard": {
+          "low": 1500,
+          "high": 6000
+        },
+        "premium": {
+          "low": 3000,
+          "high": 15000
+        }
+      },
+      "source": {
+        "url": "https://blog.moneysmart.sg/budgeting/do-you-need-interior-designer-hdb/",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Qanvast design fees article (28 Sep 2017, old): S$0-1,500, often absorbed; S$1,500-6,000 lump sum. MoneySmart (undated): about S$5,000 for a 4-room, or 3-10% of the job. No separate project management fee figure was found.",
+      "rationale": "Sources are old and clash (3-15% of the job). Contractors build project management into their margins."
+    },
+    {
+      "id": "pe-endorse",
+      "group": "fees",
+      "label": "Professional Engineer endorsement",
+      "description": "PE endorsement that HDB may require for hacking masonry walls.",
+      "per": "fixed",
+      "unit": "per job",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 800,
+          "high": 2000
+        },
+        "standard": {
+          "low": 800,
+          "high": 2000
+        },
+        "premium": {
+          "low": 800,
+          "high": 2000
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/renovation-quotation-guide-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Smart Calculator quotation guide (16 Jul 2026): S$800-2,000 per job for masonry walls.",
+      "rationale": "The same at every tier; only needed for certain wall works."
+    },
+    {
+      "id": "permit",
+      "group": "fees",
+      "label": "HDB renovation permit",
+      "description": "Permit your HDB-registered contractor applies for before works start.",
+      "per": "fixed",
+      "unit": "per flat",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "basic": {
+          "low": 0,
+          "high": 50
+        },
+        "standard": {
+          "low": 0,
+          "high": 50
+        },
+        "premium": {
+          "low": 0,
+          "high": 50
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/renovation-quotation-guide-singapore-2026",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "HDB's renovation permit page (hdb.gov.sg, checked by our researcher) lists no fee; Smart Calculator (16 Jul 2026) allows up to S$50. HDB's S$100 fee is for contractors joining its directory, not for homeowners.",
+      "rationale": "Probably free or nominal; check with your contractor."
+    },
+    {
+      "id": "protection",
+      "group": "fees",
+      "label": "Floor and lift protection",
+      "description": "Protective boards for floors, lifts and common areas during works.",
+      "per": "fixed",
+      "unit": "per flat",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 300,
+          "high": 500
+        },
+        "standard": {
+          "low": 400,
+          "high": 650
+        },
+        "premium": {
+          "low": 500,
+          "high": 800
+        }
+      },
+      "source": {
+        "url": "https://qanvast.com/sg/articles/these-7-hidden-costs-will-bust-your-renovation-budget-873",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Qanvast hidden-costs article: 'a few hundred dollars'. The S$300-800 range is our estimate; Smart Calculator (2026) puts permit, protection and cleaning together at S$900-2,200.",
+      "rationale": "An estimate."
+    },
+    {
+      "id": "haulage",
+      "group": "fees",
+      "label": "Debris haulage",
+      "description": "Lorry trips to cart away hacked debris and old fittings.",
+      "per": "fixed",
+      "unit": "per lorry trip",
+      "qty": 3,
+      "qtyMax": 10,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 180,
+          "high": 300
+        },
+        "standard": {
+          "low": 250,
+          "high": 400
+        },
+        "premium": {
+          "low": 300,
+          "high": 500
+        }
+      },
+      "source": {
+        "url": "https://www.carousell.sg/disposal-sofa/q/",
+        "verified": "2026-10-28",
+        "type": "secondary"
+      },
+      "notes": "Carousell movers' ads (2026) S$180-300 per trip; an MND written answer gives S$300-500 per truckload. Smart Calculator (2026): S$2,500-5,500 when bundled with hacking.",
+      "rationale": "Default 3 trips for a full resale job; the tiers reflect access and volume."
+    },
+    {
+      "id": "cleaning",
+      "group": "fees",
+      "label": "Post-renovation cleaning",
+      "description": "Professional cleaning after the works finish.",
+      "per": "area",
+      "unit": "per sqm of floor",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": true,
+      "prices": {
+        "basic": {
+          "low": 2.8,
+          "high": 4
+        },
+        "standard": {
+          "low": 3.5,
+          "high": 5
+        },
+        "premium": {
+          "low": 4.5,
+          "high": 6.4
+        }
+      },
+      "source": {
+        "url": "https://megafurniture.sg/blogs/articles/renovation-cleaning-cost-singapore",
+        "verified": "2026-10-28",
+        "type": "estimate"
+      },
+      "notes": "Per-sqm figures are ours, from flat prices: megafurniture 3-room S$200-300, 4-room S$250-380, 5-room S$320-500; homesysg S$290-550; Homejourney (Jan-Feb 2026) S$300-700.",
+      "rationale": "An estimate from three overlapping sources."
+    }
+  ]
+}
