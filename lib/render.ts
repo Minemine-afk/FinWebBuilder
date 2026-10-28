@@ -35,6 +35,7 @@ export function buildCostSection(spec: Spec): string {
   }
   const { rounds, totalSgd } = summariseBuildLog(spec.buildLog);
   let rows = "";
+  let reportedTotal = 0, anyReported = false;
   for (const r of rounds) {
     const plan = r.entries.some((e) => e.billing === "subscription") ? " (Claude subscription)" : "";
     rows += `<tbody><tr><td colspan="6"><strong>${esc(r.round)}${plan}</strong></td></tr>`;
@@ -42,16 +43,22 @@ export function buildCostSection(spec: Spec): string {
       const tokensIn = e.input + e.cacheRead + e.cacheWrite;
       rows += `<tr><td>${esc(e.label)}</td><td>${esc(modelName(e.model))}</td><td>${num(tokensIn)}</td><td>${num(e.output)}</td><td>${num(e.searches)}</td><td>${formatSgd(e.costSgd)}</td></tr>`;
     }
-    rows += `<tr><td colspan="5">${esc(r.round)} subtotal</td><td>${formatSgd(r.subtotalSgd)}</td></tr>`;
-    rows += `<tr class="mute"><td colspan="5">Running total</td><td>${formatSgd(r.runningTotalSgd)}</td></tr></tbody>`;
+    rows += `<tr><td colspan="5">${esc(r.round)} subtotal (our API estimate)</td><td>${formatSgd(r.subtotalSgd)}</td></tr>`;
+    rows += `<tr class="mute"><td colspan="5">Running total (our API estimate)</td><td>${formatSgd(r.runningTotalSgd)}</td></tr>`;
+    if (r.entries.some((e) => e.reportedUsd !== undefined)) {
+      const sgd = r.entries.reduce((sum, e) => sum + (e.reportedUsd ?? 0), 0) * SGD_PER_USD;
+      reportedTotal += sgd; anyReported = true;
+      rows += `<tr><td colspan="5">${esc(r.round)}: cost reported by Claude Code</td><td>${formatSgd(sgd)}</td></tr>`;
+    }
+    rows += `</tbody>`;
   }
   const onPlan = spec.buildLog.some((e) => e.billing === "subscription");
   const planNote = onPlan
-    ? " Rounds run on a Claude subscription were covered by the plan, so their figures show what the same work would have cost on the API."
+    ? " Rounds run on a Claude subscription were covered by the plan, so their figures show what the same work would have cost on the API. Where shown, \"cost reported by Claude Code\" is the figure Claude Code itself worked out from the same run's tokens, also at list prices and also not a charge; it can differ a little from ours because it prices cache writes and other details its own way. Builds made before it was recorded don't have it."
     : "";
   return `${head}<p class="mute">Estimated from the token counts and web searches reported for each step, priced at the published API rates converted to SGD (S$${SGD_PER_USD.toFixed(2)} per US$1). It is not an invoice and leaves out hosting.${planNote}</p>
 <div class="scroll"><table><thead><tr><th>Step</th><th>Model</th><th>Tokens in</th><th>Tokens out</th><th>Searches</th><th>Cost</th></tr></thead>${rows}
-<tfoot><tr><td colspan="5">Total AI cost so far</td><td>${formatSgd(totalSgd)}</td></tr></tfoot></table></div></section>`;
+<tfoot><tr><td colspan="5">Total AI cost so far (our API estimate)</td><td>${formatSgd(totalSgd)}</td></tr>${anyReported ? `<tr><td colspan="5">Total reported by Claude Code so far</td><td>${formatSgd(reportedTotal)}</td></tr>` : ""}</tfoot></table></div></section>`;
 }
 
 /** The full calculator page: the kind's template with the shared styles and scripts and this spec built in. */

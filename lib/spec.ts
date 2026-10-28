@@ -73,6 +73,8 @@ export const BuildLogEntrySchema = z.object({
   fetches: z.number().int().nonnegative().default(0),
   /** "subscription": ran on a Claude plan, so the cost is what it would have been on the API, not a charge. */
   billing: z.enum(["api", "subscription"]).default("api"),
+  /** US dollars Claude Code itself reported for this model in the run (modelUsage.costUSD), from its own token accounting. Subscription runs only. */
+  reportedUsd: z.number().nonnegative().optional(),
   at: z.string().optional(),
 });
 

@@ -14,7 +14,7 @@ describe("usageFromExecution", () => {
         subtype: "success",
         modelUsage: {
           "claude-opus-5-5": { inputTokens: 50_000, outputTokens: 20_000, cacheReadInputTokens: 900_000, cacheCreationInputTokens: 60_000, webSearchRequests: 3 },
-          "claude-sonnet-5-5": { inputTokens: 200_000, outputTokens: 30_000, cacheReadInputTokens: 0, cacheCreationInputTokens: 0, webSearchRequests: 25 },
+          "claude-sonnet-5-5": { inputTokens: 200_000, outputTokens: 30_000, cacheReadInputTokens: 0, cacheCreationInputTokens: 0, webSearchRequests: 25, costUSD: 0.5 },
         },
       },
     ];
@@ -25,6 +25,7 @@ describe("usageFromExecution", () => {
     expect(sonnet.label).toBe("Price research (sub-agents)");
     expect(sonnet.searches).toBe(25);
     expect(callCostSgd(sonnet)).toBeGreaterThan(0);
+    expect(sonnet.reportedUsd).toBeCloseTo(0.5, 6);
   });
   it("returns nothing when the log has no result", () => {
     expect(usageFromExecution([{ type: "assistant" }], "First build")).toEqual([]);
