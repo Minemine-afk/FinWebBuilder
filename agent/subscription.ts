@@ -122,6 +122,7 @@ interface ModelUsage {
   cacheReadInputTokens?: number;
   cacheCreationInputTokens?: number;
   webSearchRequests?: number;
+  costUSD?: number;
 }
 
 /** Turns the Claude Code execution log into build-log entries, one per model used. */
@@ -141,6 +142,7 @@ export function usageFromExecution(messages: unknown[], round: string): BuildLog
     searches: u.webSearchRequests ?? 0,
     fetches: 0,
     billing: "subscription" as const,
+    ...(typeof u.costUSD === "number" ? { reportedUsd: u.costUSD } : {}),
     at,
   }));
 }
