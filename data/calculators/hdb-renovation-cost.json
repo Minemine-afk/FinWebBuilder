@@ -4,7 +4,7 @@
   "title": "HDB renovation cost calculator",
   "currency": "SGD",
   "scope": "What renovating an HDB flat in Singapore costs in 2026, line by line across 12 trades: hacking and masonry, flooring, wall tiling and waterproofing, ceilings and cove lighting, carpentry, countertops, electrical, plumbing and sanitary ware, doors, gates and windows, painting, aircon and kitchen appliances, and design fees, permits, protection, haulage and cleaning. Pick a renovation type, flat size, bedrooms, bathrooms and finish level, choose who does the work and the year, and add a contingency buffer. Prices are SGD ranges for supply and installation unless a line says supply only.",
-  "limits": "Published prices: the per-unit ranges for vinyl and timber flooring, false ceilings, power points, DB boxes, quartz and sintered countertops, main, bedroom and bathroom doors, invisible grilles, aircon systems, built-in ovens, debris haulage, PE endorsement, design fees and the HDB permit come straight from the cited guides, retailers and supplier listings (2024-2026, some undated). Estimates (marked 'AI estimate'): every line whose tiers we split from a single range, converted from per sqft or per flat to per sqm, or built up from item plus labour prices. That covers hacking, floor and wall tiling, waterproofing, cove lighting, bathroom ceilings, most carpentry premium tiers, rewiring, sanitary ware, piping, windows, gates, painting, hob and hood, protection and cleaning. Provider factors are our ratio of each firm's average or package price (Qanvast, Hometrust or its own site) to Qanvast's market midpoints. No dated package pages or web.archive.org copies could be retrieved, so most firms' 2023-2025 history is back-cast from one current figure using Qanvast's market trend; only Starry Homestead, U-Home, Fineline and Renozone have more than one or an older own figure. Future-year prices are trend scenarios, not forecasts. Excludes loose furniture, curtains, fridge and washer, digital locks, a separate project management fee (usually built into quotes), GST where sources quote before GST, and Home Improvement Programme works paid by HDB. Get itemised quotes from an HDB-registered contractor before budgeting.",
+  "limits": "Published prices: the per-unit ranges for vinyl and timber flooring, false ceilings, power points, DB boxes, quartz and sintered countertops, main, bedroom and bathroom doors, invisible grilles, aircon systems, built-in ovens, debris haulage, PE endorsement, design fees and the HDB permit come straight from the cited guides, retailers and supplier listings (2024-2026, some undated). Estimates (marked 'AI estimate'): every line whose tiers we split from a single range, converted from per sqft or per flat to per sqm, or built up from item plus labour prices. That covers hacking, floor and wall tiling, waterproofing, cove lighting, bathroom ceilings, most carpentry premium tiers, rewiring, sanitary ware, piping, windows, gates, painting, hob and hood, protection and cleaning. Provider price levels (factors) are our ratio of each firm's average or package price (Qanvast, Hometrust or its own site) to Qanvast's market midpoints. Provider price histories: 8 of 10 firms have real dated figures read from Internet Archive snapshots of their Hometrust or Qanvast profiles (Starry Homestead, Fineline, Livspace, Ovon, Dots 'n' Tots, Weiken.com and Carpenters from Hometrust; U-Home and Absolook from Qanvast), plus today's live page, and the market average uses Qanvast's published yearly 4-room resale cost. Those profile figures are averages of the firm's recent projects of all sizes, so they are noisy; Ovon and Weiken show no change, probably stale profiles. Absolook has two real readings (2023 and now) with the years between interpolated. Only FC Interior Design and Renozone are back-cast (FC from its current package and Renozone from one 2023 homeowner-reported budget, each moved along the market-average series so their yearly rate is the market's); both are marked as estimates. Future-year prices are trend scenarios, not forecasts. Excludes loose furniture, curtains, fridge and washer, digital locks, a separate project management fee (usually built into quotes), GST where sources quote before GST, and Home Improvement Programme works paid by HDB. Get itemised quotes from an HDB-registered contractor before budgeting.",
   "version": 1,
   "updated": "2026-10-28",
   "buildLog": [
@@ -450,28 +450,28 @@
         "history": [
           {
             "year": 2023,
-            "value": 49800,
-            "label": "Hometrust new 4-room average, 2023 data (search excerpt)",
-            "url": "https://hometrust.sg/interior-designers/starry-homestead-pte-ltd/review/687"
+            "value": 45089,
+            "label": "Hometrust profile, archived 8 Feb 2023: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20230208173759/https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd"
           },
           {
             "year": 2025,
-            "value": 52185,
-            "label": "Hometrust new 4-room average, early-2026 snapshot (search excerpt)",
-            "url": "https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd"
+            "value": 51642,
+            "label": "Hometrust profile, archived 7 Oct 2025: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20251007124239/https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd"
           },
           {
             "year": 2026,
-            "value": 54806,
-            "label": "Hometrust new 4-room average, page updated 26 Oct 2026",
+            "value": 54900,
+            "label": "Hometrust profile, read live 28 Oct 2026: average cost of the firm's new-HDB projects",
             "url": "https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd"
           }
         ],
-        "rationale": "About market price for BTO jobs (Qanvast's own Starry average of S$74,923 would put it nearer 1.36x). Its own averages rose about 3% a year. No 2024 average was found, and the 2023 and 2025 figures come from search excerpts, so the source is marked an estimate.",
+        "rationale": "Real dated prices, not back-cast: each point is the figure shown on the firm's Hometrust profile on the archived date (Internet Archive snapshot, linked in the table), the average cost of its new-HDB projects, and the last point is the live page. No usable 2024 snapshot (the archived pages from 2023-12 and 2024-10 did not contain the figure), so there is no 2024 point. The yearly change is the compound growth across these points. It tracks the firm's mix of projects (all flat sizes), not a fixed package, so it is noisy. The price level (factor) is set separately from 4-room averages, as the price-level hover text explains.",
         "source": {
           "url": "https://www.hometrust.sg/interior-designers/starry-homestead-pte-ltd",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "HDB-registered (HB-08-4738-B); Hometrust lists CaseTrust-RCMA 2017-2021. No published packages; Qanvast's Dec 2024 roundup shows a S$39,000 4-room BTO at Plantation Village."
       },
@@ -484,29 +484,29 @@
         "factorBasis": "New 4-room average S$53,000 vs the BTO midpoint S$55,000 (0.96), and resale 4-room average S$83,571 vs the resale midpoint S$75,800 (1.10), averaged.",
         "history": [
           {
-            "year": 2023,
-            "value": 51175,
-            "label": "Estimate: 2024 figure scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.hometrust.sg/interior-designers/u-home-interior-design-pte-ltd"
+            "year": 2024,
+            "value": 60286,
+            "label": "Qanvast profile, archived 14 Jun 2024: average renovation cost of the firm's HDB projects in the past year",
+            "url": "https://web.archive.org/web/20240614045606/https://qanvast.com/sg/interior-designers-architects/u-home-interior-design-342"
           },
           {
-            "year": 2024,
-            "value": 54000,
-            "label": "Hometrust new 4-room average (labelled 2024 in a search summary)",
-            "url": "https://www.hometrust.sg/interior-designers/u-home-interior-design-pte-ltd"
+            "year": 2025,
+            "value": 77833,
+            "label": "Qanvast profile, archived 14 Jan 2025: average renovation cost of the firm's HDB projects in the past year",
+            "url": "https://web.archive.org/web/20250114103929/https://qanvast.com/sg/interior-designers-architects/u-home-interior-design-342"
           },
           {
             "year": 2026,
-            "value": 53000,
-            "label": "Qanvast new 4-room average, past year",
+            "value": 61563,
+            "label": "Qanvast profile, read live 28 Oct 2026: average renovation cost of the firm's HDB projects in the past year",
             "url": "https://qanvast.com/sg/interior-designers-architects/u-home-interior-design-342"
           }
         ],
-        "rationale": "Near market for BTO, above it for resale. No 2023 or 2025 own figure was found, so 2023 is back-cast from 2024 using Qanvast's BTO trend (estimate).",
+        "rationale": "Real dated prices: Qanvast shows the average cost of the firm's HDB projects over the past year, and each point is that line on the archived date (Internet Archive, linked) and today. It covers only a few dozen projects of all sizes, so it swings (S$60,286, S$77,833, S$61,563); the compound yearly change across the three is about 1%. The 2023 snapshots did not show the line. The price level (factor) is set separately.",
         "source": {
           "url": "https://qanvast.com/sg/interior-designers-architects/u-home-interior-design-342",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "Founded 1999; its site shows CaseTrust, RCMA and HDB Registered Renovation Contractor logos. No prices on its own site."
       },
@@ -520,28 +520,28 @@
         "history": [
           {
             "year": 2024,
-            "value": 62340,
-            "label": "Earlier Hometrust new 4-room average (undated; year is our estimate)",
-            "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd"
+            "value": 63900,
+            "label": "Hometrust profile, archived 17 Jul 2024: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20240717201027/https://www.hometrust.sg/interior-designers/fineline-design-pte-ltd"
           },
           {
             "year": 2025,
-            "value": 64850,
-            "label": "Later Hometrust new 4-room average (undated; year is our estimate)",
-            "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd/review/911"
+            "value": 75680,
+            "label": "Hometrust profile, archived 17 Dec 2025: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20251217064839/https://www.hometrust.sg/interior-designers/fineline-design-pte-ltd"
           },
           {
             "year": 2026,
-            "value": 68325,
-            "label": "Hometrust new 4-room average, updated 26 Oct 2026",
-            "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd"
+            "value": 75680,
+            "label": "Hometrust profile, read live 28 Oct 2026: average cost of the firm's new-HDB projects",
+            "url": "https://www.hometrust.sg/interior-designers/fineline-design-pte-ltd"
           }
         ],
-        "rationale": "Above market for new flats, near market for resale. The two older averages are undated page versions that we placed in 2024 and 2025 by order (estimate); together they imply about 4.7% a year. No 2023 figure was found.",
+        "rationale": "Real dated prices, not back-cast: each point is the figure shown on the firm's Hometrust profile on the archived date (Internet Archive snapshot, linked in the table), the average cost of its new-HDB projects, and the last point is the live page. The 2023 snapshots show only an all-property average, not the new-HDB figure, so the series starts in 2024. A Feb 2024 snapshot showed S$44,200, so this firm's figure jumps around as projects are added; the page value has not changed since Dec 2025. The yearly change is the compound growth across these points. It tracks the firm's mix of projects (all flat sizes), not a fixed package, so it is noisy. The price level (factor) is set separately from 4-room averages, as the price-level hover text explains.",
         "source": {
-          "url": "https://hometrust.sg/interior-designers/fineline-design-pte-ltd",
+          "url": "https://www.hometrust.sg/interior-designers/fineline-design-pte-ltd",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "HDB-registered and CaseTrust per Qanvast and Megafurniture. Qanvast's own past-year figures: S$62,500 new, S$85,000 resale."
       },
@@ -554,35 +554,29 @@
         "factorBasis": "Qanvast new 4-room average S$75,000 (3 projects) vs the BTO midpoint S$55,000 (1.36), and resale S$65,500 vs S$75,800 (0.86); weighted towards its overall HDB average of S$75,053.",
         "history": [
           {
-            "year": 2023,
-            "value": 76568,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://qanvast.com/professional/1049/weiken-com"
-          },
-          {
             "year": 2024,
-            "value": 80795,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://qanvast.com/professional/1049/weiken-com"
+            "value": 67280,
+            "label": "Hometrust profile, archived 8 Dec 2024: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20241208220619/https://www.hometrust.sg/interior-designers/weiken-com-design-pte-ltd"
           },
           {
             "year": 2025,
-            "value": 76909,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://qanvast.com/professional/1049/weiken-com"
+            "value": 67280,
+            "label": "Hometrust profile, archived 15 Sep 2025: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20250915065005/https://www.hometrust.sg/interior-designers/weiken-com-design-pte-ltd"
           },
           {
             "year": 2026,
-            "value": 75000,
-            "label": "Qanvast new 4-room average (current profile)",
-            "url": "https://qanvast.com/professional/1049/weiken-com"
+            "value": 67280,
+            "label": "Hometrust profile, read live 28 Oct 2026: average cost of the firm's new-HDB projects",
+            "url": "https://www.hometrust.sg/interior-designers/weiken-com-design-pte-ltd"
           }
         ],
-        "rationale": "Mid-to-high priced, on a small sample. No dated own prices were found for 2023-2025, so those years are back-cast from its current average using Qanvast's BTO trend (estimate).",
+        "rationale": "Real dated prices, not back-cast: each point is the figure shown on the firm's Hometrust profile on the archived date (Internet Archive snapshot, linked in the table), the average cost of its new-HDB projects, and the last point is the live page. The figure is the same in all three readings (2024, 2025 and now) and the 2023 snapshots could not be read, so its trend is 0%, probably an un-updated profile; treat its projection as a floor. The yearly change is the compound growth across these points. It tracks the firm's mix of projects (all flat sizes), not a fixed package, so it is noisy. The price level (factor) is set separately from 4-room averages, as the price-level hover text explains.",
         "source": {
-          "url": "https://qanvast.com/professional/1049/weiken-com",
+          "url": "https://www.hometrust.sg/interior-designers/weiken-com-design-pte-ltd",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "Qanvast lists it as HDB-registered with CaseTrust Gold. Two Qanvast versions disagree on its resale average (S$40,000 vs S$65,500)."
       },
@@ -596,34 +590,34 @@
         "history": [
           {
             "year": 2023,
-            "value": 46165,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://hometrust.sg/interior-designers/livspace"
+            "value": 42998,
+            "label": "Hometrust profile, archived 4 Dec 2023: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20231204200328/https://www.hometrust.sg/interior-designers/livspace"
           },
           {
             "year": 2024,
-            "value": 48713,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://hometrust.sg/interior-designers/livspace"
+            "value": 45426,
+            "label": "Hometrust profile, archived 9 Dec 2024: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20241209071807/https://www.hometrust.sg/interior-designers/livspace"
           },
           {
             "year": 2025,
-            "value": 46370,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://hometrust.sg/interior-designers/livspace"
+            "value": 45426,
+            "label": "Hometrust profile, archived 9 Dec 2025: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20251209172331/https://www.hometrust.sg/interior-designers/livspace"
           },
           {
             "year": 2026,
-            "value": 45219,
-            "label": "Hometrust new 4-room average, updated 26 Oct 2026",
-            "url": "https://hometrust.sg/interior-designers/livspace"
+            "value": 45426,
+            "label": "Hometrust profile, read live 28 Oct 2026: average cost of the firm's new-HDB projects",
+            "url": "https://www.hometrust.sg/interior-designers/livspace"
           }
         ],
-        "rationale": "Below market. Its 2021 IKEA x Livspace 4-room package (from S$15,600, Mothership Jan 2021) is not the same scope, so 2023-2025 are back-cast from the current average with Qanvast's BTO trend (estimate).",
+        "rationale": "Real dated prices, not back-cast: each point is the figure shown on the firm's Hometrust profile on the archived date (Internet Archive snapshot, linked in the table), the average cost of its new-HDB projects, and the last point is the live page. The figure changed once (Dec 2024) and has not changed since, so the page may be stale. The yearly change is the compound growth across these points. It tracks the firm's mix of projects (all flat sizes), not a fixed package, so it is noisy. The price level (factor) is set separately from 4-room averages, as the price-level hover text explains.",
         "source": {
-          "url": "https://hometrust.sg/interior-designers/livspace",
+          "url": "https://www.hometrust.sg/interior-designers/livspace",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "HDB-registered, not CaseTrust (Qanvast listing)."
       },
@@ -637,34 +631,34 @@
         "history": [
           {
             "year": 2023,
-            "value": 78270,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
+            "value": 76667,
+            "label": "Hometrust profile, archived 30 Sep 2023: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20230930164549/https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
           },
           {
             "year": 2024,
-            "value": 82591,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
+            "value": 76667,
+            "label": "Hometrust profile, archived 10 Nov 2024: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20241110152807/https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
           },
           {
             "year": 2025,
-            "value": 78619,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
+            "value": 76667,
+            "label": "Hometrust profile, archived 15 Nov 2025: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20251115001902/https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
           },
           {
             "year": 2026,
             "value": 76667,
-            "label": "Hometrust new 4-room average, updated 26 Oct 2026",
+            "label": "Hometrust profile, read live 28 Oct 2026: average cost of the firm's new-HDB projects",
             "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd"
           }
         ],
-        "rationale": "Mid-to-high end. Its dated projects cover different scopes (about S$100,000 for an old 4-room during HIP in 2023, S$28,000 for a Tengah BTO in 2026), so 2023-2025 are back-cast from the current average with Qanvast's BTO trend (estimate).",
+        "rationale": "Real dated prices, not back-cast: each point is the figure shown on the firm's Hometrust profile on the archived date (Internet Archive snapshot, linked in the table), the average cost of its new-HDB projects, and the last point is the live page. The figure has been S$76,667 in every snapshot since Mar 2023 (a handful of projects), so its trend is 0%, which most likely means the profile is not being updated rather than that prices stood still; treat its projection as a floor. The yearly change is the compound growth across these points. It tracks the firm's mix of projects (all flat sizes), not a fixed package, so it is noisy. The price level (factor) is set separately from 4-room averages, as the price-level hover text explains.",
         "source": {
           "url": "https://www.hometrust.sg/interior-designers/ovon-design-pte-ltd",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "HDB-registered and CaseTrust per Qanvast; S$40,000 minimum budget."
       },
@@ -678,34 +672,34 @@
         "history": [
           {
             "year": 2023,
-            "value": 37309,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+            "value": 37737,
+            "label": "Hometrust profile, archived 25 Sep 2023: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20230925125326/https://www.hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
           },
           {
             "year": 2024,
-            "value": 39369,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+            "value": 39818,
+            "label": "Hometrust profile, archived 3 Oct 2024: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20241003164031/https://www.hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
           },
           {
             "year": 2025,
-            "value": 37475,
-            "label": "Estimate: current average scaled by Qanvast's 4-room BTO trend",
-            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+            "value": 40304,
+            "label": "Hometrust profile, archived 16 Sep 2025: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20250916071111/https://www.hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
           },
           {
             "year": 2026,
-            "value": 36545,
-            "label": "Hometrust new 4-room average (current page)",
-            "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
+            "value": 40694,
+            "label": "Hometrust profile, read live 28 Oct 2026: average cost of the firm's new-HDB projects",
+            "url": "https://www.hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd"
           }
         ],
-        "rationale": "A budget option. No dated own prices were found, so 2023-2025 are back-cast from the current average with Qanvast's BTO trend (estimate).",
+        "rationale": "Real dated prices, not back-cast: each point is the figure shown on the firm's Hometrust profile on the archived date (Internet Archive snapshot, linked in the table), the average cost of its new-HDB projects, and the last point is the live page.  The yearly change is the compound growth across these points. It tracks the firm's mix of projects (all flat sizes), not a fixed package, so it is noisy. The price level (factor) is set separately from 4-room averages, as the price-level hover text explains.",
         "source": {
-          "url": "https://hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd",
+          "url": "https://www.hometrust.sg/interior-designers/dots-n-tots-interior-pte-ltd",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "Lists itself as HDB registered and a BCA licensed builder; its site carries a CCS public apology about buying fake reviews."
       },
@@ -720,29 +714,26 @@
           {
             "year": 2023,
             "value": 50000,
-            "label": "HomeRenoGuru reviews: 4-room budgets S$40,000-60,000 (Aug 2023)",
+            "label": "HomeRenoGuru reviews: 4-room budgets S$40,000-60,000 (Aug 2023, midpoint)",
             "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
           },
           {
             "year": 2024,
-            "value": 52761,
-            "label": "Estimate: 2023 figure scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
+            "value": 48867,
+            "label": "Estimate: the real figure moved along the market-average series (Qanvast 4-room resale cost, not this firm's own price)"
           },
           {
             "year": 2025,
-            "value": 50223,
-            "label": "Estimate: 2023 figure scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
+            "value": 54271,
+            "label": "Estimate: the real figure moved along the market-average series (Qanvast 4-room resale cost, not this firm's own price)"
           },
           {
             "year": 2026,
-            "value": 48976,
-            "label": "Estimate: 2023 figure scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews"
+            "value": 56898,
+            "label": "Estimate: the real figure moved along the market-average series (Qanvast 4-room resale cost, not this firm's own price)"
           }
         ],
-        "rationale": "Slightly below market. Only 2023 has its own figure (self-reported budgets, BTO or resale not stated); 2024-2026 follow Qanvast's BTO trend (estimate).",
+        "rationale": "Only one own figure exists: homeowner-reported 4-room budgets of S$40,000-60,000 in 2023 (midpoint S$50,000, flat type and BTO or resale not stated). Its Hometrust and Qanvast pages show no usable average and the archived copies contained no price line, so 2024-2026 are that figure moved along the market-average series, which makes its yearly rate (4.4%) the market's, not its own.",
         "source": {
           "url": "https://www.homerenoguru.sg/interior-designer/renozone-interior-design-house-321/reviews",
           "verified": "2026-10-28",
@@ -760,34 +751,28 @@
         "history": [
           {
             "year": 2023,
-            "value": 66866,
-            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
-            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
+            "value": 34051,
+            "label": "Hometrust profile, archived 30 Sep 2023: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20230930170434/https://www.hometrust.sg/interior-designers/carpenters"
           },
           {
             "year": 2024,
-            "value": 65350,
-            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
-            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
-          },
-          {
-            "year": 2025,
-            "value": 72578,
-            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
-            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
+            "value": 50348,
+            "label": "Hometrust profile, archived 8 Sep 2024: average cost of the firm's new-HDB projects",
+            "url": "https://web.archive.org/web/20240908171025/https://www.hometrust.sg/interior-designers/carpenters"
           },
           {
             "year": 2026,
-            "value": 76091,
-            "label": "Qanvast HDB average, past year",
-            "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388"
+            "value": 50348,
+            "label": "Hometrust profile, read live 28 Oct 2026: average cost of the firm's new-HDB projects",
+            "url": "https://www.hometrust.sg/interior-designers/carpenters"
           }
         ],
-        "rationale": "Above market, with an in-house carpentry factory. It publishes no packages (quotes are itemised per project), so 2023-2025 are back-cast with Qanvast's resale trend (estimate).",
+        "rationale": "Real dated prices, not back-cast: each point is the figure shown on the firm's Hometrust profile on the archived date (Internet Archive snapshot, linked in the table), the average cost of its new-HDB projects, and the last point is the live page. The Nov 2025 snapshot could not be fetched, so there is no 2025 point; the live page still shows the Sep 2024 figure. Its few new-HDB projects make the series jump (+48% between 2023 and 2024), so the 13.9% yearly rate is the least reliable here. The yearly change is the compound growth across these points. It tracks the firm's mix of projects (all flat sizes), not a fixed package, so it is noisy. The price level (factor) is set separately from 4-room averages, as the price-level hover text explains.",
         "source": {
-          "url": "https://qanvast.com/sg/interior-designers/carpenters-匠-388",
+          "url": "https://www.hometrust.sg/interior-designers/carpenters",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "Its own site says CaseTrust accredited and HDB registered (HB-10-4334E per a directory)."
       },
@@ -801,34 +786,32 @@
         "history": [
           {
             "year": 2023,
-            "value": 69246,
-            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
-            "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
+            "value": 54000,
+            "label": "Qanvast profile, archived 29 Jan 2023: average renovation cost of the firm's HDB projects in the past year",
+            "url": "https://web.archive.org/web/20230129122313/https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
           },
           {
             "year": 2024,
-            "value": 67677,
-            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
-            "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
+            "value": 61250,
+            "label": "Interpolated between the 2023 and 2026 figures (not a recorded price)"
           },
           {
             "year": 2025,
-            "value": 75162,
-            "label": "Estimate: current average scaled by Qanvast's 4-room resale trend",
-            "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
+            "value": 69473,
+            "label": "Interpolated between the 2023 and 2026 figures (not a recorded price)"
           },
           {
             "year": 2026,
             "value": 78800,
-            "label": "Qanvast HDB average, past year",
+            "label": "Qanvast HDB average, past year (as read in the build, Oct 2026)",
             "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439"
           }
         ],
-        "rationale": "About market for resale-sized jobs. No dated own prices were found, so 2023-2025 are back-cast with Qanvast's resale trend (estimate).",
+        "rationale": "The only dated recording found is Qanvast's profile archived on 29 Jan 2023 (past-year average of its HDB projects, S$54,000), compared with today's S$78,800 from the same Qanvast line. The 2024 and 2025 points are interpolated and shown as such, so the rate (13.4% a year) rests on those two real readings; it is a small-sample average and probably overstates the true rise. The price level (factor) is set separately.",
         "source": {
           "url": "https://qanvast.com/sg/interior-designers/absolook-interior-design-439",
           "verified": "2026-10-28",
-          "type": "estimate"
+          "type": "secondary"
         },
         "notes": "Qanvast says it is not under the CaseTrust scheme; its HDB registration status conflicts between Qanvast pages."
       },
@@ -842,30 +825,27 @@
         "history": [
           {
             "year": 2023,
-            "value": 36549,
-            "label": "Estimate: 2026 package scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
+            "value": 31460,
+            "label": "Estimate: the real figure moved along the market-average series (Qanvast 4-room resale cost, not this firm's own price)"
           },
           {
             "year": 2024,
-            "value": 38566,
-            "label": "Estimate: 2026 package scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
+            "value": 30746,
+            "label": "Estimate: the real figure moved along the market-average series (Qanvast 4-room resale cost, not this firm's own price)"
           },
           {
             "year": 2025,
-            "value": 36711,
-            "label": "Estimate: 2026 package scaled by Qanvast's 4-room BTO trend",
-            "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
+            "value": 34147,
+            "label": "Estimate: the real figure moved along the market-average series (Qanvast 4-room resale cost, not this firm's own price)"
           },
           {
             "year": 2026,
             "value": 35800,
-            "label": "Published 4-room BTO package, from S$35,800 (site 2026)",
+            "label": "Published 4-room BTO package, from S$35,800 (firm's site, 2026)",
             "url": "https://www.fcinteriordesign.net/bto-renovation-packages/"
           }
         ],
-        "rationale": "Below market, with published packages (3-room S$29,800, 5-room S$42,800). Earlier package prices could not be found (the web archive was unreachable), so 2023-2025 are back-cast with Qanvast's BTO trend (estimate).",
+        "rationale": "Only today's package price is real (the firm's own site). No archived copy of its package page could be read (the Internet Archive lookup returned no usable snapshots), so 2023-2025 are today's price moved along the market-average series, which means this firm's yearly rate (4.4%) is the market's, not its own. Treat its future prices as the market trend applied to today's package.",
         "source": {
           "url": "https://www.fcinteriordesign.net/bto-renovation-packages/",
           "verified": "2026-10-28",
