@@ -5,7 +5,8 @@ import { estimateCost, KIND_HELP, KIND_LABELS, type Plan, type PlanChoice } from
 import { KINDS, type Kind } from "@/lib/spec";
 
 type Scoped = { plan: Plan; cached: string[] };
-type Phase = { kind: "idle" } | { kind: "scoping"; draft: Scoped | null } | { kind: "preview"; scoped: Scoped } | { kind: "error"; message: string };
+/** "preview" shows a scope at once; `refining` is the quick draft while the GitHub run improves it, `upgrade` is the better scope once it arrives. */
+type Phase = { kind: "idle" } | { kind: "scoping" } | { kind: "preview"; scoped: Scoped; refining: boolean; upgrade: Scoped | null } | { kind: "error"; message: string };
 
 const input = "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2";
 const button = "rounded-lg bg-accent-fill px-4 py-2 font-medium text-on-accent disabled:opacity-60";
@@ -23,25 +24,29 @@ export function PlanBuilder({ passcode, onBuild, busy }: { passcode: string; onB
 
   async function scope() {
     clearTimeout(timer.current);
-    setPhase({ kind: "scoping", draft: null });
+    setPhase({ kind: "scoping" });
     try {
       const res = await fetch("/api/plan", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ passcode, topic }) });
       const data = await res.json();
       if (!res.ok) return setPhase({ kind: "error", message: data.error ?? "Something went wrong." });
-      if (data.status === "ready") return setPhase({ kind: "preview", scoped: { plan: data.plan, cached: data.cached ?? [] } });
+      if (data.status === "ready") return setPhase({ kind: "preview", scoped: { plan: data.plan, cached: data.cached ?? [] }, refining: false, upgrade: null });
+      // The GitHub run is still working: show the quick draft now and offer the better scope when it lands.
       const draft: Scoped = { plan: data.draft, cached: data.cached ?? [] };
-      setPhase({ kind: "scoping", draft });
+      setPhase({ kind: "preview", scoped: draft, refining: true, upgrade: null });
       let tries = 0;
       const poll = async () => {
         tries++;
         try {
           const r = await fetch(`/api/plan?id=${data.planId}`, { cache: "no-store" });
           const d = await r.json();
-          if (d.status === "ready") return setPhase({ kind: "preview", scoped: { plan: d.plan, cached: d.cached ?? [] } });
+          if (d.status === "ready") {
+            const better: Scoped = { plan: d.plan, cached: d.cached ?? [] };
+            return setPhase((cur) => (cur.kind === "preview" ? { ...cur, refining: false, upgrade: better.plan.source === "haiku" ? better : null } : cur));
+          }
         } catch {
           // Try again on the next tick.
         }
-        if (tries > 45) return setPhase({ kind: "preview", scoped: draft });
+        if (tries > 45) return setPhase((cur) => (cur.kind === "preview" ? { ...cur, refining: false } : cur));
         timer.current = setTimeout(poll, 4000);
       };
       timer.current = setTimeout(poll, 4000);
@@ -66,18 +71,27 @@ export function PlanBuilder({ passcode, onBuild, busy }: { passcode: string; onB
           Build straight away
         </button>
       </div>
-      {phase.kind === "scoping" && (
-        <p className="mt-3 text-sm text-muted" role="status">
-          Scoping the topic… {phase.draft ? "This usually takes a minute or two." : ""}
-          {phase.draft && (
-            <button type="button" className="ml-2 text-accent underline" onClick={() => setPhase({ kind: "preview", scoped: phase.draft! })}>
-              Use the quick draft now
-            </button>
-          )}
-        </p>
-      )}
+      {phase.kind === "scoping" && <p className="mt-3 text-sm text-muted" role="status">Starting…</p>}
       {phase.kind === "error" && <p className="mt-3 text-sm text-warn-fg" role="alert">{phase.message}</p>}
-      {phase.kind === "preview" && <Preview key={phase.scoped.plan.topic + phase.scoped.plan.source} scoped={phase.scoped} busy={busy} onBuild={(choice, research) => onBuild(topic, choice, research)} onCancel={() => setPhase({ kind: "idle" })} />}
+      {phase.kind === "preview" && (
+        <>
+          {phase.refining && (
+            <p className="mt-3 text-sm text-muted" role="status">
+              This is a quick draft. The low-cost model is refining the scope on GitHub (a minute or two); you can start ticking items now.
+            </p>
+          )}
+          {phase.upgrade && (
+            <p className="mt-3 text-sm" role="status">
+              A better scope is ready.{" "}
+              <button type="button" className="text-accent underline" onClick={() => setPhase({ kind: "preview", scoped: phase.upgrade!, refining: false, upgrade: null })}>
+                Switch to it
+              </button>{" "}
+              (your ticks on the draft will reset).
+            </p>
+          )}
+          <Preview key={phase.scoped.plan.topic + phase.scoped.plan.source} scoped={phase.scoped} busy={busy} onBuild={(choice, research) => onBuild(topic, choice, research)} onCancel={() => { clearTimeout(timer.current); setPhase({ kind: "idle" }); }} />
+        </>
+      )}
     </div>
   );
 }

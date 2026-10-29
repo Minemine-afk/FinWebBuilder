@@ -5,9 +5,10 @@ import { cachedItemIds, newPlanId, planWithApi } from "@/lib/plan-server";
 
 /**
  * Scopes a topic before any research is paid for: picks the calculator kind, proposes the options to cover and
- * at most two questions. With an ANTHROPIC_API_KEY on the site, one Haiku call answers straight away. Otherwise
- * the cheap `Plan calculator` workflow runs Haiku on the subscription, and the page polls GET until its plan arrives.
- * The built-in fallback plan comes back with the request, so the reader is never stuck waiting.
+ * at most two questions. The cheap `Plan calculator` GitHub workflow runs Haiku on the subscription, and the page
+ * polls GET until its plan arrives. The built-in fallback plan comes back with the request, so the page shows a
+ * scope at once and offers the Haiku one when it lands. Only a site with no GitHub connection but an
+ * ANTHROPIC_API_KEY calls Haiku directly.
  */
 const Body = z.object({ passcode: z.string(), topic: z.string().trim().min(3).max(200) });
 
@@ -17,14 +18,16 @@ export async function POST(request: Request) {
   const { passcode, topic } = parsed.data;
   if (!passcodeOk(passcode)) return Response.json({ error: "Wrong passcode." }, { status: 401 });
 
-  if (process.env.ANTHROPIC_API_KEY) {
-    const plan = await planWithApi(topic);
-    return Response.json({ status: "ready", plan, cached: cachedItemIds(plan) });
-  }
-
   const cfg = githubConfig();
   const draft = fallbackPlan(topic);
-  if (!cfg) return Response.json({ status: "ready", plan: draft, cached: cachedItemIds(draft) });
+  if (!cfg) {
+    // Without GitHub, one direct Haiku call is the only way to get a model-made scope.
+    if (process.env.ANTHROPIC_API_KEY) {
+      const plan = await planWithApi(topic);
+      return Response.json({ status: "ready", plan, cached: cachedItemIds(plan) });
+    }
+    return Response.json({ status: "ready", plan: draft, cached: cachedItemIds(draft) });
+  }
   const id = newPlanId();
   const status = await dispatchWorkflow(cfg, "plan-calculator.yml", { topic, plan_id: id });
   // If the scoping step can't start, the fallback plan still lets the reader build.
