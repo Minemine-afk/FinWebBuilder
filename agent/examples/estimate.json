@@ -96,7 +96,8 @@
         "type": "estimate"
       },
       "notes": "",
-      "description": "Removing old tiles, fixtures and carpentry."
+      "description": "Removing old tiles, fixtures and carpentry.",
+      "rationale": "Range for hacking and disposal taken from the prices quoted by the source, one unit (per sqm); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "electrical",
@@ -126,7 +127,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for electrical rewiring taken from the prices quoted by the source, one unit (per sqm); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "plumbing",
@@ -156,7 +158,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for plumbing and waterproofing taken from the prices quoted by the source, one unit (per bathroom); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "flooring",
@@ -186,7 +189,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for flooring taken from the prices quoted by the source, one unit (per sqm); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "painting",
@@ -216,7 +220,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for painting taken from the prices quoted by the source, one unit (per sqm); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "bath-tiles",
@@ -246,7 +251,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for bathroom wall tiling taken from the prices quoted by the source, one unit (per bathroom); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "wardrobes",
@@ -276,7 +282,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for wardrobes and built-ins taken from the prices quoted by the source, one unit (per room); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "kitchen",
@@ -306,7 +313,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for kitchen cabinets and countertop taken from the prices quoted by the source, one unit (per kitchen); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "consoles",
@@ -336,7 +344,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for tv console and shoe cabinet taken from the prices quoted by the source, one unit (each); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "doors",
@@ -366,7 +375,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for doors and windows taken from the prices quoted by the source, one unit (per flat); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "lighting",
@@ -396,7 +406,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for lighting and fans taken from the prices quoted by the source, one unit (per sqm); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "aircon",
@@ -426,7 +437,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": ""
+      "notes": "",
+      "rationale": "Range for air-conditioning taken from the prices quoted by the source, one unit (per unit); the three levels follow its basic, standard and premium finishes."
     },
     {
       "id": "furniture",
@@ -456,7 +468,8 @@
         "verified": "2026-10-27",
         "type": "estimate"
       },
-      "notes": "Loose furniture, curtains and appliances vary most; treat as a placeholder."
+      "notes": "Loose furniture, curtains and appliances vary most; treat as a placeholder.",
+      "rationale": "Range for furniture and curtains taken from the prices quoted by the source, one unit (per sqm); the three levels follow its basic, standard and premium finishes."
     }
   ],
   "version": 1,

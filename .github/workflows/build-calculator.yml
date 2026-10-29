@@ -21,6 +21,15 @@ on:
       prompt:
         description: "What should change"
         required: false
+      plan:
+        description: "Scope the reader confirmed, as JSON (kind, answers, include, exclude); set by the site"
+        required: false
+      kind:
+        description: "Refine only: rebuild the calculator as this kind (compare, estimate or projection)"
+        required: false
+      no_research:
+        description: "Refine only: set to true to edit without any web research"
+        required: false
       research_model:
         description: "Model for the price-research sub-agents"
         required: false
@@ -47,6 +56,9 @@ jobs:
       SLUG: ${{ inputs.slug }}
       PROMPT: ${{ inputs.prompt }}
       RESEARCH_MODEL: ${{ inputs.research_model }}
+      PLAN: ${{ inputs.plan }}
+      KIND: ${{ inputs.kind }}
+      NO_RESEARCH: ${{ inputs.no_research }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

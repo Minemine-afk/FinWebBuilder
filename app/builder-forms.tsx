@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { PlanBuilder } from "./plan-builder";
 
 type Status = { kind: "idle" } | { kind: "sending" } | { kind: "done"; runsUrl: string; message: string } | { kind: "error"; message: string };
 
-async function send(body: Record<string, string>, endpoint = "/api/build"): Promise<Status> {
+async function send(body: Record<string, unknown>, endpoint = "/api/build"): Promise<Status> {
   try {
     const res = await fetch(endpoint, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
     const data = await res.json();
@@ -35,7 +36,6 @@ const button = "mt-4 rounded-lg bg-accent-fill px-4 py-2 font-medium text-on-acc
 
 export function BuilderForms({ calculators }: { calculators: { id: string; title: string }[] }) {
   const [passcode, setPasscode] = useState("");
-  const [topic, setTopic] = useState("");
   const [slug, setSlug] = useState(calculators[0]?.id ?? "");
   const [prompt, setPrompt] = useState("");
   const [buildStatus, setBuildStatus] = useState<Status>({ kind: "idle" });
@@ -55,22 +55,18 @@ export function BuilderForms({ calculators }: { calculators: { id: string; title
       </label>
 
       <div className="mt-6 grid gap-8 md:grid-cols-2">
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setBuildStatus({ kind: "sending" });
-            const s = await send({ mode: "new", passcode, topic });
-            setBuildStatus(s.kind === "done" ? { ...s, message: `Researching "${topic}".` } : s);
-          }}
-        >
-          <h3 className="font-semibold">New calculator</h3>
-          <label className="mt-2 block text-sm">
-            Topic
-            <input className={input} required minLength={3} maxLength={200} placeholder="e.g. Owning an e-bike in Singapore" value={topic} onChange={(e) => setTopic(e.target.value)} />
-          </label>
-          <button className={button} disabled={buildStatus.kind === "sending"}>Build it</button>
+        <div>
+          <PlanBuilder
+            passcode={passcode}
+            busy={buildStatus.kind === "sending"}
+            onBuild={async (topic, choice, research) => {
+              setBuildStatus({ kind: "sending" });
+              const s = await send({ mode: "new", passcode, topic, research, ...(choice ? { plan: choice } : {}) });
+              setBuildStatus(s.kind === "done" ? { ...s, message: `Researching "${topic}".` } : s);
+            }}
+          />
           <StatusLine status={buildStatus} />
-        </form>
+        </div>
 
         <form
           onSubmit={async (e) => {

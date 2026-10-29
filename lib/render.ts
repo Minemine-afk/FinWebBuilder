@@ -61,6 +61,29 @@ export function buildCostSection(spec: Spec): string {
 <tfoot><tr><td colspan="5">Total AI cost so far (our API estimate)</td><td>${formatSgd(totalSgd)}</td></tr>${anyReported ? `<tr><td colspan="5">Total reported by Claude Code so far</td><td>${formatSgd(reportedTotal)}</td></tr>` : ""}</tfoot></table></div></section>`;
 }
 
+/** The "Suggest a change" chat panel: sends refinements to the cheap Sonnet refine path and shows the run's progress. */
+export function refineWidget(spec: Spec): string {
+  const style = `<style>
+#refine-root{position:fixed;right:16px;bottom:16px;z-index:50;font:14px Geist,system-ui,sans-serif;color:#111}
+#refine-root .rf-open{background:#1d4ed8;color:#fff;border:0;border-radius:999px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+#refine-root .rf-panel{width:min(360px,calc(100vw - 32px));max-height:80vh;overflow:auto;background:#fff;border:1px solid #ccc;border-radius:12px;padding:12px;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+#refine-root .rf-head{display:flex;justify-content:space-between;align-items:center}
+#refine-root .rf-x{background:none;border:0;font-size:22px;line-height:1;cursor:pointer;color:inherit}
+#refine-root .rf-note{margin:6px 0;opacity:.75;font-size:12.5px}
+#refine-root .rf-chat{max-height:200px;overflow:auto;display:flex;flex-direction:column;gap:6px;margin:6px 0}
+#refine-root .rf-msg{margin:0;padding:6px 10px;border-radius:10px;max-width:90%}
+#refine-root .rf-me{align-self:flex-end;background:#dbeafe}#refine-root .rf-bot{align-self:flex-start;background:#f1f1f1}
+#refine-root .rf-chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+#refine-root .rf-chip{border:1px solid #bbb;background:#fff;border-radius:999px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer;color:inherit}
+#refine-root .rf-form{display:grid;gap:6px}#refine-root .rf-in{width:100%;box-sizing:border-box;border:1px solid #bbb;border-radius:8px;padding:6px 8px;font:inherit;color:inherit;background:#fff}
+#refine-root .rf-check{font-size:12.5px}#refine-root .rf-send{background:#1d4ed8;color:#fff;border:0;border-radius:8px;padding:8px;font:inherit;font-weight:600;cursor:pointer}
+#refine-root .rf-send:disabled{opacity:.6}
+@media print{#refine-root{display:none}}
+</style>`;
+  const config = JSON.stringify({ slug: spec.id, kind: spec.kind }).replace(/</g, "\\u003c");
+  return `<div id="refine-root"></div>${style}<script>${read("refine.js").replace("__REFINE_CONFIG__", () => config)}</script>`;
+}
+
 /** The full calculator page: the kind's template with the shared styles and scripts and this spec built in. */
 export function renderCalculatorHtml(spec: Spec, template = read(KIND_FILES[spec.kind].template)): string {
   // The page script only needs what it renders; the build log is shown by the section below.
@@ -78,5 +101,5 @@ export function renderCalculatorHtml(spec: Spec, template = read(KIND_FILES[spec
   html = html.replace("<body>", () => "<body>" + nav);
   // The page script also contains the text "</body>", so insert before the real closing tag (the last one).
   const end = html.lastIndexOf("</body>");
-  return html.slice(0, end) + buildCostSection(spec) + html.slice(end);
+  return html.slice(0, end) + buildCostSection(spec) + refineWidget(spec) + html.slice(end);
 }

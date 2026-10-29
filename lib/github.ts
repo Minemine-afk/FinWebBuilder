@@ -25,7 +25,7 @@ export function githubHeaders(token: string) {
   };
 }
 
-export type WorkflowFile = "build-calculator.yml" | "remove-calculator.yml";
+export type WorkflowFile = "build-calculator.yml" | "remove-calculator.yml" | "plan-calculator.yml";
 
 /** Starts a workflow on the site's branch. Returns the HTTP status GitHub answered with. */
 export async function dispatchWorkflow(cfg: { repo: string; token: string }, workflow: WorkflowFile, inputs: Record<string, string>) {
@@ -37,7 +37,7 @@ export async function dispatchWorkflow(cfg: { repo: string; token: string }, wor
   return res.status;
 }
 
-export type RunKind = "build" | "refine" | "remove";
+export type RunKind = "build" | "refine" | "remove" | "plan";
 
 export interface RunSummary {
   id: number;
@@ -76,11 +76,12 @@ const STEP_LABELS: [match: RegExp, label: string][] = [
   [/^Check the site still builds/, "Checking the site still builds"],
   [/^Publish/, "Publishing"],
   [/^Remove/, "Removing"],
+  [/^Scope the topic/, "Scoping the topic"],
 ];
 
 export function describeRun(run: ApiRun, job: ApiJob | undefined): RunSummary {
-  const title = run.display_title.replace(/^(Build|Refine|Remove): /, "");
-  const kind: RunKind = run.display_title.startsWith("Remove") ? "remove" : run.display_title.startsWith("Refine") ? "refine" : "build";
+  const title = run.display_title.replace(/^(Build|Refine|Remove|Plan): /, "");
+  const kind: RunKind = run.display_title.startsWith("Remove") ? "remove" : run.display_title.startsWith("Refine") ? "refine" : run.display_title.startsWith("Plan") ? "plan" : "build";
   const state: RunSummary["state"] =
     run.status !== "completed"
       ? run.status === "in_progress"
@@ -96,7 +97,7 @@ export function describeRun(run: ApiRun, job: ApiJob | undefined): RunSummary {
   const active = steps.find((s) => s.status === "in_progress");
   const label = (name?: string) => STEP_LABELS.find(([re]) => name && re.test(name))?.[1];
   let step = "Waiting to start";
-  if (state === "done") step = kind === "remove" ? "Removed. The site updates in about a minute." : "Published. The site updates in about a minute.";
+  if (state === "done") step = kind === "remove" ? "Removed. The site updates in about a minute." : kind === "plan" ? "Scope ready." : "Published. The site updates in about a minute.";
   else if (state === "failed") step = "The build failed. Nothing was published.";
   else if (state === "cancelled") step = "Stopped.";
   else if (state === "running") step = label(active?.name) ?? "Starting";
@@ -110,7 +111,7 @@ export function describeRun(run: ApiRun, job: ApiJob | undefined): RunSummary {
   return { id: run.id, kind, title, state, step, progress, startedAt: run.created_at, url: run.html_url };
 }
 
-const WORKFLOW_PATHS = new Set([".github/workflows/build-calculator.yml", ".github/workflows/remove-calculator.yml"]);
+const WORKFLOW_PATHS = new Set([".github/workflows/build-calculator.yml", ".github/workflows/remove-calculator.yml", ".github/workflows/plan-calculator.yml"]);
 
 /** The build and removal runs still going, with the current step of each. */
 export async function activeRuns(cfg: { repo: string; token: string }): Promise<RunSummary[]> {
@@ -126,4 +127,44 @@ export async function activeRuns(cfg: { repo: string; token: string }): Promise<
       return describeRun(run, job);
     }),
   );
+}
+
+/**
+ * Plans from the scoping step live on their own branch, one small file each, so they never trigger a site deploy
+ * or crowd main's history. The site reads them back through the GitHub contents API.
+ */
+export const PLANS_BRANCH = "builder-plans";
+const PLAN_ID = /^[a-f0-9]{12}$/;
+export const planId = (value: string) => PLAN_ID.test(value);
+export const planFile = (id: string) => `plans/${id}.json`;
+
+/** The saved plan JSON as text, "pending" while the scoping step hasn't written it, or null if GitHub can't be read. */
+export async function readPlanFile(cfg: { repo: string; token: string }, id: string): Promise<string | "pending" | null> {
+  if (!planId(id)) return null;
+  const res = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${planFile(id)}?ref=${PLANS_BRANCH}`, {
+    headers: { ...githubHeaders(cfg.token), accept: "application/vnd.github.raw+json" },
+    cache: "no-store",
+  });
+  if (res.status === 404) return "pending";
+  return res.ok ? res.text() : null;
+}
+
+/** Saves a plan to the plans branch, creating the branch from the default branch the first time. */
+export async function writePlanFile(cfg: { repo: string; token: string }, id: string, json: string): Promise<void> {
+  if (!planId(id)) throw new Error(`"${id}" is not a plan id.`);
+  const api = `https://api.github.com/repos/${cfg.repo}`;
+  const headers = githubHeaders(cfg.token);
+  const branch = await fetch(`${api}/git/ref/heads/${PLANS_BRANCH}`, { headers });
+  if (branch.status === 404) {
+    const repo = (await (await fetch(api, { headers })).json()) as { default_branch: string };
+    const base = (await (await fetch(`${api}/git/ref/heads/${repo.default_branch}`, { headers })).json()) as { object: { sha: string } };
+    const created = await fetch(`${api}/git/refs`, { method: "POST", headers, body: JSON.stringify({ ref: `refs/heads/${PLANS_BRANCH}`, sha: base.object.sha }) });
+    if (!created.ok && created.status !== 422) throw new Error(`Couldn't create the ${PLANS_BRANCH} branch (${created.status}).`);
+  }
+  const put = await fetch(`${api}/contents/${planFile(id)}`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ message: `Plan ${id}`, content: Buffer.from(json).toString("base64"), branch: PLANS_BRANCH }),
+  });
+  if (!put.ok) throw new Error(`Couldn't save the plan (${put.status}).`);
 }

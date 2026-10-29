@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { RunSummary } from "@/lib/github";
 
-const KIND: Record<RunSummary["kind"], string> = { build: "Building", refine: "Refining", remove: "Removing" };
+const KIND: Record<RunSummary["kind"], string> = { build: "Building", refine: "Refining", remove: "Removing", plan: "Scoping" };
 
 function elapsed(from: string, now: number) {
   const s = Math.max(0, Math.floor((now - Date.parse(from)) / 1000));

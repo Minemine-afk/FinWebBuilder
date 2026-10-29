@@ -1,0 +1,62 @@
+name: Plan calculator
+
+# Started from the site's builder box (app/api/plan). A cheap Haiku run reads the topic, picks the calculator
+# kind, and proposes a scope (or at most two questions). The result is saved to the builder-plans branch for the
+# site to show; nothing is published to main and no research is done. It costs a few cents of API-equivalent usage.
+run-name: "${{ format('Plan: {0}', inputs.topic) }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: "Topic to scope"
+        required: true
+      plan_id:
+        description: "Id the site will poll for (12 hex characters)"
+        required: true
+
+permissions:
+  contents: write
+  id-token: write
+
+concurrency:
+  group: plan-${{ inputs.plan_id }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TOPIC: ${{ inputs.topic }}
+      PLAN_ID: ${{ inputs.plan_id }}
+      HAS_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Prepare the scoping run
+        id: prep
+        run: npx tsx agent/plan.ts prepare
+      - name: Scope the topic with Claude Code (Haiku)
+        if: env.HAS_TOKEN == 'true'
+        # If Haiku fails, the next step still saves the built-in fallback plan, so the site is never left waiting.
+        continue-on-error: true
+        uses: anthropics/claude-code-action@v1
+        env:
+          CLAUDE_CODE_DISABLE_BACKGROUND_TASKS: "1"
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ github.token }}
+          prompt: ${{ steps.prep.outputs.prompt }}
+          claude_args: |
+            --model ${{ steps.prep.outputs.model }}
+            --max-turns 8
+            --allowedTools "Read,Write,Bash(npx tsx agent/plan.ts validate:*)"
+      - name: Save the plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: npx tsx agent/plan.ts publish
