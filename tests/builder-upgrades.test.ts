@@ -221,6 +221,17 @@ describe("price cache", () => {
   });
 });
 
+describe("sample prompt", () => {
+  it("fits the topic limit and names what, where, size and a comparison", () => {
+    const src = fs.readFileSync("app/plan-builder.tsx", "utf8");
+    const sample = /const EXAMPLE_TOPIC = "([^"]+)"/.exec(src)![1];
+    expect(sample.length).toBeLessThanOrEqual(200);
+    expect(sample).toMatch(/Singapore/);
+    expect(sample).toMatch(/sqm/);
+    expect(sample).toMatch(/comparing/);
+  });
+});
+
 describe("pages and runs", () => {
   it("add the suggest-a-change chat to every kind of page", () => {
     for (const kind of ["compare", "estimate", "projection"] as const) {

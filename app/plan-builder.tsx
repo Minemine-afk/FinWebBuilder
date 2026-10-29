@@ -8,6 +8,9 @@ type Scoped = { plan: Plan; cached: string[] };
 /** "preview" shows a scope at once; `refining` is the quick draft while the GitHub run improves it, `upgrade` is the better scope once it arrives. */
 type Phase = { kind: "idle" } | { kind: "scoping" } | { kind: "preview"; scoped: Scoped; refining: boolean; upgrade: Scoped | null } | { kind: "error"; message: string };
 
+/** A topic specific enough to need little refinement: what, where, size or quality, and who or what to compare. Must stay within the 200 characters the topic allows. */
+const EXAMPLE_TOPIC = "Renovation cost for a resale 4-room HDB flat in Singapore, about 90 sqm, mid-range finish, comparing interior design firms and contractors";
+
 const input = "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2";
 const button = "rounded-lg bg-accent-fill px-4 py-2 font-medium text-on-accent disabled:opacity-60";
 const ghost = "rounded-lg border border-border px-4 py-2 font-medium disabled:opacity-60";
@@ -58,11 +61,19 @@ export function PlanBuilder({ passcode, onBuild, busy }: { passcode: string; onB
   return (
     <div>
       <h3 className="font-semibold">New calculator</h3>
-      <label className="mt-2 block text-sm">
+      <div className="mt-2 rounded-lg border border-border bg-background p-3 text-sm">
+        <p className="font-medium">A specific topic needs less fixing afterwards</p>
+        <p className="mt-1 text-muted">Say what it is, where, the size or quality, and what to compare. For example:</p>
+        <p className="mt-1 italic">&ldquo;{EXAMPLE_TOPIC}&rdquo;</p>
+        <button type="button" className="mt-2 text-accent underline" onClick={() => setTopic(EXAMPLE_TOPIC)}>
+          Use this example
+        </button>
+      </div>
+      <label className="mt-3 block text-sm">
         Topic
-        <input className={input} required minLength={3} maxLength={200} placeholder="e.g. Owning an e-bike in Singapore, or just 'renovation costs'" value={topic} onChange={(e) => setTopic(e.target.value)} />
+        <input className={input} required minLength={3} maxLength={200} placeholder={EXAMPLE_TOPIC} value={topic} onChange={(e) => setTopic(e.target.value)} />
       </label>
-      <p className="mt-1 text-xs text-muted">Vague is fine. A quick, low-cost step proposes what to cover and asks at most two questions before any research is paid for.</p>
+      <p className="mt-1 text-xs text-muted">Short is fine too. A quick, low-cost step proposes what to cover and asks at most two questions before any research is paid for.</p>
       <div className="mt-3 flex flex-wrap gap-2">
         <button type="button" className={button} disabled={topic.trim().length < 3 || !passcode || phase.kind === "scoping" || busy} onClick={scope}>
           Scope it first
