@@ -222,13 +222,14 @@ describe("price cache", () => {
 });
 
 describe("sample prompt", () => {
-  it("fits the topic limit and names what, where, size and a comparison", () => {
+  it("fits the topic limit and names what, where, size, who to compare and a forecast", () => {
     const src = fs.readFileSync("app/plan-builder.tsx", "utf8");
     const sample = /const EXAMPLE_TOPIC = "([^"]+)"/.exec(src)![1];
     expect(sample.length).toBeLessThanOrEqual(200);
     expect(sample).toMatch(/Singapore/);
     expect(sample).toMatch(/sqm/);
-    expect(sample).toMatch(/comparing/);
+    expect(sample).toMatch(/compare at least 10 design firms and 10 contractors/);
+    expect(sample).toMatch(/predict future prices.*past 3 years/);
   });
 });
 

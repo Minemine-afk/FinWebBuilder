@@ -9,7 +9,7 @@ type Scoped = { plan: Plan; cached: string[] };
 type Phase = { kind: "idle" } | { kind: "scoping" } | { kind: "preview"; scoped: Scoped; refining: boolean; upgrade: Scoped | null } | { kind: "error"; message: string };
 
 /** A topic specific enough to need little refinement: what, where, size or quality, and who or what to compare. Must stay within the 200 characters the topic allows. */
-const EXAMPLE_TOPIC = "Renovation cost for a resale 4-room HDB flat in Singapore, about 90 sqm, mid-range finish, comparing interior design firms and contractors";
+const EXAMPLE_TOPIC = "What a mid-range renovation of a 90 sqm resale 4-room HDB flat in Singapore costs: compare at least 10 design firms and 10 contractors, and predict future prices from their past 3 years";
 
 const input = "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2";
 const button = "rounded-lg bg-accent-fill px-4 py-2 font-medium text-on-accent disabled:opacity-60";
@@ -63,7 +63,7 @@ export function PlanBuilder({ passcode, onBuild, busy }: { passcode: string; onB
       <h3 className="font-semibold">New calculator</h3>
       <div className="mt-2 rounded-lg border border-border bg-background p-3 text-sm">
         <p className="font-medium">A specific topic needs less fixing afterwards</p>
-        <p className="mt-1 text-muted">Say what it is, where, the size or quality, and what to compare. For example:</p>
+        <p className="mt-1 text-muted">Say what it is, where, the size and quality, who to compare (and how many), and whether you want a forecast. For example:</p>
         <p className="mt-1 italic">&ldquo;{EXAMPLE_TOPIC}&rdquo;</p>
         <button type="button" className="mt-2 text-accent underline" onClick={() => setTopic(EXAMPLE_TOPIC)}>
           Use this example
