@@ -1,0 +1,458 @@
+{
+  "kind": "compare",
+  "id": "compare-prices-for-shampoo-bottles-over-the-year",
+  "title": "Shampoo prices per 100ml, by brand and bottle size",
+  "subject": "shampoo bottle",
+  "currency": "SGD",
+  "periodLabel": "Year",
+  "scope": "Regular (non-promotion) shelf prices of ten popular shampoos at Singapore supermarkets and pharmacies (mainly NTUC FairPrice and Watsons), turned into a price per 100ml so small and large bottles can be compared fairly. Each year counts as one bottle bought at that year's price. Each price per 100ml is split into the large-bottle price before GST, the extra a smaller bottle costs per 100ml, and 9% GST. History for 2022 to 2025 uses dated prices where we found them and estimates otherwise.",
+  "limits": "Promotions are not counted, and they are frequent: FairPrice and Watsons often take 30 to 40% off, for example Pantene 680ml at S$7.77 instead of S$11.91 until 1 Jan 2027. Several sizes in the request are not sold in Singapore. Pantene 340ml, Head & Shoulders 400ml, Sunsilk Black Shine and Clear 400ml are estimates scaled from a nearby size. TRESemmé uses the 670ml, Dove the Nourishment / Detox Nourishment bottles and L'Oréal the 440ml Sleek bottle, as noted on each option. Internet Archive snapshots of the FairPrice pages exist for 2023 to 2026, but none of them recorded a price, so most past years are estimates. Future years assume prices rise about 1% a year.",
+  "fx": {},
+  "minStartYear": 2026,
+  "defaultGrowth": 0.01,
+  "components": [
+    {
+      "id": "base",
+      "label": "Large-bottle price per 100ml, before GST",
+      "kind": "recurring"
+    },
+    {
+      "id": "premium",
+      "label": "Extra per 100ml for a smaller bottle",
+      "kind": "recurring"
+    },
+    {
+      "id": "gst",
+      "label": "GST at 9%",
+      "kind": "recurring"
+    }
+  ],
+  "drivers": [],
+  "groups": [
+    {
+      "id": "regular",
+      "label": "Regular bottle (about 320 to 440ml)",
+      "growth": 0.01
+    },
+    {
+      "id": "large",
+      "label": "Large bottle (about 650 to 680ml)",
+      "growth": 0.01
+    }
+  ],
+  "items": [
+    {
+      "id": "pantene-680",
+      "group": "large",
+      "name": "Pantene Pro-V Smooth & Sleek 675ml",
+      "option": "Sold here as Silky Smooth Care 680ml, S$11.91",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 1.61,
+          "premium": 0,
+          "gst": 0.14
+        }
+      },
+      "history": [
+        {
+          "year": 2022,
+          "value": 1.72
+        },
+        {
+          "year": 2023,
+          "value": 1.73
+        },
+        {
+          "year": 2024,
+          "value": 1.74
+        },
+        {
+          "year": 2025,
+          "value": 1.74
+        }
+      ],
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/pantene-shampoo-silky-smooth-care-680ml-13194386",
+        "verified": "2026-10-29",
+        "type": "official"
+      },
+      "notes": "Regular price S$11.91 for 680ml on the FairPrice product page, seen 29 Oct 2026; the promo is S$7.77 until 1 Jan 2027. Lazada showed S$11.70. In Singapore, Pantene's Smooth & Sleek is sold as Silky Smooth Care (Watsons calls it Smooth & Silky), and the closest size to 675ml is 680ml. Price per 100ml: S$11.91 / 6.8 = S$1.75. That is S$1.61 before GST plus S$0.14 GST at 9%."
+    },
+    {
+      "id": "pantene-340",
+      "group": "regular",
+      "name": "Pantene Pro-V Smooth & Sleek 340ml",
+      "option": "Estimated about S$7.50 (not listed in Singapore)",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 1.61,
+          "premium": 0.42,
+          "gst": 0.18
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 2.18
+        },
+        {
+          "year": 2024,
+          "value": 2.19
+        },
+        {
+          "year": 2025,
+          "value": 2.2
+        }
+      ],
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/pantene-shampoo-silky-smooth-care-680ml-13194386",
+        "verified": "2026-10-29",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE. Searches on 29 Oct 2026 found no 320 to 340ml Silky Smooth Care bottle at FairPrice, Watsons, Guardian, Cold Storage, RedMart, Shopee or Lazada; it seems to be sold only in India. We took the 680ml regular price (S$11.91 at FairPrice), halved it, and added about 25% for the smaller bottle, the usual gap between sizes: about S$7.50, or S$2.21 per 100ml. That is the large-bottle S$1.61 plus S$0.42 small-bottle extra, before GST, plus S$0.18 GST."
+    },
+    {
+      "id": "hs-650",
+      "group": "large",
+      "name": "Head & Shoulders Classic Clean 700ml",
+      "option": "Sold here as Clean & Balanced 650ml, S$14.00",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 1.97,
+          "premium": 0,
+          "gst": 0.18
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 2.22
+        },
+        {
+          "year": 2024,
+          "value": 2.22
+        },
+        {
+          "year": 2025,
+          "value": 2.15
+        }
+      ],
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/head-shoulders-shampoo-clean-balanced-720ml-13010505",
+        "verified": "2026-10-29",
+        "type": "official"
+      },
+      "notes": "Regular price S$14.00 for 650ml on the FairPrice product page, seen 29 Oct 2026; the promo is S$8.00 until 1 Jan 2027. The page address still says 720ml. Watsons snippets give S$14.00 or S$16.00, so we used FairPrice. Classic Clean is sold in Singapore as Clean & Balanced, and 650ml is the size nearest 700ml. Price per 100ml: S$14.00 / 6.5 = S$2.15, which is S$1.97 before GST plus S$0.18 GST. The bottle shrank from 720ml at S$16.00 in 2024; per 100ml it got slightly cheaper."
+    },
+    {
+      "id": "hs-400",
+      "group": "regular",
+      "name": "Head & Shoulders Classic Clean 400ml",
+      "option": "Estimated about S$11.00 (not listed in Singapore)",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 1.97,
+          "premium": 0.55,
+          "gst": 0.23
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 2.71
+        },
+        {
+          "year": 2024,
+          "value": 2.72
+        },
+        {
+          "year": 2025,
+          "value": 2.74
+        }
+      ],
+      "source": {
+        "url": "https://www.doctoroncall.com.my/medicine/head-shoulders-clean-balanced-shampoo-330ml",
+        "verified": "2026-10-29",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE. Searches on 29 Oct 2026 found no 330 to 400ml Clean & Balanced bottle at any Singapore retailer. In Malaysia (DoctorOnCall) the 330ml costs RM 22.70 and the 720ml RM 38.70, so the small bottle costs about 28% more per ml. Applying that to the Singapore 650ml price (S$2.15 per 100ml) gives about S$2.75 per 100ml, or about S$11.00 for 400ml. That is the large-bottle S$1.97 plus S$0.55 small-bottle extra, before GST, plus S$0.23 GST."
+    },
+    {
+      "id": "dove-650",
+      "group": "large",
+      "name": "Dove Nourishing Secrets 650ml",
+      "option": "Priced on Dove Detox Nourishment 650ml, S$12.27",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 1.73,
+          "premium": 0,
+          "gst": 0.16
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 1.86
+        },
+        {
+          "year": 2024,
+          "value": 1.87
+        },
+        {
+          "year": 2025,
+          "value": 1.88
+        }
+      ],
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/dove-shampoo-detox-nourishment-680ml-13176304",
+        "verified": "2026-10-29",
+        "type": "secondary"
+      },
+      "notes": "Stand-in price. No Singapore retailer we searched on 29 Oct 2026 lists Nourishing Secrets in 640 to 680ml; the big stores sell Dove's Nourishment range instead. FairPrice's Detox Nourishment 650ml showed S$12.27 regular (S$7.35 promo until 1 May 2026, search snippet). On 29 Oct 2026 the page itself showed only 'any 2 for S$12.27'. Watsons lists Dove Nourishing Oil Care 680ml at S$12.25, which agrees. Price per 100ml: S$12.27 / 6.5 = S$1.89, which is S$1.73 before GST plus S$0.16 GST."
+    },
+    {
+      "id": "dove-340",
+      "group": "regular",
+      "name": "Dove Nourishing Secrets 340ml",
+      "option": "Priced on Dove Nourishment 340ml at Watsons, S$8.05",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 1.73,
+          "premium": 0.44,
+          "gst": 0.2
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 2.34
+        },
+        {
+          "year": 2024,
+          "value": 2.35
+        },
+        {
+          "year": 2025,
+          "value": 2.36
+        }
+      ],
+      "source": {
+        "url": "https://watsons.com.sg/nourishment-shampoo-340ml/p/BP_42715",
+        "verified": "2026-10-29",
+        "type": "secondary"
+      },
+      "notes": "Stand-in price. No 330 to 340ml Nourishing Secrets bottle was found in Singapore on 29 Oct 2026 (only a 250ml at a small shop for S$2.90, likely clearance). Watsons' Dove Nourishment Shampoo 340ml shows S$8.05 in search results; the page blocked us, so it may be a member or promo price. Price per 100ml: S$8.05 / 3.4 = S$2.37. That is the large-bottle S$1.73 plus S$0.44 small-bottle extra, before GST, plus S$0.20 GST."
+    },
+    {
+      "id": "sunsilk-340",
+      "group": "regular",
+      "name": "Sunsilk Stunning Black Shine 340ml",
+      "option": "Estimated about S$7.50, from Sunsilk 320ml at FairPrice",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 2.02,
+          "premium": 0,
+          "gst": 0.18
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 2.17
+        },
+        {
+          "year": 2024,
+          "value": 2.18
+        },
+        {
+          "year": 2025,
+          "value": 2.19
+        }
+      ],
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/sunsilk-hair-shampoo-hair-fall-solution-320ml-13085450",
+        "verified": "2026-10-29",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE. Black Shine was not found at FairPrice, Watsons, Guardian, Cold Storage, RedMart, Shopee or Lazada on 29 Oct 2026; only an overseas seller on Desertcart lists it. FairPrice sells Sunsilk Hair Fall Solution 320ml at S$7.03 (search snippet), or S$2.20 per 100ml, so a 340ml Black Shine would be about S$7.50. No larger Sunsilk bottle is sold at the big stores, so the whole price is in the base: S$2.02 before GST plus S$0.18 GST."
+    },
+    {
+      "id": "clear-400",
+      "group": "regular",
+      "name": "Clear Men Cool Sport Menthol 400ml",
+      "option": "Estimated about S$11.70 (650ml is S$16.50)",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 2.33,
+          "premium": 0.35,
+          "gst": 0.24
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 2.88
+        },
+        {
+          "year": 2024,
+          "value": 2.89
+        },
+        {
+          "year": 2025,
+          "value": 2.91
+        }
+      ],
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/clear-men-anti-dandruff-shampoo-cool-sport-menthol-650ml-13152208",
+        "verified": "2026-10-29",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE. No 330 to 400ml bottle was found at Singapore retailers on 29 Oct 2026. The 650ml is S$16.50 regular on the FairPrice page seen that day (promo S$9.75), and Watsons also shows S$16.50: S$2.54 per 100ml. We added about 15% for the smaller bottle, giving S$2.92 per 100ml, or about S$11.70 for 400ml. That is the large-bottle S$2.33 plus S$0.35 small-bottle extra, before GST, plus S$0.24 GST."
+    },
+    {
+      "id": "tresemme-670",
+      "group": "large",
+      "name": "TRESemmé Keratin Smooth 500ml",
+      "option": "500ml not sold here; priced on the 670ml, S$14.65",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 2.01,
+          "premium": 0,
+          "gst": 0.18
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 2.16
+        },
+        {
+          "year": 2024,
+          "value": 2.17
+        },
+        {
+          "year": 2025,
+          "value": 2.18
+        }
+      ],
+      "source": {
+        "url": "https://www.watsons.com.sg/tresemme-keratin-smooth-anti-frizz-shampoo-670ml/p/BP_17471",
+        "verified": "2026-10-29",
+        "type": "secondary"
+      },
+      "notes": "Keratin Smooth is sold in Singapore in 340ml and 670ml, not 500ml. We used the 670ml: S$14.65 at Watsons (search snippet; page blocked us), in line with S$14.64 for other TRESemmé 670ml shampoos at FairPrice. Price per 100ml: S$14.65 / 6.7 = S$2.19, which is S$2.01 before GST plus S$0.18 GST. For comparison, the 340ml is S$10.39 on the FairPrice page seen 29 Oct 2026, or S$3.06 per 100ml."
+    },
+    {
+      "id": "loreal-440",
+      "group": "regular",
+      "name": "L'Oréal Paris Elvive Extraordinary Oil 400ml",
+      "option": "Priced on Extraordinary Oil Sleek 440ml, S$19.70",
+      "currency": "SGD",
+      "duration": 5,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "base": 4.11,
+          "premium": 0,
+          "gst": 0.37
+        }
+      },
+      "history": [
+        {
+          "year": 2023,
+          "value": 4.41
+        },
+        {
+          "year": 2024,
+          "value": 4.44
+        },
+        {
+          "year": 2025,
+          "value": 4.46
+        }
+      ],
+      "source": {
+        "url": "https://www.fairprice.com.sg/product/l-oreal-paris-extraordinary-oil-shampoo-sleek-440ml-13188975",
+        "verified": "2026-10-29",
+        "type": "secondary"
+      },
+      "notes": "No 330 to 410ml Extraordinary Oil shampoo was found at the main Singapore retailers on 29 Oct 2026. FairPrice lists the Extraordinary Oil Sleek 440ml at S$19.70 regular, with S$15.75 until 1 Aug 2026 (search snippet). A small online shop sells a 400ml for S$6.90, likely a parallel import, so we left it out. Price per 100ml: S$19.70 / 4.4 = S$4.48, which is S$4.11 before GST plus S$0.37 GST. It is the dearest per 100ml here."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "pantene-680",
+      "pantene-340",
+      "hs-650"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-10-29",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 933090,
+      "output": 46932,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 56,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 0.6767749999999999,
+      "at": "2026-10-29T07:04:26.075Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 124,
+      "output": 53342,
+      "cacheRead": 1328004,
+      "cacheWrite": 179830,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 2.4092278000000005,
+      "at": "2026-10-29T07:04:26.075Z"
+    }
+  ]
+}
