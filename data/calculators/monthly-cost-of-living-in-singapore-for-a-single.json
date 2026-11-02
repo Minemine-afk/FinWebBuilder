@@ -1,0 +1,719 @@
+{
+  "kind": "estimate",
+  "id": "monthly-cost-of-living-in-singapore-for-a-single",
+  "title": "Monthly cost of living in Singapore for a single, couple or family",
+  "currency": "SGD",
+  "scope": "What a household in Singapore spends in a typical month in 2026, line by line: housing (renting a room or a whole home), utilities, broadband, food, transport, mobile plans, health insurance, childcare or school, children's other costs, personal care and clothing, leisure and holidays, and optionally a car and a domestic helper. Set the number of adults and children, pick a lifestyle level and switch lines on or off. Prices are monthly ranges in Singapore dollars.",
+  "limits": "Assumes a renting household; it does not include a home loan, property tax, CPF contributions, income tax, savings, allowances to parents or one-off costs such as furniture, deposits or agent fees. Rents are 2026 HDB medians by town (Q3 2026), URA-based condo lease ranges for the Outside Central Region, and 2026 room listings. Food, transport, personal care, leisure and children's other costs are our estimates built from the SingStat Household Expenditure Survey 2023 and 2026 prices, not a published budget. Utilities use the Q4 2026 SP Group tariff before U-Save rebates; the tariff changes every quarter. Childcare uses the 2026 anchor-operator fee cap after the basic subsidy for working mothers; extra means-tested subsidies are not deducted. Health insurance is premiums for adults aged 31 to 40 and can largely be paid from MediSave. Car and helper costs are all-in monthly estimates.",
+  "version": 1,
+  "updated": "2026-11-02",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 1287015,
+      "output": 88283,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 67,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 0.8428429999999998,
+      "at": "2026-11-02T18:30:13.375Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 106,
+      "output": 60291,
+      "cacheRead": 955690,
+      "cacheWrite": 204661,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 2.5809470000000005,
+      "at": "2026-11-02T18:30:13.375Z"
+    }
+  ],
+  "subject": "household",
+  "priceYear": 2026,
+  "inputs": [
+    {
+      "id": "adults",
+      "label": "Adults in the household",
+      "unit": "adults",
+      "default": 1,
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "rationale": "Food, transport, phone, health insurance, personal care and leisure are priced per adult; a single person is the default, set 2 for a couple.",
+      "choices": [
+        {
+          "label": "Single",
+          "value": 1
+        },
+        {
+          "label": "Couple",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "children",
+      "label": "Children",
+      "unit": "children",
+      "default": 0,
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "rationale": "Children's food, health cover, childcare or school and other costs are priced per child; a family of four is 2 adults and 2 children.",
+      "choices": [
+        {
+          "label": "No children",
+          "value": 0
+        },
+        {
+          "label": "1 child",
+          "value": 1
+        },
+        {
+          "label": "2 children",
+          "value": 2
+        }
+      ]
+    }
+  ],
+  "tiers": {
+    "label": "Lifestyle",
+    "options": [
+      {
+        "id": "budget",
+        "label": "Budget",
+        "note": "HDB in an outlying town, hawker meals and home cooking, MRT and bus, MediShield Life only, subsidised childcare.",
+        "rationale": "Close to a basic-needs budget: the cheapest common options most Singapore residents can actually get."
+      },
+      {
+        "id": "moderate",
+        "label": "Moderate",
+        "note": "4-room HDB or a master room, mix of hawker and restaurants, some Grab rides, a ward A/B1 Integrated Shield Plan, a commercial gym.",
+        "rationale": "Around the average Singapore household's spending in the SingStat Household Expenditure Survey, updated to 2026 prices."
+      },
+      {
+        "id": "comfortable",
+        "label": "Comfortable",
+        "note": "Condo outside the city centre, frequent restaurants, heavy ride-hailing, a private-hospital shield plan with rider, premium preschool, regular holidays.",
+        "rationale": "A well-off household that chooses private options for housing, health and education; not the top of the market."
+      }
+    ],
+    "default": "moderate"
+  },
+  "presets": {
+    "label": "Household",
+    "default": "single",
+    "options": [
+      {
+        "id": "single",
+        "label": "Single renting a room",
+        "note": "One adult renting a room; utilities and broadband are usually included in room rent.",
+        "rationale": "Most singles in Singapore who do not live with parents rent a room rather than a whole flat, and room rents commonly include utilities and Wi-Fi.",
+        "lines": [
+          "room-rent",
+          "food-adult",
+          "transport",
+          "mobile",
+          "health-adult",
+          "personal",
+          "leisure"
+        ]
+      },
+      {
+        "id": "couple",
+        "label": "Couple renting a whole home",
+        "note": "Set adults to 2. Rents a whole flat and pays its own utilities and broadband.",
+        "rationale": "A couple typically rents a whole flat (or waits for a BTO), so housing, utilities and broadband are household costs shared by both.",
+        "lines": [
+          "home-rent",
+          "utilities",
+          "broadband",
+          "food-adult",
+          "transport",
+          "mobile",
+          "health-adult",
+          "personal",
+          "leisure"
+        ]
+      },
+      {
+        "id": "family",
+        "label": "Family with children",
+        "note": "Set adults to 2 and children to 1 or 2. Adds children's food, health cover, childcare or school and other costs.",
+        "rationale": "A family adds per-child costs on top of the couple's whole-home budget; childcare is the largest of them for pre-schoolers.",
+        "lines": [
+          "home-rent",
+          "utilities",
+          "broadband",
+          "food-adult",
+          "food-child",
+          "transport",
+          "mobile",
+          "health-adult",
+          "health-child",
+          "childcare",
+          "child-other",
+          "personal",
+          "leisure"
+        ]
+      }
+    ]
+  },
+  "contingency": {
+    "default": 0.05,
+    "max": 0.2
+  },
+  "groups": [
+    {
+      "id": "housing",
+      "label": "Housing and utilities"
+    },
+    {
+      "id": "food",
+      "label": "Food"
+    },
+    {
+      "id": "transport",
+      "label": "Transport"
+    },
+    {
+      "id": "health",
+      "label": "Health insurance and care"
+    },
+    {
+      "id": "kids",
+      "label": "Children"
+    },
+    {
+      "id": "personal",
+      "label": "Phone, personal and leisure"
+    },
+    {
+      "id": "help",
+      "label": "Domestic help"
+    }
+  ],
+  "lines": [
+    {
+      "id": "room-rent",
+      "group": "housing",
+      "label": "Rent: a room in a shared flat",
+      "description": "Common room in an HDB flat (budget), master room or room nearer town (moderate), room in a condo (comfortable). Usually includes utilities and Wi-Fi.",
+      "per": "fixed",
+      "unit": "per room per month",
+      "qty": 1,
+      "qtyMax": 3,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 750,
+          "high": 1000
+        },
+        "moderate": {
+          "low": 1200,
+          "high": 1600
+        },
+        "comfortable": {
+          "low": 1400,
+          "high": 2400
+        }
+      },
+      "source": {
+        "url": "https://www.99.co/singapore/rent/rooms/hdb",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "From 2026 asking rents on 99.co and PropertyGuru (checked Nov 2026): HDB common rooms in Yishun S$750 to S$880, Woodlands S$800, Boon Lay S$1,000 including utilities; master rooms in Choa Chu Kang S$1,200, Ang Mo Kio S$1,300, Jurong East S$1,500; condo rooms S$1,390 to S$2,200 (https://www.99.co/singapore/rent/rooms/condos-apartments). Cross-check: Cove's guide of 8 Apr 2026 gives a standard-room median of S$1,550 (https://blog.cove.sg/cost-to-rent-in-singapore/). No official room-rent statistics exist.",
+      "rationale": "Our estimate, worked out from the lowest and highest 2026 asking rents on 99.co and PropertyGuru for each room type, because HDB and URA publish no room-rent statistics; signed rents can be a little lower."
+    },
+    {
+      "id": "home-rent",
+      "group": "housing",
+      "label": "Rent: a whole home",
+      "description": "Whole 3-room HDB flat (budget), whole 4-room HDB flat (moderate), 2 to 3 bedroom condo outside the central region (comfortable).",
+      "per": "fixed",
+      "unit": "per home per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 2600,
+          "high": 3300
+        },
+        "moderate": {
+          "low": 3000,
+          "high": 4800
+        },
+        "comfortable": {
+          "low": 3350,
+          "high": 5200
+        }
+      },
+      "source": {
+        "url": "https://themoneybees.co/blog/hdb-rent-prices",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "HDB median rents for Q3 2026 by town (released 23 Oct 2026, as republished by The Money Bees on 28 Oct 2026): 3-room from S$2,600 (Woodlands) to S$3,300 (Central); 4-room from S$3,000 (Bukit Panjang) to S$4,800 (Central), with most towns below about S$4,100. HDB's Q2 2026 table: https://www.hdb.gov.sg/-/media/hdb-pulse/news/2026/20260724-2nd-quarter-2026-public-housing-data-and-upcoming-flat-supply/Annex-D.pdf. Condo: PropKaki's analysis of URA lease records for leases starting Q4 2025 to Q3 2026 (https://propkaki.sg/market/questions/how-much-does-it-cost-to-rent-a-condo-in-singapore): OCR 2-bedroom middle half S$3,350 to S$4,000 (median S$3,600), 3-bedroom S$4,150 to S$5,200 (median S$4,600).",
+      "rationale": "Low and high are the cheapest and dearest town medians for HDB, and the 25th to 75th percentile of signed OCR condo leases, so they span typical rather than extreme rents."
+    },
+    {
+      "id": "utilities",
+      "group": "housing",
+      "label": "Electricity, water and gas",
+      "description": "SP Group bill for the whole home: average usage for a 3-room HDB (budget), 4-room HDB (moderate), 5-room HDB or condo (comfortable).",
+      "per": "fixed",
+      "unit": "per home per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 140,
+          "high": 170
+        },
+        "moderate": {
+          "low": 185,
+          "high": 220
+        },
+        "comfortable": {
+          "low": 220,
+          "high": 270
+        }
+      },
+      "source": {
+        "url": "https://www.spgroup.com.sg/our-services/utilities/tariff-information",
+        "verified": "2026-11-02",
+        "type": "official"
+      },
+      "notes": "Electricity tariff Q4 2026 (1 Oct to 31 Dec): 31.16 cents/kWh with GST (SP Group); Q3 2026 was 34.78 cents, used for the high end. Average 2024 household use from MSE's written parliamentary reply of 24 Sep 2025 (https://www.mse.gov.sg/latest-news/written-reply-to-parliamentary-question-on--monthly-average-electricity-and-water-consumption-rates-for-households/): 3-room 276 kWh and 12.2 m3 water, 4-room 381 kWh and 15.4 m3, 5-room 464 kWh, condo 522 kWh. Water about S$3.53/m3 all-in with GST (our calculation from the SP tariff plus water conservation tax and waterborne fee). Gas S$12 to S$35 is our estimate (50 to 150 kWh of town gas at 23.38 cents).",
+      "rationale": "Average usage for the flat type times the current tariff, before U-Save rebates (HDB households get some back; condos do not). Switched off for room renters because room rent usually includes utilities."
+    },
+    {
+      "id": "broadband",
+      "group": "housing",
+      "label": "Home fibre broadband",
+      "description": "Budget 10Gbps plan (eight, M1), mainstream telco plan, or premium plan with mesh Wi-Fi.",
+      "per": "fixed",
+      "unit": "per home per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 27,
+          "high": 35
+        },
+        "moderate": {
+          "low": 35,
+          "high": 50
+        },
+        "comfortable": {
+          "low": 60,
+          "high": 108
+        }
+      },
+      "source": {
+        "url": "https://www.eight.com.sg/wp-content/uploads/2026/03/eight_CIS_28.80_10GGpbs-Home-Internet_20260323.pdf",
+        "verified": "2026-11-02",
+        "type": "official"
+      },
+      "notes": "Budget: eight 10Gbps S$28.80 to S$35.80 (price sheet 23 Mar 2026), M1 HomePac about S$26.90 (themoneybees, 2026). Moderate: M1 10Gbps S$34.90 (from Oct 2025), ViewQwest S$38.75, StarHub S$38.90 and Singtel mesh S$49.70 promo (https://themoneybees.co/blog/best-fibre-broadband-singapore, Jun 2026). Comfortable: MyRepublic HyperSpeed S$59.99, Singtel 10Gbps S$65.90 to S$107.90 with mesh (WhistleOut, https://www.whistleout.com.sg/Broadband/Providers/Singtel/Fibre/Singtel-10Gbps-Fibre-Broadband-Mesh).",
+      "rationale": "Mostly 24-month contract promo prices; after the contract some plans reprice much higher."
+    },
+    {
+      "id": "food-adult",
+      "group": "food",
+      "label": "Food per adult (meals out and groceries)",
+      "description": "Hawker and home cooking (budget); hawker, food court and a few restaurant meals (moderate); frequent restaurants and premium groceries (comfortable).",
+      "per": "adults",
+      "unit": "per adult per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 300,
+          "high": 450
+        },
+        "moderate": {
+          "low": 450,
+          "high": 750
+        },
+        "comfortable": {
+          "low": 800,
+          "high": 1500
+        }
+      },
+      "source": {
+        "url": "https://mothership.sg/2025/01/singapore-average-monthly-household-spending-increase-2023/",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "Anchor: SingStat Household Expenditure Survey 2023 (reported 21 Jan 2025) shows S$1,422 a month on food per household, S$966 of it eating out (SingStat press release 28 Nov 2024, https://singstat.gov.sg/-/media/files/news/press28112024.ashx), about S$476 per person, or about S$500 at 2026 prices (our inflation assumption). IPS Makan Index (Mar 2023) found hawker breakfast S$4.81, lunch S$6.01, dinner S$6.20, about S$510 a month for three hawker meals a day. Restaurant meals S$20 to S$40 (SmartCalculator, 2026). Tier ranges are our estimate from these anchors.",
+      "rationale": "Moderate is centred on the survey average per person; budget is below an all-hawker diet thanks to home cooking; comfortable adds 10 to 20 restaurant meals a month."
+    },
+    {
+      "id": "food-child",
+      "group": "food",
+      "label": "Food per child",
+      "description": "Share of groceries plus school canteen or preschool snacks.",
+      "per": "children",
+      "unit": "per child per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 150,
+          "high": 250
+        },
+        "moderate": {
+          "low": 250,
+          "high": 400
+        },
+        "comfortable": {
+          "low": 400,
+          "high": 700
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/cost-of-raising-child",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "No source gives food spending per child. Built from primary school canteen spending of S$80 to S$150 a month (2026 guide) plus a share of household groceries (S$456 a month per household in HES 2023, https://dollarsandsense.sg/average-singaporean-household-spend-month-groceries/). Our estimate.",
+      "rationale": "Our estimate, worked out as canteen or preschool snacks (S$80 to S$150) plus roughly half an adult's share of household groceries; full-day childcare includes most meals, so pre-schoolers sit at the low end."
+    },
+    {
+      "id": "transport",
+      "group": "transport",
+      "label": "Public transport and rides per adult",
+      "description": "MRT and bus only (budget); concession pass plus occasional Grab (moderate); heavy ride-hailing (comfortable).",
+      "per": "adults",
+      "unit": "per adult per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 85,
+          "high": 122
+        },
+        "moderate": {
+          "low": 180,
+          "high": 260
+        },
+        "comfortable": {
+          "low": 500,
+          "high": 800
+        }
+      },
+      "source": {
+        "url": "https://www.ptc.gov.sg/fares/public-transport-fares-and-passes",
+        "verified": "2026-11-02",
+        "type": "official"
+      },
+      "notes": "Adult monthly travel pass S$122 for citizens and PRs, cut from S$128 on 27 Dec 2025 (PTC, checked Nov 2026). Pay-as-you-go commuting S$85 to S$120 and Grab at about S$14 a ride, heavy users S$550 to S$700 (https://www.smartcalculator.sg/articles/singapore-transport-cost-comparison-2026, 29 Apr 2026); typical Grab spend S$400 to S$800 (https://sgfinancecalculators.com/lifestyle/grab-vs-gojek-vs-car-ownership-comparison, Jul 2026). Moderate and comfortable ranges are our estimate.",
+      "rationale": "Budget tops out at the monthly pass; moderate adds 4 to 10 Grab rides; comfortable assumes about two rides a working day."
+    },
+    {
+      "id": "car",
+      "group": "transport",
+      "label": "Owning a car",
+      "description": "All-in monthly cost: depreciation including COE, loan interest, insurance, road tax, petrol, parking and ERP. Mass-market Cat A car for budget and moderate, premium Cat B car for comfortable.",
+      "per": "fixed",
+      "unit": "per car per month",
+      "qty": 1,
+      "qtyMax": 3,
+      "optional": true,
+      "prices": {
+        "budget": {
+          "low": 2200,
+          "high": 2800
+        },
+        "moderate": {
+          "low": 2200,
+          "high": 3300
+        },
+        "comfortable": {
+          "low": 3500,
+          "high": 5500
+        }
+      },
+      "source": {
+        "url": "https://ownershipguide.pages.dev/monthly-cost-of-owning-a-car-singapore",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "COE closed at S$132,004 (Cat A) and S$131,901 (Cat B) on 21 Oct 2026 (https://littlebigreddot.com/?p=29252). Ownership guide (14 Apr 2026) totals S$1,925 to S$3,460 a month for a mainstream car; SmartCalculator (29 Apr 2026) S$2,127 to S$2,677 excluding depreciation. Our tiers assume a S$170k to S$200k Cat A car or a S$280k to S$400k Cat B car written off over 10 years, plus running costs.",
+      "rationale": "Our estimate, worked out as a car priced at today's COE written off over 10 years plus interest, insurance, road tax, petrol, parking and ERP from the cited breakdowns. Off by default because most households do without a car."
+    },
+    {
+      "id": "health-adult",
+      "group": "health",
+      "label": "Health insurance and clinic visits per adult",
+      "description": "MediShield Life plus polyclinic visits (budget); public-hospital ward A/B1 Integrated Shield Plan (moderate); private-hospital plan with rider (comfortable).",
+      "per": "adults",
+      "unit": "per adult per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 40,
+          "high": 65
+        },
+        "moderate": {
+          "low": 75,
+          "high": 105
+        },
+        "comfortable": {
+          "low": 140,
+          "high": 200
+        }
+      },
+      "source": {
+        "url": "https://www.moh.gov.sg/healthcare-schemes-subsidies/medishield-life/medishield-life-premiums-and-subsidies/premium-subsidy-tables",
+        "verified": "2026-11-02",
+        "type": "official"
+      },
+      "notes": "MediShield Life age 31 to 40: S$503 a year (S$42 a month) with GST before subsidy (MOH, rates from 1 Apr 2025). Polyclinic consultation S$13.20 (SingHealth) to S$18.50 (NHG); out-of-pocket care estimated at S$8 to S$25 a month. Ward A/B1 plans S$823 to S$980 a year including MediShield Life (https://thekopinotes.com/?p=6885; https://www.smartcalculator.sg/articles/integrated-shield-plan-compare-sg-2026, updated 3 Oct 2026). Private plan: AIA Gold Max A S$773 to S$843 a year (thekopinotes, Jun 2026) up to about S$1,290, plus AIA rider S$788 a year cash (AIA price sheet). Each level adds about S$8 to S$25 of clinic costs.",
+      "rationale": "Annual premiums divided by 12 for ages 31 to 40, plus routine clinic visits. Shield premiums can mostly be paid from MediSave; riders are cash."
+    },
+    {
+      "id": "health-child",
+      "group": "health",
+      "label": "Health insurance and clinic visits per child",
+      "description": "MediShield Life for a child, optionally with an Integrated Shield Plan and rider.",
+      "per": "children",
+      "unit": "per child per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 13,
+          "high": 25
+        },
+        "moderate": {
+          "low": 25,
+          "high": 40
+        },
+        "comfortable": {
+          "low": 50,
+          "high": 75
+        }
+      },
+      "source": {
+        "url": "https://www.moh.gov.sg/healthcare-schemes-subsidies/medishield-life/medishield-life-premiums-and-subsidies/premium-subsidy-tables",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "MediShield Life for a child: S$200 a year (S$16.67 a month), S$12.50 after a 25% subsidy (MOH). Child Integrated Shield Plan premiums could not be found; moderate assumes a S$100 to S$250 a year top-up and comfortable adds a S$150 to S$300 rider, our estimate.",
+      "rationale": "Budget is the official MediShield Life premium plus a little for clinic visits; the higher levels are estimates because insurers' child rates were not published in sources found."
+    },
+    {
+      "id": "childcare",
+      "group": "kids",
+      "label": "Childcare, preschool or school per child",
+      "description": "Anchor-operator full-day childcare after the basic subsidy (budget); private childcare or school plus tuition (moderate); premium preschool or international school (comfortable).",
+      "per": "children",
+      "unit": "per child per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 365,
+          "high": 665
+        },
+        "moderate": {
+          "low": 700,
+          "high": 1700
+        },
+        "comfortable": {
+          "low": 2800,
+          "high": 4600
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/childcare-infant-subsidy-sg-2026",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Anchor-operator full-day fee cap S$610 before GST from 1 Jan 2026 (also https://mothership.sg/2025/03/preschool-fee-caps-lowered-affordable/), S$665 with GST, or about S$365 after the S$300 basic subsidy for working mothers. Private childcare S$1,000 to S$2,000 (https://blog.moneysmart.sg/family/government-vs-private-childcare-what-are-you-really-paying-for/, 2025); tuition S$180 to S$350 a month group, home tutor median S$325 at primary (MindFlex survey, 21 Oct 2026). Premium: MindChamps full-day S$2,796 with GST (2026), Odyssey S$3,379; international primary schools S$25,000 to S$55,000 a year (https://www.expatarrivals.com/article/singapore-international-school-fees-20262027).",
+      "rationale": "A pre-schooler in full-day care is the costliest case; MOE primary school is free for citizens apart from small miscellaneous fees, so for a school-age child set this to the tuition you pay or switch it off."
+    },
+    {
+      "id": "child-other",
+      "group": "kids",
+      "label": "Other child costs (diapers, clothes, toys, enrichment)",
+      "description": "Everyday child spending beyond food, health and school fees.",
+      "per": "children",
+      "unit": "per child per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 100,
+          "high": 200
+        },
+        "moderate": {
+          "low": 200,
+          "high": 350
+        },
+        "comfortable": {
+          "low": 350,
+          "high": 600
+        }
+      },
+      "source": {
+        "url": "https://www.smartcalculator.sg/articles/cost-of-raising-child",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "Diapers S$80 to S$120 a month in the first year (search result, undated); clothing S$30 to S$80 our estimate; DollarsAndSense assumes a flat S$300 a month per child for books, toys and clothes. Ranges are our estimate.",
+      "rationale": "Our estimate, worked out by adding diaper costs (S$80 to S$120) and clothing (S$30 to S$80), then toys and enrichment classes at the higher levels, since no published breakdown exists."
+    },
+    {
+      "id": "mobile",
+      "group": "personal",
+      "label": "Mobile phone plan per adult",
+      "description": "SIM-only plan from a budget brand (budget), mid-range plan (moderate), main telco plan (comfortable).",
+      "per": "adults",
+      "unit": "per adult per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 8,
+          "high": 12
+        },
+        "moderate": {
+          "low": 15,
+          "high": 30
+        },
+        "comfortable": {
+          "low": 32,
+          "high": 50
+        }
+      },
+      "source": {
+        "url": "https://techradar.whistleout.com.sg/MobilePhones/Reviews/gomo-vs-giga-vs-simba-vs-circles-life",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Budget: Circles.Life S$8, SIMBA S$10, GOMO S$10.80 to S$12, giga S$10.90 (WhistleOut, updated 10 Feb 2026). Moderate: M1 S$14.95 intro, StarHub S$22, giga and Circles.Life 1TB S$28 to S$30. Comfortable: StarHub S$32, Singtel S$35 to S$40, GOMO top plan S$50 (https://www.whistleout.com.sg/MobilePhones/Reviews/singtel-mobile-plans-review). Excludes handset instalments.",
+      "rationale": "SIM-only plan prices; phone instalments are not included."
+    },
+    {
+      "id": "personal",
+      "group": "personal",
+      "label": "Personal care, clothing and household supplies per adult",
+      "description": "Toiletries, haircuts, clothes and shoes, cleaning supplies.",
+      "per": "adults",
+      "unit": "per adult per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 60,
+          "high": 90
+        },
+        "moderate": {
+          "low": 120,
+          "high": 200
+        },
+        "comfortable": {
+          "low": 300,
+          "high": 600
+        }
+      },
+      "source": {
+        "url": "https://www.singstat.gov.sg/-/media/files/find_data/household/hes2023-key-indicators.ashx",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "HES 2023 (released Nov 2024): clothing and footwear S$120 and personal care S$149 per household a month, about S$87 per person at 3.11 persons per household; about S$112 with household supplies. Haircuts S$14 at QB House to S$30 to S$80 at a salon (https://themoneybees.co/blog/cheap-haircut-singapore-barber-shop, 2026). Tier ranges are our estimate.",
+      "rationale": "Moderate sits a little above the survey average per person because adults spend more than children; budget assumes S$14 haircuts and few new clothes."
+    },
+    {
+      "id": "leisure",
+      "group": "personal",
+      "label": "Leisure, gym, streaming and holidays per adult",
+      "description": "Gym, streaming, films, outings, bars and an allowance for holidays spread over the year.",
+      "per": "adults",
+      "unit": "per adult per month",
+      "qty": 1,
+      "qtyMax": 1,
+      "optional": false,
+      "prices": {
+        "budget": {
+          "low": 100,
+          "high": 200
+        },
+        "moderate": {
+          "low": 350,
+          "high": 650
+        },
+        "comfortable": {
+          "low": 1100,
+          "high": 1900
+        }
+      },
+      "source": {
+        "url": "https://mothership.sg/2025/01/singapore-average-monthly-household-spending-increase-2023/",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "HES 2023: recreation and culture S$335 and overseas travel S$297 per household a month. Prices in 2026: ActiveSG gym S$2.50 an entry or S$15 to S$30 a month; Anytime Fitness S$98 to S$158 (https://dollarsandsense.sg/singapore-gym-membership-cheatsheet/); Virgin Active S$59 to S$82 a week (https://virginactive.com.sg/membership-info); Netflix S$15.98 to S$29.98; Golden Village S$11.50 to S$17. Short trip about S$820 per person (Populix, Aug 2025); 7-night trip about S$3,190 (Klook via Alvinology, 14 Feb 2026). Tier ranges are our estimate.",
+      "rationale": "Budget assumes ActiveSG and one short trip a year; moderate a commercial gym and two trips; comfortable a premium gym and S$5,000 to S$8,000 of travel a year."
+    },
+    {
+      "id": "helper",
+      "group": "help",
+      "label": "Foreign domestic helper",
+      "description": "Salary, MOM levy, food and lodging, insurance, medical checks and agency fee spread over a two-year contract.",
+      "per": "fixed",
+      "unit": "per helper per month",
+      "qty": 1,
+      "qtyMax": 2,
+      "optional": true,
+      "prices": {
+        "budget": {
+          "low": 750,
+          "high": 950
+        },
+        "moderate": {
+          "low": 1100,
+          "high": 1350
+        },
+        "comfortable": {
+          "low": 1400,
+          "high": 1650
+        }
+      },
+      "source": {
+        "url": "https://income.com.sg/blog/helper-costs",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Levy S$300 a month normal rate or S$60 concession rate, e.g. with a child under 16 or an elderly member (https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-domestic-worker/foreign-domestic-worker-levy/paying-levy, updated 8 Jul 2026). Income (13 Mar 2026): salary S$450 to S$700 (average S$597), food and upkeep about S$150, insurance about S$20 a month, agency fee S$1,000 to S$3,000 one-off; totals S$780 to S$1,030 with concession levy, S$1,020 to S$1,270 normal levy. SmartCalculator gives up to S$1,650 for experienced helpers.",
+      "rationale": "Budget uses the concession levy that most families with young children qualify for; moderate and comfortable use the normal levy and higher salaries."
+    }
+  ]
+}
