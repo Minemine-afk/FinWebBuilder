@@ -34,7 +34,7 @@ function StatusLine({ status }: { status: Status }) {
 type SetupState = { github: { ok: boolean; message: string }; secrets: { CLAUDE_CODE_OAUTH_TOKEN: boolean; ANTHROPIC_API_KEY: boolean } };
 
 /** Connect Claude without opening GitHub's secrets page: paste a subscription token or API key and the server stores it as the repository secret. */
-function SetupPanel({ passcode }: { passcode: string }) {
+export function SetupPanel({ passcode }: { passcode: string }) {
   const [status, setStatus] = useState<SetupState | null>(null);
   const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
   const [busy, setBusy] = useState(false);
@@ -64,7 +64,7 @@ function SetupPanel({ passcode }: { passcode: string }) {
   ];
 
   return (
-    <div className="mt-8 max-w-md border-t border-border pt-6">
+    <div className="rounded-xl border border-border bg-sidebar p-6">
       <h3 className="font-semibold">Setup: connect Claude</h3>
       <p className="mt-1 text-xs text-muted">Paste a credential here and the site saves it, encrypted, as the repository&rsquo;s secret on GitHub. It is not kept on this site or in your browser, and nobody can read it back.</p>
       <button type="button" className={button} disabled={!passcode || busy} onClick={() => act({ action: "status" })}>
@@ -101,7 +101,7 @@ function SetupPanel({ passcode }: { passcode: string }) {
   );
 }
 
-function ClaudeLinkCheck({ passcode }: { passcode: string }) {
+export function ClaudeLinkCheck({ passcode }: { passcode: string }) {
   const [state, setState] = useState<{ kind: "idle" } | { kind: "working"; note: string } | { kind: "ok" | "fail"; text: string; url?: string }>({ kind: "idle" });
 
   async function call(since?: string) {
@@ -130,7 +130,7 @@ function ClaudeLinkCheck({ passcode }: { passcode: string }) {
   }
 
   return (
-    <div className="mt-8 max-w-md border-t border-border pt-6">
+    <div className="rounded-xl border border-border bg-sidebar p-6">
       <h3 className="font-semibold">Check Claude link</h3>
       <p className="mt-1 text-xs text-muted">Makes one tiny test call to confirm the builder can reach Claude. A subscription token is stored only in GitHub, so that check runs there for about a minute.</p>
       <button type="button" className={button} disabled={!passcode || state.kind === "working"} onClick={run}>Check now</button>
@@ -149,25 +149,28 @@ function ClaudeLinkCheck({ passcode }: { passcode: string }) {
 const input = "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2";
 const button = "mt-4 rounded-lg bg-accent-fill px-4 py-2 font-medium text-on-accent disabled:opacity-60";
 
-export function BuilderForms({ calculators }: { calculators: { id: string; title: string }[] }) {
-  const [passcode, setPasscode] = useState("");
+export function PasscodeField({ passcode, setPasscode }: { passcode: string; setPasscode: (v: string) => void }) {
+  return (
+    <label className="mt-4 block max-w-xs text-sm font-medium">
+      Passcode
+      <input className={input} type="password" autoComplete="current-password" value={passcode} onChange={(e) => setPasscode(e.target.value)} />
+    </label>
+  );
+}
+
+export function BuilderPanel({ calculators, passcode, setPasscode }: { calculators: { id: string; title: string }[]; passcode: string; setPasscode: (v: string) => void }) {
   const [slug, setSlug] = useState(calculators[0]?.id ?? "");
   const [prompt, setPrompt] = useState("");
   const [buildStatus, setBuildStatus] = useState<Status>({ kind: "idle" });
   const [refineStatus, setRefineStatus] = useState<Status>({ kind: "idle" });
-  const [removeSlug, setRemoveSlug] = useState("");
-  const [removeStatus, setRemoveStatus] = useState<Status>({ kind: "idle" });
 
   return (
-    <section className="mt-12 rounded-xl border border-border bg-sidebar p-6" aria-labelledby="builder-heading">
+    <section className="mt-8 rounded-xl border border-border bg-sidebar p-6" aria-labelledby="builder-heading">
       <h2 id="builder-heading" className="text-xl font-semibold">Build or refine a calculator</h2>
       <p className="mt-1 text-sm text-muted">
         The research agent searches the web for current prices. A new calculator or a refinement goes live on its own in about 5 to 10 minutes, with no approval step.
       </p>
-      <label className="mt-4 block max-w-xs text-sm font-medium">
-        Passcode
-        <input className={input} type="password" autoComplete="current-password" value={passcode} onChange={(e) => setPasscode(e.target.value)} />
-      </label>
+      <PasscodeField passcode={passcode} setPasscode={setPasscode} />
 
       <div className="mt-6 grid gap-8 md:grid-cols-2">
         <div>
@@ -208,9 +211,17 @@ export function BuilderForms({ calculators }: { calculators: { id: string; title
           <StatusLine status={refineStatus} />
         </form>
       </div>
+    </section>
+  );
+}
 
+export function RemovePanel({ calculators, passcode }: { calculators: { id: string; title: string }[]; passcode: string }) {
+  const [removeSlug, setRemoveSlug] = useState("");
+  const [removeStatus, setRemoveStatus] = useState<Status>({ kind: "idle" });
+  return (
+    <section className="mt-8 rounded-xl border border-border bg-sidebar p-6" aria-label="Remove a calculator">
       <form
-        className="mt-8 max-w-md border-t border-border pt-6"
+        className="max-w-md"
         onSubmit={async (e) => {
           e.preventDefault();
           const title = calculators.find((c) => c.id === removeSlug)?.title;
@@ -233,9 +244,6 @@ export function BuilderForms({ calculators }: { calculators: { id: string; title
         <button className={button} disabled={removeStatus.kind === "sending" || !removeSlug}>Remove it</button>
         <StatusLine status={removeStatus} />
       </form>
-
-      <SetupPanel passcode={passcode} />
-      <ClaudeLinkCheck passcode={passcode} />
     </section>
   );
 }
