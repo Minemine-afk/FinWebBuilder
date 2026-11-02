@@ -35,7 +35,11 @@ export function HomeShell({ calculators, header, cards }: { calculators: Sidebar
               {header}
               <BuilderPanel calculators={calculators} passcode={passcode} setPasscode={setPasscode} />
               <BuildProgress />
+            </>
+          ) : view === "all" ? (
+            <>
               {cards}
+              <PasscodeField passcode={passcode} setPasscode={setPasscode} />
               <RemovePanel calculators={calculators} passcode={passcode} />
             </>
           ) : (

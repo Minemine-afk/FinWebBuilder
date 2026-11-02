@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export type SidebarCalculator = { id: string; title: string };
-export type View = "home" | "setup" | "check";
+export type View = "home" | "all" | "setup" | "check";
 
 const RECENT_COUNT = 5;
 
@@ -83,8 +83,11 @@ export function Sidebar({ calculators, view, onView }: { calculators: SidebarCal
       <button type="button" className="px-1 py-1 text-left text-base font-semibold" onClick={() => onView("home")}>
         Finexis calculators
       </button>
-      <button type="button" className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-left hover:border-accent" onClick={() => onView("home")}>
+      <button type="button" aria-current={view === "home" ? "page" : undefined} className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-left hover:border-accent ${view === "home" ? "border-accent bg-chip font-semibold" : "border-border bg-surface"}`} onClick={() => onView("home")}>
         <span aria-hidden="true">＋</span> New calculator
+      </button>
+      <button type="button" aria-current={view === "all" ? "page" : undefined} className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-left hover:border-accent ${view === "all" ? "border-accent bg-chip font-semibold" : "border-border bg-surface"}`} onClick={() => onView("all")}>
+        <span aria-hidden="true">▦</span> Show all calculators
       </button>
 
       <div className="relative">
