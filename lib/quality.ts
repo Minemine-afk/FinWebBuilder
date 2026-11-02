@@ -18,7 +18,7 @@ export interface QualityOptions {
   today?: Date;
 }
 
-export const DEFAULT_MIN_ITEMS = { compare: 3, estimate: 6, projection: 3 } as const;
+export const DEFAULT_MIN_ITEMS = { compare: 3, estimate: 6, projection: 3, probability: 2 } as const;
 /** Sources older than this were last checked too long ago to call current. */
 const STALE_DAYS = 400;
 
@@ -104,6 +104,19 @@ export function checkQuality(spec: Spec, opts: QualityOptions = {}): QualityIssu
       if (g !== null && (g < -0.2 || g > 0.5)) out.push({ level: "warning", where, message: `price history implies ${(g * 100).toFixed(1)}% a year; check the figures.` });
     }
     if (spec.providers && spec.providers.options.length < 3) out.push({ level: "warning", where: "providers", message: "has fewer than 3 providers to compare." });
+  } else if (spec.kind === "probability") {
+    if (spec.items.length < min) err("items", `has ${spec.items.length} portfolios; this topic needs at least ${min}.`);
+    for (const it of spec.items) {
+      const where = `Portfolio "${it.name}"`;
+      sourceIssues(`${where} source`, it.source, today, out);
+      rationaleIssue(`${where} rationale`, it.rationale ?? it.notes, it.source, out);
+      if (it.volatility < 0.01) out.push({ level: "warning", where, message: "has almost no volatility; a probability needs a realistic spread." });
+      if (it.expectedReturn > 0.15) out.push({ level: "warning", where, message: `expected return ${(it.expectedReturn * 100).toFixed(1)}% a year is very high; check the figure.` });
+    }
+    const ranked = [...spec.items].sort((a, b) => a.volatility - b.volatility);
+    for (let i = 1; i < ranked.length; i++) {
+      if (ranked[i].expectedReturn < ranked[i - 1].expectedReturn - 0.01) out.push({ level: "warning", where: `Portfolio "${ranked[i].name}"`, message: `is more volatile than "${ranked[i - 1].name}" but expects a lower return; check both figures.` });
+    }
   } else {
     // A projection of one typed-in amount (savings toward a goal) has one item by design.
     if (spec.startMode === "item" && spec.items.length < min) err("items", `has ${spec.items.length} items; this topic needs at least ${min}.`);

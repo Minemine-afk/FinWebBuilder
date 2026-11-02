@@ -59,6 +59,7 @@ export const FORMAT_EXAMPLES = {
   compare: "agent/examples/compare.json",
   estimate: "agent/examples/estimate.json",
   projection: "agent/examples/projection.json",
+  probability: "agent/examples/probability.json",
 } as const;
 
 /** Which model the price-researcher sub-agents run on; a build can ask for Opus when the research is hard. */
@@ -70,6 +71,7 @@ const RESEARCH_BY_KIND = {
   compare: "one or two options per call: the current prices of each cost component",
   estimate: "one or two groups of lines per call: a realistic low and high price for one unit of each line at every quality level, with the size or quantity the price assumes",
   projection: "one or two items per call: today's value or price, plus its yearly growth or return over recent years and any published current rate, so low, base and high rates can be chosen",
+  probability: "one or two portfolios or asset mixes per call: a long-run average yearly return before inflation and the yearly volatility (standard deviation), from a published long-run dataset or a fund provider's capital-market assumptions, with the period each covers",
 } as const;
 
 export function buildPrompt(state: RunState, request: string, research: "sonnet" | "opus" = "opus", extras: PromptExtras = {}): string {
@@ -101,6 +103,7 @@ ${validateStep(4)}`
    - compare: the topic is a choice between options ("A vs B", "which X", owning or using one thing versus another) and the answer is the total cost of each over a period.
    - estimate: the topic is the cost of one project or purchase whose price depends on size, scope or quality ("how much does X cost", "wedding", "renovation").
    - projection: the topic is about the future: a price or value growing over time ("future price of X", "how much will Y be worth"), or saving or investing toward a goal.
+   - probability: the topic asks whether money will last or a goal will be met when returns are uncertain ("will my savings last in retirement", "how much can I withdraw"); the answer is a chance, not a single number.
    If a topic could fit two, choose the one the reader most likely wants an answer from. Set "kind" to your choice. Notes: ${Object.entries(FORMAT_EXAMPLES).map(([k, f]) => `agent/formats/${k}.md with ${f}`).join("; ")}.`}
 2. Plan the calculator yourself, as the kind's notes describe, with real options, lines or items people would recognise.${extras.cache ? " Items listed under \"Prices already researched\" below need no research; plan around them." : ""}
 3. Hand the price research to the price-researcher sub-agent, one or two options, lines or items per call, several calls in parallel. For this kind, ask for: compare = ${RESEARCH_BY_KIND.compare}; estimate = ${RESEARCH_BY_KIND.estimate}; projection = ${RESEARCH_BY_KIND.projection}. ${research === "opus" ? agentModel.trim() : "It runs on a cheaper model."} Start every sub-agent in the foreground and wait for all of them to report: this is a single non-interactive run, so if you end your turn before the notes are back, nothing is saved. Never end your turn saying you will wait; the run is over when you stop.

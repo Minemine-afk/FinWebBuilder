@@ -8,11 +8,12 @@ import { KINDS, type Kind } from "./spec";
  * Plain data and maths with no Node imports, so both the site and the build scripts use it.
  */
 
-export const KIND_LABELS: Record<Kind, string> = { compare: "Comparison", estimate: "Cost estimate", projection: "Projection over time" };
+export const KIND_LABELS: Record<Kind, string> = { compare: "Comparison", estimate: "Cost estimate", projection: "Projection over time", probability: "Chance of success" };
 export const KIND_HELP: Record<Kind, string> = {
   compare: "Options side by side: the total cost of each over a period.",
   estimate: "What one project or purchase costs, line by line, with a low to high range.",
   projection: "How a price or value grows over time.",
+  probability: "The chance a savings plan lasts through uncertain markets.",
 };
 
 const KindSchema = z.enum(KINDS);
@@ -61,6 +62,7 @@ export type PlanChoice = z.infer<typeof PlanChoiceSchema>;
 /** Picks a kind from the wording alone, or null when the words don't say. */
 export function guessKind(topic: string): Kind | null {
   const t = topic.toLowerCase();
+  if (/\b(retire|retirement|monte carlo|run out of money|safe withdrawal|probability of)\b/.test(t)) return "probability";
   if (/\b(vs|versus|compare|comparison|which|better|or)\b/.test(t)) return "compare";
   if (/\b(future|forecast|predict|grow|growth|worth|appreciat|trend|over time)\b|in \d+ years/.test(t)) return "projection";
   if (/\b(how much|cost of|costs?|price of|budget|wedding|renovation|baby|fees?)\b/.test(t)) return "estimate";
@@ -139,9 +141,10 @@ Choose the calculator kind:
 - compare: a choice between options; the answer is each one's total cost over a period.
 - estimate: the cost of one project or purchase whose price depends on size, scope or quality.
 - projection: a price or value over future years.
+- probability: the chance savings last through uncertain markets while spending (retirement, drawdown).
 
 Then propose the scope. If the topic is clear enough, set "questions" to []. Only if something that really changes what gets built is unclear (for example which flat type, which country, new or used), ask at most 2 multiple-choice questions, each with 2 to 4 options and a sensible default.
 ${hint}
-Return: {"kind": "compare"|"estimate"|"projection", "kindReason": "one sentence", "title": "short page title", "summary": "two sentences: what is covered, where, key assumptions", "questions": [{"id": "...", "question": "...", "options": [{"id": "...", "label": "..."}], "default": "<option id>"}], "items": [{"id": "kebab-id", "label": "option, line or item to research", "group": "optional group"}], "playbook": "property"|"renovation"|"travel"|"cars"|"education"|null}
+Return: {"kind": "compare"|"estimate"|"projection"|"probability", "kindReason": "one sentence", "title": "short page title", "summary": "two sentences: what is covered, where, key assumptions", "questions": [{"id": "...", "question": "...", "options": [{"id": "...", "label": "..."}], "default": "<option id>"}], "items": [{"id": "kebab-id", "label": "option, line or item to research", "group": "optional group"}], "playbook": "property"|"renovation"|"travel"|"cars"|"education"|null}
 "items" lists 5 to 15 things the research will cover, specific enough to price (real names, not categories of categories).`;
 }

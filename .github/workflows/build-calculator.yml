@@ -25,7 +25,7 @@ on:
         description: "Scope the reader confirmed, as JSON (kind, answers, include, exclude); set by the site"
         required: false
       kind:
-        description: "Refine only: rebuild the calculator as this kind (compare, estimate or projection)"
+        description: "Refine only: rebuild the calculator as this kind (compare, estimate, projection or probability)"
         required: false
       no_research:
         description: "Refine only: set to true to edit without any web research"

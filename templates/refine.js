@@ -1,7 +1,7 @@
 /* Chat-style refinement panel for a published calculator. Inlined by lib/render.ts; config below is filled in per page. */
 (function () {
   var cfg = __REFINE_CONFIG__;
-  var KINDS = { compare: "comparison", estimate: "cost estimate", projection: "projection" };
+  var KINDS = { compare: "comparison", estimate: "cost estimate", projection: "projection", probability: "probability" };
   var KEY = "refine-chat:" + cfg.slug;
   var root = document.getElementById("refine-root");
   if (!root) return;
