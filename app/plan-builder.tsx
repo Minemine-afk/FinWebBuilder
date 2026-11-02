@@ -61,10 +61,11 @@ export function PlanBuilder({ passcode, onBuild, busy }: { passcode: string; onB
   return (
     <div>
       <h3 className="font-semibold">New calculator</h3>
-      <div className="mt-2 rounded-lg border border-border bg-background p-3 text-sm">
-        <p className="font-medium">A specific topic needs less fixing afterwards</p>
+      <div className="mt-2 rounded-r-lg border-l-4 border-accent bg-chip p-3 text-sm" aria-label="Tips and example, not a field to fill in">
+        <p className="text-xs font-semibold uppercase tracking-wide text-accent">Tip</p>
+        <p className="mt-1 font-medium">A specific topic needs less fixing afterwards</p>
         <p className="mt-1 text-muted">Say what it is, where, the size and quality, who to compare (and how many), and whether you want a forecast. For example:</p>
-        <p className="mt-1 italic">&ldquo;{EXAMPLE_TOPIC}&rdquo;</p>
+        <p className="mt-1 italic text-accent">&ldquo;{EXAMPLE_TOPIC}&rdquo;</p>
         <button type="button" className="mt-2 text-accent underline" onClick={() => setTopic(EXAMPLE_TOPIC)}>
           Use this example
         </button>

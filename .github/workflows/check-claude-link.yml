@@ -61,6 +61,10 @@ jobs:
           else
             fail "no Claude secret is saved. Add CLAUDE_CODE_OAUTH_TOKEN (subscription) or ANTHROPIC_API_KEY under Settings > Secrets and variables > Actions."
           fi
+      # The website reads this step's name to show the answer without opening GitHub.
+      - name: "Result: ${{ steps.test.outputs.result || 'Failed: the check could not run' }}"
+        if: always()
+        run: echo "${{ steps.test.outputs.result }}"
       - name: Open an issue when the weekly check fails
         if: failure() && github.event_name == 'schedule'
         uses: actions/github-script@v7
