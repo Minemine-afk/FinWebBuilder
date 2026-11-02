@@ -25,7 +25,7 @@ export function githubHeaders(token: string) {
   };
 }
 
-export type WorkflowFile = "build-calculator.yml" | "remove-calculator.yml" | "plan-calculator.yml";
+export type WorkflowFile = "build-calculator.yml" | "remove-calculator.yml" | "plan-calculator.yml" | "check-claude-link.yml";
 
 /** Starts a workflow on the site's branch. Returns the HTTP status GitHub answered with. */
 export async function dispatchWorkflow(cfg: { repo: string; token: string }, workflow: WorkflowFile, inputs: Record<string, string>) {
@@ -167,4 +167,39 @@ export async function writePlanFile(cfg: { repo: string; token: string }, id: st
     body: JSON.stringify({ message: `Plan ${id}`, content: Buffer.from(json).toString("base64"), branch: PLANS_BRANCH }),
   });
   if (!put.ok) throw new Error(`Couldn't save the plan (${put.status}).`);
+}
+
+const RESULT_STEP = /^Result: (.+)$/;
+
+/** The answer a finished Check Claude link run left in its last step's name, e.g. "Linked using API key". */
+export function checkResultFromSteps(steps: { name: string }[] | undefined): string | null {
+  const hit = steps?.map((s) => RESULT_STEP.exec(s.name)?.[1]).find(Boolean);
+  return hit ?? null;
+}
+
+export interface CheckRun {
+  state: "waiting" | "running" | "done" | "failed";
+  /** "Linked using ..." or "Failed: ..." once the run has said so. */
+  result: string | null;
+  url: string;
+}
+
+/** The newest Check Claude link run started at or after `since` (ISO time), or null if GitHub hasn't created it yet. */
+export async function latestCheckRun(cfg: { repo: string; token: string }, since: string): Promise<CheckRun | null> {
+  const headers = githubHeaders(cfg.token);
+  const res = await fetch(`https://api.github.com/repos/${cfg.repo}/actions/workflows/check-claude-link.yml/runs?event=workflow_dispatch&per_page=5`, { headers, cache: "no-store" });
+  if (!res.ok) return null;
+  const runs = ((await res.json()) as { workflow_runs: { id: number; status: string; conclusion: string | null; created_at: string; html_url: string }[] }).workflow_runs;
+  // Allow for a few seconds of clock difference between this server and GitHub.
+  const floor = new Date(since).getTime() - 15_000;
+  const run = runs.find((r) => new Date(r.created_at).getTime() >= floor);
+  if (!run) return null;
+  let result: string | null = null;
+  if (run.status === "completed") {
+    const jobs = await fetch(`https://api.github.com/repos/${cfg.repo}/actions/runs/${run.id}/jobs`, { headers, cache: "no-store" });
+    const job = jobs.ok ? ((await jobs.json()) as { jobs: { steps?: { name: string }[] }[] }).jobs[0] : undefined;
+    result = checkResultFromSteps(job?.steps);
+  }
+  const state: CheckRun["state"] = run.status === "completed" ? (run.conclusion === "success" ? "done" : "failed") : run.status === "in_progress" ? "running" : "waiting";
+  return { state, result, url: run.html_url };
 }

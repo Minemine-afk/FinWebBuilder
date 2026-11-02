@@ -31,6 +31,121 @@ function StatusLine({ status }: { status: Status }) {
   return null;
 }
 
+type SetupState = { github: { ok: boolean; message: string }; secrets: { CLAUDE_CODE_OAUTH_TOKEN: boolean; ANTHROPIC_API_KEY: boolean } };
+
+/** Connect Claude without opening GitHub's secrets page: paste a subscription token or API key and the server stores it as the repository secret. */
+function SetupPanel({ passcode }: { passcode: string }) {
+  const [status, setStatus] = useState<SetupState | null>(null);
+  const [note, setNote] = useState<{ ok: boolean; text: string } | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [values, setValues] = useState({ CLAUDE_CODE_OAUTH_TOKEN: "", ANTHROPIC_API_KEY: "" });
+
+  async function act(body: Record<string, unknown>, done?: string) {
+    setBusy(true);
+    setNote(null);
+    try {
+      const res = await fetch("/api/setup", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ passcode, ...body }) });
+      const data = await res.json();
+      if (!res.ok) setNote({ ok: false, text: data.error ?? "Something went wrong." });
+      else {
+        setStatus(data);
+        if (done) setNote({ ok: true, text: done });
+        setValues({ CLAUDE_CODE_OAUTH_TOKEN: "", ANTHROPIC_API_KEY: "" });
+      }
+    } catch {
+      setNote({ ok: false, text: "Couldn't reach the server." });
+    }
+    setBusy(false);
+  }
+
+  const rows = [
+    { name: "CLAUDE_CODE_OAUTH_TOKEN" as const, title: "Claude subscription token", hint: "From running `claude setup-token` once in Claude Code. Starts with sk-ant-oat." },
+    { name: "ANTHROPIC_API_KEY" as const, title: "Claude API key (pay per use)", hint: "From the Claude Console. Starts with sk-ant-. If both are saved, the API key is used." },
+  ];
+
+  return (
+    <div className="mt-8 max-w-md border-t border-border pt-6">
+      <h3 className="font-semibold">Setup: connect Claude</h3>
+      <p className="mt-1 text-xs text-muted">Paste a credential here and the site saves it, encrypted, as the repository&rsquo;s secret on GitHub. It is not kept on this site or in your browser, and nobody can read it back.</p>
+      <button type="button" className={button} disabled={!passcode || busy} onClick={() => act({ action: "status" })}>
+        {status ? "Refresh status" : "Show status"}
+      </button>
+      {status && (
+        <p className={`mt-3 text-sm ${status.github.ok ? "" : "text-warn-fg"}`}>{status.github.ok ? "✓ " : "✗ "}{status.github.message}</p>
+      )}
+      {status?.github.ok &&
+        rows.map((r) => (
+          <div key={r.name} className="mt-4">
+            <label className="block text-sm font-medium">
+              {r.title} {status.secrets[r.name] ? <span className="font-normal text-accent">· saved</span> : <span className="font-normal text-muted">· not saved</span>}
+              <input className={input} type="password" autoComplete="off" spellCheck={false} placeholder="Paste here" value={values[r.name]} onChange={(e) => setValues({ ...values, [r.name]: e.target.value })} />
+            </label>
+            <p className="mt-1 text-xs text-muted">{r.hint}</p>
+            <div className="mt-2 flex gap-2">
+              <button type="button" className="rounded-lg bg-accent-fill px-3 py-1.5 text-sm font-medium text-on-accent disabled:opacity-60" disabled={busy || !values[r.name]} onClick={() => act({ action: "save", name: r.name, value: values[r.name] }, `${r.title} saved. Press Check now below to test it.`)}>
+                Save
+              </button>
+              {status.secrets[r.name] && (
+                <button type="button" className="rounded-lg border border-border px-3 py-1.5 text-sm disabled:opacity-60" disabled={busy} onClick={() => window.confirm(`Remove the saved ${r.title.toLowerCase()}?`) && act({ action: "remove", name: r.name }, "Removed.")}>
+                  Remove
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+      {status?.secrets.ANTHROPIC_API_KEY && status.secrets.CLAUDE_CODE_OAUTH_TOKEN && (
+        <p className="mt-3 text-sm text-warn-fg">Both are saved, so builds use the API key. Remove it to use the subscription.</p>
+      )}
+      {note && <p className={`mt-3 text-sm ${note.ok ? "" : "text-warn-fg"}`} role={note.ok ? "status" : "alert"}>{note.text}</p>}
+    </div>
+  );
+}
+
+function ClaudeLinkCheck({ passcode }: { passcode: string }) {
+  const [state, setState] = useState<{ kind: "idle" } | { kind: "working"; note: string } | { kind: "ok" | "fail"; text: string; url?: string }>({ kind: "idle" });
+
+  async function call(since?: string) {
+    const res = await fetch("/api/check-claude", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ passcode, ...(since ? { since } : {}) }) });
+    return { ok: res.ok, data: await res.json() };
+  }
+
+  async function run() {
+    setState({ kind: "working", note: "Testing…" });
+    try {
+      const first = await call();
+      if (!first.ok) return setState({ kind: "fail", text: first.data.error ?? "Something went wrong." });
+      if (first.data.mode === "direct") return setState({ kind: first.data.state === "done" ? "ok" : "fail", text: first.data.result });
+      setState({ kind: "working", note: "Asking GitHub to run the check. This takes about a minute…" });
+      for (let i = 0; i < 40; i++) {
+        await new Promise((r) => setTimeout(r, 5000));
+        const { ok, data } = await call(first.data.since);
+        if (!ok) return setState({ kind: "fail", text: data.error ?? "Something went wrong." });
+        if (data.state === "done" || data.state === "failed")
+          return setState({ kind: data.state === "done" ? "ok" : "fail", text: data.result ?? (data.state === "done" ? "Linked." : "Failed: open the run to see why."), url: data.url });
+      }
+      setState({ kind: "fail", text: "Still waiting after 3 minutes. Open the run in GitHub to see where it is.", url: first.data.url });
+    } catch {
+      setState({ kind: "fail", text: "Couldn't reach the server." });
+    }
+  }
+
+  return (
+    <div className="mt-8 max-w-md border-t border-border pt-6">
+      <h3 className="font-semibold">Check Claude link</h3>
+      <p className="mt-1 text-xs text-muted">Makes one tiny test call to confirm the builder can reach Claude. A subscription token is stored only in GitHub, so that check runs there for about a minute.</p>
+      <button type="button" className={button} disabled={!passcode || state.kind === "working"} onClick={run}>Check now</button>
+      {state.kind === "working" && <p className="mt-3 text-sm text-muted" role="status">{state.note}</p>}
+      {(state.kind === "ok" || state.kind === "fail") && (
+        <p className={`mt-3 text-sm ${state.kind === "fail" ? "text-warn-fg" : ""}`} role={state.kind === "fail" ? "alert" : "status"}>
+          {state.kind === "ok" ? "✓ " : "✗ "}
+          {state.text}{" "}
+          {state.url && <a className="text-accent underline" href={state.url} target="_blank" rel="noreferrer">Open the run</a>}
+        </p>
+      )}
+    </div>
+  );
+}
+
 const input = "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2";
 const button = "mt-4 rounded-lg bg-accent-fill px-4 py-2 font-medium text-on-accent disabled:opacity-60";
 
@@ -118,6 +233,9 @@ export function BuilderForms({ calculators }: { calculators: { id: string; title
         <button className={button} disabled={removeStatus.kind === "sending" || !removeSlug}>Remove it</button>
         <StatusLine status={removeStatus} />
       </form>
+
+      <SetupPanel passcode={passcode} />
+      <ClaudeLinkCheck passcode={passcode} />
     </section>
   );
 }
