@@ -18,13 +18,13 @@ export default function Home() {
       }
       cards={
         <>
-          <h2 className="mt-10 text-xl font-semibold">All calculators</h2>
-          <section className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Calculators">
+          <h1 className="text-3xl font-semibold">All calculators</h1>
+          <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" aria-label="Calculators">
             {calculators.map((c) => {
               const { totalSgd } = summariseBuildLog(c.buildLog);
               return (
                 <a key={c.id} href={`/c/${c.id}`} className="block rounded-xl border border-border bg-surface p-5 hover:border-accent">
-                  <h3 className="text-lg font-semibold">{c.title}</h3>
+                  <h2 className="text-lg font-semibold">{c.title}</h2>
                   <p className="mt-2 line-clamp-3 text-sm text-muted">{c.scope}</p>
                   <p className="mt-3 text-xs text-accent">
                     {describeSpec(c)} · version {c.version} · {c.buildLog.length ? `AI cost ${formatSgd(totalSgd)}` : "built by hand"}
