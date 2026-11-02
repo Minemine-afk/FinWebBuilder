@@ -99,7 +99,7 @@ Once the site is running (section 10), you can do the Claude part without openin
 
 1. On the home page, enter the **Passcode**. In **Setup: connect Claude**, press **Show status**. It shows whether the site's GitHub connection works and which Claude credentials are saved (names only; values can never be read back).
 2. Paste your subscription token (or API key) into its box and press **Save**. The site encrypts it and saves it as the repository secret on GitHub. It is not kept on the site or in your browser.
-3. Press **Check now** under **Check Claude link**. With an API key the answer is immediate. With a subscription token it takes about a minute, because that token exists only inside GitHub.
+3. Press **Check now** under **Check Claude link**. The check runs inside GitHub, where the saved credential lives, so it takes about a minute. (If you also put `ANTHROPIC_API_KEY` in Vercel's variables, the check tests that key directly and answers at once, but it then tests the Vercel copy, not GitHub's.)
 4. To switch accounts, paste the new value over the old one and Save. **Remove** deletes a saved credential.
 
 What still needs outside steps: creating the token itself (`claude setup-token` on one computer, or an API key in the Claude Console), and the site's GitHub token, which must have **Secrets: Read and write** for this panel to work (section 10, step 5). Anyone with the passcode can replace the Claude credential, so keep it private. The manual GitHub steps below remain as a fallback.
@@ -238,7 +238,7 @@ The website starts builds by calling GitHub. It needs a token that can only do t
 
 The **Check Claude link** workflow makes one tiny test call to Claude with whichever secret is saved, so you find out about a broken link before a real build fails.
 
-**On the website:** enter the passcode and press **Check now** under **Check Claude link**. With an API key saved in GitHub the answer shows on the page after about a minute; the site shows the same plain-words result.
+**On the website:** enter the passcode and press **Check now** under **Check Claude link**. The answer shows on the page after about a minute, in the same plain words.
 
 **Or in GitHub:**
 
