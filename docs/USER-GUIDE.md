@@ -117,6 +117,8 @@ If you cannot install Claude Code on your own computer, ask someone you trust to
 
 ### Check that it works
 
+Fastest: run the **Check Claude link** workflow (section 11). Or do it the long way:
+
 1. On the site, enter the passcode and build something small, for example "Shampoo prices in Singapore", with **Build straight away**.
 2. In GitHub, open the **Actions** tab and click the newest **Build calculator** run. A green tick after a few minutes means success, and the calculator appears on the home page.
 3. To see which path ran, open the run: *Run the research agent (API)* means the API key was used; *Research with Claude Code (subscription)* means the subscription was used. Steps for the path not used are greyed out.
@@ -140,14 +142,103 @@ To switch from a subscription to an API key (or back): add the new secret, and d
 | Rate limit, usage limit or "plan limit reached" message | The subscription's allowance is used up. Wait for it to reset, switch to another account, or use an API key |
 | "Credit balance is too low" (API key) | Add credit in the Claude Console |
 | Builds seem to use the wrong account or get billed | An `ANTHROPIC_API_KEY` secret exists and overrides the subscription. Delete it |
-| Buttons on the site say something went wrong before any run starts | Not a Claude problem: check `BUILDER_PASSCODE`, `GITHUB_TOKEN` and `GITHUB_REPOSITORY` in Vercel (section 10) |
-| Everything is set but a run still fails after a long time | Open the failed step and read the last printed message, then see the troubleshooting table in section 11 |
+| Buttons on the site say something went wrong before any run starts | Not a Claude problem: check `BUILDER_PASSCODE`, `GITHUB_TOKEN` and `GITHUB_REPOSITORY` in Vercel (section 12) |
+| Everything is set but a run still fails after a long time | Open the failed step and read the last printed message, then see the troubleshooting table in section 13 |
 
 Security notes: the token can run Claude as your account, so only people who know the builder passcode should be able to start builds, and secrets in GitHub cannot be read back, only replaced.
 
-## 10. Hosting and workflow setup (one time)
+## 10. Moving to a brand-new GitHub account
 
-**GitHub:** the Claude credential is covered in section 9.
+Follow these in order. The site runs on **Vercel** (GitHub Pages is not used), the research runs in **GitHub Actions**, and the two talk to each other through a GitHub token. Budget about 30 minutes. Keep a note of every secret you create; none can be read back later.
+
+### Step 1: Accounts
+
+1. Create the GitHub account at github.com (Sign up). Verify the email address.
+2. Turn on two-factor sign-in under **Settings > Password and authentication**.
+3. Create or sign in to a Vercel account at vercel.com using **Continue with GitHub** on the new account (so Vercel can see the repositories).
+4. Have the Claude account ready (section 9).
+
+### Step 2: Get a copy of the code
+
+1. Open the existing repository (`Minemine-afk/FinWebBuilder`). If it is private, the old owner must first add the new account under **Settings > Collaborators**.
+2. Easiest: press **Fork** (top right), choose the new account, keep the name `FinWebBuilder`. This copies the code and the calculators in `data/`.
+3. If you want a private copy with no link to the old one: download the code as a zip (**Code > Download ZIP**), create a new empty repository named `FinWebBuilder` (**+ > New repository**, choose Private, no README), then upload the files (**Add file > Upload files**). Hidden folders such as `.github` must be included or the builds will not exist.
+4. Open **Actions**. On a fork GitHub shows "Workflows aren't being run on this forked repository"; press **I understand my workflows, go ahead and enable them**.
+5. Check that the **Actions** list shows: Build calculator, Plan calculator, Remove calculator, Check Claude link, CI.
+
+### Step 3: Let the workflows save their work
+
+1. Repository **Settings > Actions > General > Workflow permissions**: choose **Read and write permissions** and Save. Builds commit calculators straight to `main` and need this.
+2. **Settings > Branches**: make sure `main` has no rule that blocks direct pushes. The scoping step also writes a small branch named `builder-plans`; it is created automatically.
+
+### Step 4: Add the Claude secret
+
+Follow section 9 (subscription token or API key) and add it under **Settings > Secrets and variables > Actions**. Then run **Check Claude link** (section 11) to confirm.
+
+### Step 5: Create the GitHub token the website uses
+
+The website starts builds by calling GitHub. It needs a token that can only do that, on this repository only.
+
+1. Click your profile picture > **Settings** > (bottom of the left menu) **Developer settings** > **Personal access tokens** > **Fine-grained tokens** > **Generate new token**.
+2. Token name: `finwebbuilder-site`. Expiration: pick up to a year, and write the expiry date in your calendar.
+3. Resource owner: your new account. **Repository access: Only select repositories** > choose `FinWebBuilder`.
+4. Under **Repository permissions** set **Actions: Read and write** and **Contents: Read-only** (the scoping step reads saved plans from the `builder-plans` branch). Leave everything else as No access. **Metadata: Read** is added automatically.
+5. Press **Generate token** and copy it now (starts with `github_pat_`). It is shown once.
+
+### Step 6: Put the site on Vercel
+
+1. In Vercel: **Add New > Project > Import Git Repository** and choose your `FinWebBuilder` repository. If it is not listed, press **Adjust GitHub App Permissions** and allow that repository.
+2. Framework is detected as Next.js. Before pressing Deploy, open **Environment Variables** and add:
+   - `BUILDER_PASSCODE`: a passcode you invent (a long phrase; you will type it into the build box).
+   - `GITHUB_TOKEN`: the `github_pat_...` token from step 5.
+   - `GITHUB_REPOSITORY`: `YourNewUsername/FinWebBuilder` (new username, exact spelling and capitals).
+   - Optional `ANTHROPIC_API_KEY`: only if you use an API key (section 9, option B).
+3. Press **Deploy**. When it finishes, open the address Vercel shows (it ends in `.vercel.app`).
+4. Vercel redeploys automatically whenever a build commits to `main`. Vercel's free Hobby plan does not allow commercial use; a business site needs Pro. A custom domain can be added under **Settings > Domains**.
+
+### Step 7: Test everything
+
+1. Run **Check Claude link** (Actions tab > Run workflow). It should say "Linked using subscription token" or "Linked using API key".
+2. On your site, enter the passcode and build "Shampoo prices in Singapore" with **Build straight away**. A green run in **Actions** and a new calculator on the home page means GitHub, the token, the passcode and Claude are all linked.
+
+### What carries over, what does not
+
+| Item | Carries over to the new account? |
+|---|---|
+| Code, calculators, saved versions (`data/`), price cache | Yes, with the fork or upload |
+| Secrets (Claude token, API key) | No, add them again |
+| Vercel variables and the GitHub token | No, create them again |
+| `BUILDER_PASSCODE` | No, choose a new one |
+| Old calculator history in git commits | Fork keeps it; zip upload does not |
+| Build log "cost reported" figures | Kept inside each calculator's file |
+
+### Errors when moving
+
+| What you see | Fix |
+|---|---|
+| Site says it couldn't start the build | `GITHUB_TOKEN` or `GITHUB_REPOSITORY` in Vercel is wrong or expired; recreate the token (step 5), update Vercel, then **Redeploy** |
+| "Resource not accessible by personal access token" | The token lacks **Actions: Read and write** or was created for another repository |
+| Builds start but the push at the end fails | Workflow permissions are not Read and write (step 3), or `main` has a protection rule |
+| No workflows appear in Actions | The `.github` folder was not copied, or workflows are not enabled on the fork (step 2) |
+| Vercel cannot see the repository | Allow it under Vercel's GitHub app permissions (step 6) |
+| Changed an environment variable but nothing changed | Vercel only reads variables at deploy time; press **Redeploy** |
+
+## 11. Checking the Claude link
+
+The **Check Claude link** workflow makes one tiny test call to Claude with whichever secret is saved, so you find out about a broken link before a real build fails.
+
+1. In GitHub, open the repository's **Actions** tab, choose **Check Claude link** on the left, then **Run workflow** > **Run workflow**.
+2. After about a minute open the run. The summary at the bottom shows one of:
+   - **Linked using subscription token**: the subscription is working.
+   - **Linked using API key**: the API key is working (it wins when both secrets exist, as in real builds).
+   - **Failed: ...** followed by a plain reason, such as the token has expired (run `claude setup-token` again and update the secret), no credit, a usage limit, or no secret saved.
+3. It also runs by itself every Monday. If that weekly check fails, it opens an issue named **Claude link check failed** in the repository's **Issues** tab (GitHub emails you), and adds to the same issue if it keeps failing. Close the issue after fixing the secret and running the check by hand.
+
+Run it after adding or changing any Claude secret. It uses almost nothing from your plan or credit.
+
+## 12. Hosting and workflow setup (reference)
+
+**GitHub:** the Claude credential is covered in section 9. A full from-scratch walk-through is in section 10, which is the one to follow on a new account.
 
 **Vercel, Project > Settings > Environment Variables:** `BUILDER_PASSCODE` (the passcode for the build box), `GITHUB_TOKEN` (fine-grained token for this repo only, Actions read and write), `GITHUB_REPOSITORY` (`Minemine-afk/FinWebBuilder`). Vercel's free Hobby plan does not allow commercial use.
 
@@ -155,7 +246,7 @@ Builds and removals publish straight to `main` with no approval step, so keep th
 
 You can also start builds by hand from the repository's **Actions** tab (*Build calculator*, *Remove calculator*). Build inputs: `topic` (new) or `slug` plus `prompt` (refine), `kind`, `no_research`, `research_model` (opus or sonnet). Only one build runs at a time; extra requests queue, and only one pending run is kept.
 
-## 11. Troubleshooting
+## 13. Troubleshooting
 
 | Symptom | What to do |
 |---|---|
@@ -169,7 +260,7 @@ You can also start builds by hand from the repository's **Actions** tab (*Build 
 | Cost looks high | Choose *Quick* research depth, reduce the item count, or rely on cached items |
 | Two builds at once | They run one after another, by design |
 
-## 12. Commands (for developers)
+## 14. Commands (for developers)
 
 ```bash
 npm run dev          # local site
