@@ -93,7 +93,18 @@ The builder does not log in to Claude through the website. The research runs ins
 
 **Important:** if both secrets exist, the API key wins and the subscription is ignored. Delete the API key if you want builds to use the subscription.
 
-### A. Link a Claude subscription
+### Fastest way: the Setup panel on the website
+
+Once the site is running (section 10), you can do the Claude part without opening GitHub's Secrets page.
+
+1. On the home page, enter the **Passcode**. In **Setup: connect Claude**, press **Show status**. It shows whether the site's GitHub connection works and which Claude credentials are saved (names only; values can never be read back).
+2. Paste your subscription token (or API key) into its box and press **Save**. The site encrypts it and saves it as the repository secret on GitHub. It is not kept on the site or in your browser.
+3. Press **Check now** under **Check Claude link**. With an API key the answer is immediate. With a subscription token it takes about a minute, because that token exists only inside GitHub.
+4. To switch accounts, paste the new value over the old one and Save. **Remove** deletes a saved credential.
+
+What still needs outside steps: creating the token itself (`claude setup-token` on one computer, or an API key in the Claude Console), and the site's GitHub token, which must have **Secrets: Read and write** for this panel to work (section 10, step 5). Anyone with the passcode can replace the Claude credential, so keep it private. The manual GitHub steps below remain as a fallback.
+
+### A. Link a Claude subscription (manual way)
 
 You need: a Claude **Pro or Max** plan, admin rights on the GitHub repository (the "Settings" tab is visible), and one computer with Claude Code installed for about two minutes. It is only used to print the code; it does not need to stay installed, and the builder never runs on it.
 
@@ -173,7 +184,7 @@ Follow these in order. The site runs on **Vercel** (GitHub Pages is not used), t
 
 ### Step 4: Add the Claude secret
 
-Follow section 9 (subscription token or API key) and add it under **Settings > Secrets and variables > Actions**. Then run **Check Claude link** (section 11) to confirm.
+Open your new site, use the **Setup: connect Claude** panel (section 9) to paste the credential, then press **Check now**. If you skipped the Secrets permission, add it under **Settings > Secrets and variables > Actions** instead. (This step comes after Step 6, once the site exists.)
 
 ### Step 5: Create the GitHub token the website uses
 
@@ -182,7 +193,7 @@ The website starts builds by calling GitHub. It needs a token that can only do t
 1. Click your profile picture > **Settings** > (bottom of the left menu) **Developer settings** > **Personal access tokens** > **Fine-grained tokens** > **Generate new token**.
 2. Token name: `finwebbuilder-site`. Expiration: pick up to a year, and write the expiry date in your calendar.
 3. Resource owner: your new account. **Repository access: Only select repositories** > choose `FinWebBuilder`.
-4. Under **Repository permissions** set **Actions: Read and write** and **Contents: Read-only** (the scoping step reads saved plans from the `builder-plans` branch). Leave everything else as No access. **Metadata: Read** is added automatically.
+4. Under **Repository permissions** set **Actions: Read and write**, **Contents: Read-only** and **Secrets: Read and write** (the last one lets the Setup panel save your Claude credential; skip it if you prefer to add secrets on GitHub by hand) (the scoping step reads saved plans from the `builder-plans` branch). Leave everything else as No access. **Metadata: Read** is added automatically.
 5. Press **Generate token** and copy it now (starts with `github_pat_`). It is shown once.
 
 ### Step 6: Put the site on Vercel
@@ -227,7 +238,11 @@ The website starts builds by calling GitHub. It needs a token that can only do t
 
 The **Check Claude link** workflow makes one tiny test call to Claude with whichever secret is saved, so you find out about a broken link before a real build fails.
 
-1. In GitHub, open the repository's **Actions** tab, choose **Check Claude link** on the left, then **Run workflow** > **Run workflow**.
+**On the website:** enter the passcode and press **Check now** under **Check Claude link**. With an API key saved in GitHub the answer shows on the page after about a minute; the site shows the same plain-words result.
+
+**Or in GitHub:**
+
+1. Open the repository's **Actions** tab, choose **Check Claude link** on the left, then **Run workflow** > **Run workflow**.
 2. After about a minute open the run. The summary at the bottom shows one of:
    - **Linked using subscription token**: the subscription is working.
    - **Linked using API key**: the API key is working (it wins when both secrets exist, as in real builds).

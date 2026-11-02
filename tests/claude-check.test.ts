@@ -28,3 +28,27 @@ describe("Claude link check", () => {
     expect(checkResultFromSteps(undefined)).toBeNull();
   });
 });
+
+import { checkSecretShape, encryptForGitHub } from "@/lib/github-secrets";
+import sodium from "libsodium-wrappers";
+
+describe("Setup secrets", () => {
+  const oat = "sk-ant-oat01-" + "a".repeat(60);
+  const key = "sk-ant-api03-" + "b".repeat(60);
+  it("rejects values pasted into the wrong box or cut short", () => {
+    expect(checkSecretShape("CLAUDE_CODE_OAUTH_TOKEN", oat)).toBeNull();
+    expect(checkSecretShape("ANTHROPIC_API_KEY", key)).toBeNull();
+    expect(checkSecretShape("ANTHROPIC_API_KEY", oat)).toMatch(/other box/);
+    expect(checkSecretShape("CLAUDE_CODE_OAUTH_TOKEN", key)).toMatch(/sk-ant-oat/);
+    expect(checkSecretShape("ANTHROPIC_API_KEY", "sk-ant-short")).toMatch(/short/);
+    expect(checkSecretShape("ANTHROPIC_API_KEY", key + "\nmore")).toMatch(/spaces/);
+  });
+  it("seals the value so only the repository's private key can open it", async () => {
+    await sodium.ready;
+    const pair = sodium.crypto_box_keypair();
+    const sealed = await encryptForGitHub(sodium.to_base64(pair.publicKey, sodium.base64_variants.ORIGINAL), "secret-value");
+    const opened = sodium.crypto_box_seal_open(sodium.from_base64(sealed, sodium.base64_variants.ORIGINAL), pair.publicKey, pair.privateKey);
+    expect(sodium.to_string(opened)).toBe("secret-value");
+    expect(sealed).not.toContain("secret-value");
+  });
+});
