@@ -408,23 +408,82 @@ const ProjectionSpecSchema = z
     if (s.rateLimits.min > s.rateLimits.max) issue("rateLimits.min exceeds max.");
   });
 
+/**
+ * Probability: the chance a plan survives uncertain returns. Savings grow while the viewer contributes, then pay a
+ * yearly withdrawal; many simulated market paths give the share that never run out. Each item is a portfolio with an
+ * expected return and a volatility, so portfolios can be compared on the same plan. Amounts are in today's money.
+ */
+const ProbabilitySpecSchema = z
+  .object({
+    kind: z.literal("probability"),
+    ...commonShape,
+    subject: z.string().default("portfolio"),
+    savings: NumberInputSchema,
+    /** Yearly saving until withdrawals begin, in today's money. Omit when nothing more is added. */
+    contribution: NumberInputSchema.optional(),
+    /** Yearly spending drawn from the savings once withdrawals begin, in today's money. */
+    withdrawal: NumberInputSchema,
+    yearsToStart: z.object({ default: z.number().int().min(0), min: z.number().int().min(0), max: z.number().int().positive() }).default({ default: 20, min: 0, max: 50 }),
+    yearsInRetirement: z.object({ default: z.number().int().positive(), min: z.number().int().positive(), max: z.number().int().positive() }).default({ default: 30, min: 5, max: 50 }),
+    /** Yearly inflation (fraction). Contributions and withdrawals rise with it; results are shown in today's money. */
+    inflation: z.number().min(0).max(0.15).default(0.025),
+    /** Number of simulated paths, and the seed that makes the page show the same answer every time. */
+    simulations: z.number().int().min(200).max(5000).default(1000),
+    seed: z.number().int().default(1),
+    /** Share of paths that must last for the plan to count as on track. */
+    target: z.number().min(0.5).max(0.99).default(0.9),
+    items: z
+      .array(
+        z.object({
+          id: z.string().min(1),
+          name: z.string().min(1),
+          option: z.string().default(""),
+          url: z.string().optional(),
+          /** Average yearly return before inflation, as a fraction. */
+          expectedReturn: z.number().min(-0.05).max(0.3),
+          /** Yearly standard deviation of the return, as a fraction. */
+          volatility: z.number().min(0).max(0.6),
+          source: SourceSchema,
+          notes: z.string().default(""),
+          /** Why the return and volatility are what they are; shown as hover text. */
+          rationale: z.string().optional(),
+        }),
+      )
+      .min(1),
+    defaults: z.object({ item: z.string().optional() }).default({}),
+  })
+  .superRefine((s, ctx) => {
+    const issue = (message: string) => ctx.addIssue({ code: "custom", message });
+    const ids = new Set<string>();
+    for (const it of s.items) {
+      if (ids.has(it.id)) issue(`Duplicate item id "${it.id}".`);
+      ids.add(it.id);
+    }
+    if (s.defaults.item && !ids.has(s.defaults.item)) issue(`Default item "${s.defaults.item}" does not exist.`);
+    for (const [name, y] of [["yearsToStart", s.yearsToStart], ["yearsInRetirement", s.yearsInRetirement]] as const) {
+      if (y.min > y.default || y.default > y.max) issue(`${name}.default must sit between min and max.`);
+    }
+  });
+
 export type CompareSpec = z.infer<typeof CompareSpecSchema>;
 export type EstimateSpec = z.infer<typeof EstimateSpecSchema>;
 export type ProjectionSpec = z.infer<typeof ProjectionSpecSchema>;
-export const KINDS = ["compare", "estimate", "projection"] as const;
+export type ProbabilitySpec = z.infer<typeof ProbabilitySpecSchema>;
+export const KINDS = ["compare", "estimate", "projection", "probability"] as const;
 export type Kind = (typeof KINDS)[number];
 
 /** Any calculator. Files written before there were kinds have no "kind" and are comparisons. */
 export const SpecSchema = z.preprocess(
   (raw) => (raw && typeof raw === "object" && !("kind" in raw) ? { kind: "compare", ...raw } : raw),
-  z.discriminatedUnion("kind", [CompareSpecSchema, EstimateSpecSchema, ProjectionSpecSchema]),
+  z.discriminatedUnion("kind", [CompareSpecSchema, EstimateSpecSchema, ProjectionSpecSchema, ProbabilitySpecSchema]),
 );
-export type Spec = CompareSpec | EstimateSpec | ProjectionSpec;
-export { CompareSpecSchema, EstimateSpecSchema, ProjectionSpecSchema };
+export type Spec = CompareSpec | EstimateSpec | ProjectionSpec | ProbabilitySpec;
+export { CompareSpecSchema, EstimateSpecSchema, ProjectionSpecSchema, ProbabilitySpecSchema };
 
 /** One-line description for lists: what the reader can do with it. */
 export function describeSpec(spec: Spec): string {
   if (spec.kind === "estimate") return `Cost estimate · ${spec.lines.length} line items`;
+  if (spec.kind === "probability") return `Probability · ${spec.items.length} ${spec.items.length === 1 ? "portfolio" : "portfolios"}`;
   if (spec.kind === "projection") return `Projection · ${spec.items.length} ${spec.items.length === 1 ? "scenario set" : "options"}`;
   return `Comparison · ${spec.items.length} options`;
 }

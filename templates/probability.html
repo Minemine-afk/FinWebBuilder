@@ -1,0 +1,162 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>__TITLE__</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"><style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style><style id="page-style">
+__BASE_CSS__
+.range-big{font-size:2.4rem;font-weight:650;margin:.3rem 0 .1rem;line-height:1.1}
+@media (max-width:640px){.range-big{font-size:1.9rem}}
+.ok{color:var(--accent)}.warn-text{color:#b45309}.bad{color:#b91c1c}
+tr.last td{font-weight:600}
+</style></head><body><header class="band">
+  <div class="wrap"><div>
+    <p class="eyebrow" style="color:var(--on-accent-muted)">Probability</p>
+    <h1 id="title"></h1>
+    <p id="scope"></p>
+  </div></div>
+</header><main>
+  <div class="wrap"><div class="grid">
+    <aside id="sidebar" aria-label="Settings"></aside>
+    <section class="results" aria-live="polite"><div id="summary" class="results"></div><p class="limits" id="limits"></p></section>
+  </div></div>
+</main><script>window.SPEC=__SPEC_JSON__;</script><script>
+"use strict";
+__COMMON_JS__
+__ENGINE_JS__
+const spec = window.SPEC;
+const CUR = spec.currency;
+const state = {
+  item: (spec.defaults && spec.defaults.item) || spec.items[0].id,
+  savingsText: String(spec.savings.default),
+  contribText: spec.contribution ? String(spec.contribution.default) : "",
+  withdrawText: String(spec.withdrawal.default),
+  startText: String(spec.yearsToStart.default),
+  retireText: String(spec.yearsInRetirement.default),
+  errors: {}, v: {}
+};
+const curItem = () => spec.items.find((i) => i.id === state.item) || spec.items[0];
+const errP = (key) => `<p class="err" data-err="${key}" style="margin:0" hidden></p>`;
+function syncErrors() { document.querySelectorAll("[data-err]").forEach((el) => { const m = state.errors[el.dataset.err]; el.hidden = !m; el.textContent = m || ""; }); }
+const numField = (id, inp, text, label) => `<label class="field" for="${id}"><span class="small">${esc(label || inp.label)}${inp.unit ? " (" + esc(inp.unit) + ")" : ""}${tip(inp.rationale)}</span>
+  <input id="${id}" type="number" inputmode="decimal" min="${inp.min}" max="${inp.max}" step="${inp.step}" value="${esc(text)}" class="num">
+  <span class="muted small">Range ${inp.min.toLocaleString("en-SG")} to ${inp.max.toLocaleString("en-SG")}.${inp.note ? " " + esc(inp.note) : ""}</span></label>${errP(id)}`;
+const yearsField = (id, y, text, label) => `<label class="field" for="${id}"><span class="small">${esc(label)}</span>
+  <input id="${id}" type="number" inputmode="numeric" min="${y.min}" max="${y.max}" step="1" value="${esc(text)}" class="num">
+  <span class="muted small">Range ${y.min} to ${y.max} years.</span></label>${errP(id)}`;
+
+function renderSidebar() {
+  const it = curItem();
+  let h = "";
+  if (spec.items.length > 1) h += `<label class="field" for="itemSel"><span>${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}${tip(it.rationale)}</span><select id="itemSel">${spec.items.map((i) => `<option value="${esc(i.id)}"${i.id === state.item ? " selected" : ""}>${esc(i.name)}${i.option ? " · " + esc(i.option) : ""}</option>`).join("")}</select></label>`;
+  h += `<fieldset><legend>Your plan (in today's money)</legend>
+    ${numField("savings", spec.savings, state.savingsText)}
+    ${spec.contribution ? numField("contrib", spec.contribution, state.contribText) : ""}
+    ${yearsField("start", spec.yearsToStart, state.startText, "Years until withdrawals begin")}
+    ${numField("withdraw", spec.withdrawal, state.withdrawText)}
+    ${yearsField("retire", spec.yearsInRetirement, state.retireText, "Years the money must last")}
+  </fieldset>
+  <p class="muted small" style="margin:0">Assumes ${pct(spec.inflation)} inflation a year. ${spec.simulations.toLocaleString("en-SG")} simulated market paths; the same inputs always give the same answer.</p>`;
+  $("sidebar").innerHTML = h;
+}
+
+/** Reads every field; bad text keeps a usable value and sets a message. */
+function readInputs() {
+  const e = (state.errors = {}), v = state.v;
+  const get = (id, text, inp) => { const r = clampInput(text, { min: inp.min, max: inp.max, fallback: inp.default, label: inp.label, unit: inp.unit }); if (r.error) e[id] = r.error; return r.value; };
+  const yrs = (id, text, y, label) => { const r = clampInput(text, { min: y.min, max: y.max, fallback: y.default, label, unit: "years" }); if (r.error) e[id] = r.error; return Math.round(r.value); };
+  v.savings = get("savings", state.savingsText, spec.savings);
+  v.contribution = spec.contribution ? get("contrib", state.contribText, spec.contribution) : 0;
+  v.withdrawal = get("withdraw", state.withdrawText, spec.withdrawal);
+  v.yearsToStart = yrs("start", state.startText, spec.yearsToStart, "Years until withdrawals begin");
+  v.yearsInRetirement = yrs("retire", state.retireText, spec.yearsInRetirement, "Years the money must last");
+}
+const params = (it) => ({ savings: state.v.savings, contribution: state.v.contribution, withdrawal: state.v.withdrawal, yearsToStart: state.v.yearsToStart, yearsInRetirement: state.v.yearsInRetirement, inflation: spec.inflation, mean: it.expectedReturn, sd: it.volatility, runs: spec.simulations, seed: spec.seed });
+const verdict = (rate) => (rate >= spec.target ? ["On track", "ok"] : rate >= spec.target - 0.2 ? ["Borderline", "warn-text"] : ["At risk", "bad"]);
+const pctWhole = (r) => Math.round(r * 100) + "%";
+
+function refresh() {
+  readInputs();
+  const it = curItem(), v = state.v, p = params(it);
+  const res = simulate(p);
+  const safe = sustainableWithdrawal(p, spec.target);
+  const [label, cls] = verdict(res.successRate);
+  let h = `<div class="panel"><p class="eyebrow">${esc(it.name)}${it.option ? " · " + esc(it.option) : ""}</p>
+    <p class="range-big num ${cls}">${pctWhole(res.successRate)}</p>
+    <p style="margin:0"><b class="${cls}">${label}</b>: in ${pctWhole(res.successRate)} of ${spec.simulations.toLocaleString("en-SG")} simulated futures the money lasts all ${res.years} years (aim for ${pctWhole(spec.target)} or more).${res.failYear ? ` In a poor market the money runs out around year ${res.failYear}.` : ""}</p></div>`;
+  h += `<div class="tiles">
+    <article class="tile"><p class="eyebrow">Typical ending balance${tip("The median of all simulated paths, in today's money. Half of the futures end above it and half below.")}</p><p class="total num">${money(res.medianFinal, CUR)}</p></article>
+    <article class="tile"><p class="eyebrow">Poor-market ending balance${tip("The 10th percentile: one future in ten ends at or below this, in today's money.")}</p><p class="total num">${money(res.p10Final, CUR)}</p></article>
+    <article class="tile"><p class="eyebrow">Yearly spending that holds ${pctWhole(spec.target)}${tip("The largest yearly withdrawal, in today's money, for which at least " + pctWhole(spec.target) + " of simulated paths last.")}</p><p class="total num">${money(safe, CUR)}</p></article></div>`;
+  if (spec.items.length > 1) h += compareTable(v);
+  h += `<div class="panel chart"><div class="panel-head"><h3>Balance over time</h3><span class="muted small">Today's money · shaded: poor to good market (10th to 90th percentile)</span></div>${fanChart(res, v)}
+    <div class="legend"><span><i style="background:var(--series-1)"></i>Typical (median)</span><span><i style="background:var(--series-1);opacity:.25"></i>10th to 90th percentile</span></div></div>`;
+  h += yearTable(res, v);
+  const su = safeUrl((it.source || {}).url);
+  h += `<p class="limits">${esc(it.name)}: expected return ${pct(it.expectedReturn)} a year before inflation, volatility ${pct(it.volatility)}. ${esc(it.notes || "")} Source: ${su ? sourceBadge(it.source) : "not given"}${it.source && it.source.verified ? ", checked " + esc(it.source.verified) : ""}. A model of possible markets, not a forecast or advice.</p>`;
+  $("summary").innerHTML = h;
+  syncErrors();
+}
+
+/** Every portfolio on the viewer's plan, best first. A row click selects it. */
+function compareTable(v) {
+  const rows = spec.items.map((it) => ({ it, r: simulate(params(it)) })).sort((a, b) => b.r.successRate - a.r.successRate);
+  let h = `<div class="panel"><div class="panel-head"><h3>All ${esc(spec.subject)}s on your plan</h3><span class="muted small">Chance the money lasts ${v.yearsToStart + v.yearsInRetirement} years, then typical ending balance</span></div><div class="tablewrap"><table><thead><tr><th style="text-align:left">${esc(spec.subject.charAt(0).toUpperCase() + spec.subject.slice(1))}</th><th>Return</th><th>Volatility</th><th>Chance it lasts</th><th>Typical end</th></tr></thead><tbody>`;
+  for (const { it, r } of rows) {
+    const sel = it.id === state.item, [, cls] = verdict(r.successRate);
+    h += `<tr data-item="${esc(it.id)}" tabindex="0" style="cursor:pointer${sel ? ";font-weight:600" : ""}"${sel ? ' aria-current="true"' : ""}><td style="white-space:normal;text-align:left">${esc(it.name)}${it.option ? " · " + esc(it.option) : ""}${it.source && it.source.type === "estimate" ? ' <span class="pill warn">AI estimate</span>' : ""}</td><td>${pct(it.expectedReturn)}</td><td>${pct(it.volatility)}</td><td class="${cls}">${pctWhole(r.successRate)}</td><td>${money(r.medianFinal, CUR)}</td></tr>`;
+  }
+  return h + `</tbody></table></div></div>`;
+}
+
+function yearTable(res, v) {
+  const step = res.years > 30 ? 5 : res.years > 15 ? 2 : 1;
+  let h = `<div class="panel"><div class="panel-head"><h3>Year by year</h3><span class="muted small">Balance at the end of the year, today's money</span></div><div class="tablewrap"><table><thead><tr><th>Year</th><th style="text-align:left">Stage</th><th>Poor market</th><th>Typical</th><th>Good market</th></tr></thead><tbody>`;
+  for (let y = 0; y <= res.years; y++) {
+    if (y % step && y !== res.years) continue;
+    h += `<tr${y === res.years ? ' class="last"' : ""}><td>${y}</td><td style="text-align:left">${y === 0 ? "Now" : y <= v.yearsToStart ? "Saving" : "Spending"}</td><td>${money(res.bands.p10[y], CUR)}</td><td>${money(res.bands.p50[y], CUR)}</td><td>${money(res.bands.p90[y], CUR)}</td></tr>`;
+  }
+  return h + `</tbody></table></div></div>`;
+}
+
+function fanChart(res, v) {
+  const W = 640, H = 300, L = 72, R = 14, T = 16, B = 34, n = res.years;
+  const max = Math.max(1, ...res.bands.p90);
+  const step = niceStep(max / 4), top = Math.ceil(max / step) * step;
+  const x = (i) => L + (W - L - R) * (i / n), y = (a) => T + (H - T - B) * (1 - a / top);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Range of possible balances over time">`;
+  for (let a = 0; a <= top + 1e-9; a += step) svg += `<line x1="${L}" x2="${W - R}" y1="${y(a)}" y2="${y(a)}" stroke="var(--border)"/><text x="${L - 8}" y="${y(a) + 4}" text-anchor="end" font-size="11" fill="var(--muted)" font-family="var(--font-mono)">${shortMoney(a)}</text>`;
+  const every = Math.max(1, Math.ceil(n / 8));
+  for (let i = 0; i <= n; i += every) svg += `<text x="${x(i)}" y="${H - B + 18}" text-anchor="middle" font-size="11" fill="var(--muted)">${i === 0 ? "Now" : "Yr " + i}</text>`;
+  if (v.yearsToStart > 0 && v.yearsToStart < n) svg += `<line x1="${x(v.yearsToStart)}" x2="${x(v.yearsToStart)}" y1="${T}" y2="${H - B}" stroke="var(--border)" stroke-dasharray="4 4"/><text x="${x(v.yearsToStart) + 4}" y="${T + 10}" font-size="11" fill="var(--muted)">Spending starts →</text>`;
+  const idx = Array.from({ length: n + 1 }, (_, i) => i);
+  const band = idx.map((i) => x(i).toFixed(1) + "," + y(res.bands.p90[i]).toFixed(1)).concat(idx.slice().reverse().map((i) => x(i).toFixed(1) + "," + y(res.bands.p10[i]).toFixed(1))).join(" ");
+  svg += `<polygon points="${band}" fill="var(--series-1)" opacity=".2"/>`;
+  svg += `<polyline fill="none" stroke="var(--series-1)" stroke-width="3" points="${idx.map((i) => x(i).toFixed(1) + "," + y(res.bands.p50[i]).toFixed(1)).join(" ")}"/>`;
+  if (n <= 25) for (const i of idx) svg += `<circle cx="${x(i)}" cy="${y(res.bands.p50[i])}" r="3" fill="var(--series-1)"><title>Year ${i}: typical ${money(res.bands.p50[i], CUR)}, poor ${money(res.bands.p10[i], CUR)}, good ${money(res.bands.p90[i], CUR)}</title></circle>`;
+  return svg + `</svg>`;
+}
+
+document.title = spec.title;
+$("title").textContent = spec.title;
+$("scope").textContent = spec.scope || "";
+$("limits").textContent = spec.limits || "";
+initTips();
+renderSidebar();
+refresh();
+
+$("sidebar").addEventListener("change", (e) => {
+  if (e.target.id === "itemSel") { state.item = e.target.value; renderSidebar(); refresh(); }
+});
+$("sidebar").addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.id === "savings") state.savingsText = t.value;
+  else if (t.id === "contrib") state.contribText = t.value;
+  else if (t.id === "withdraw") state.withdrawText = t.value;
+  else if (t.id === "start") state.startText = t.value;
+  else if (t.id === "retire") state.retireText = t.value;
+  else return;
+  refresh();
+});
+function pickItem(row) {
+  if (!row || row.dataset.item === state.item) return;
+  state.item = row.dataset.item; renderSidebar(); refresh();
+}
+$("summary").addEventListener("click", (e) => pickItem(e.target.closest("tr[data-item]")));
+$("summary").addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { const row = e.target.closest("tr[data-item]"); if (row) { e.preventDefault(); pickItem(row); } } });
+</script></body></html>

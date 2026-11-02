@@ -40,9 +40,9 @@ describe("buildPrompt", () => {
     expect(p).toContain("npx tsx agent/subscription.ts validate e-bikes");
     expect(p).toContain("price-researcher");
   });
-  it("makes the agent pick one of the three kinds and read only that kind's notes", () => {
+  it("makes the agent pick one of the four kinds and read only that kind's notes", () => {
     const p = buildPrompt({ slug: "x", round: "First build", previous: null }, "Wedding in Singapore");
-    for (const kind of ["compare", "estimate", "projection"]) {
+    for (const kind of ["compare", "estimate", "projection", "probability"]) {
       expect(p).toContain(`agent/formats/${kind}.md`);
       expect(fs.existsSync(`agent/formats/${kind}.md`)).toBe(true);
       expect(fs.existsSync(FORMAT_EXAMPLES[kind as keyof typeof FORMAT_EXAMPLES])).toBe(true);

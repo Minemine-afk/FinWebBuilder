@@ -1,0 +1,102 @@
+{
+  "kind": "probability",
+  "id": "example-retirement-drawdown",
+  "title": "Will my savings last in retirement?",
+  "currency": "SGD",
+  "scope": "The chance that a lump of savings, topped up until retirement and then drawn down each year, lasts the whole retirement. Amounts are in today's money.",
+  "limits": "A model of possible markets, not a forecast. Returns and volatility are long-run averages; real markets can do worse. It leaves out tax, fund fees, changing spending, CPF payouts and other income.",
+  "subject": "portfolio",
+  "savings": {
+    "id": "savings",
+    "label": "Savings today",
+    "unit": "S$",
+    "default": 300000,
+    "min": 0,
+    "max": 5000000,
+    "step": 10000,
+    "rationale": "A typical mid-career balance to start from; the reader replaces it with their own."
+  },
+  "contribution": {
+    "id": "contribution",
+    "label": "Saved each year until retirement",
+    "unit": "S$",
+    "default": 12000,
+    "min": 0,
+    "max": 200000,
+    "step": 1000,
+    "rationale": "About S$1,000 a month; the reader replaces it with their own."
+  },
+  "withdrawal": {
+    "id": "withdrawal",
+    "label": "Spending each year in retirement",
+    "unit": "S$",
+    "default": 40000,
+    "min": 1000,
+    "max": 500000,
+    "step": 1000,
+    "rationale": "About S$3,300 a month in today's money; the reader replaces it with their own."
+  },
+  "yearsToStart": {
+    "default": 20,
+    "min": 0,
+    "max": 45
+  },
+  "yearsInRetirement": {
+    "default": 30,
+    "min": 5,
+    "max": 50
+  },
+  "inflation": 0.025,
+  "simulations": 1000,
+  "seed": 1,
+  "target": 0.9,
+  "items": [
+    {
+      "id": "bonds-heavy",
+      "name": "Cautious mix",
+      "option": "70% bonds, 30% shares",
+      "expectedReturn": 0.045,
+      "volatility": 0.07,
+      "source": {
+        "url": "https://example.com/capital-market-assumptions",
+        "verified": "2026-01-01",
+        "type": "estimate"
+      },
+      "notes": "Example figures for the format only.",
+      "rationale": "Example estimate: a blend of long-run bond and share returns, weighted 70/30; replace with a real source and period."
+    },
+    {
+      "id": "balanced",
+      "name": "Balanced mix",
+      "option": "50% bonds, 50% shares",
+      "expectedReturn": 0.058,
+      "volatility": 0.1,
+      "source": {
+        "url": "https://example.com/capital-market-assumptions",
+        "verified": "2026-01-01",
+        "type": "estimate"
+      },
+      "notes": "Example figures for the format only.",
+      "rationale": "Example estimate: a blend of long-run bond and share returns, weighted 50/50; replace with a real source and period."
+    },
+    {
+      "id": "shares-heavy",
+      "name": "Growth mix",
+      "option": "20% bonds, 80% shares",
+      "expectedReturn": 0.07,
+      "volatility": 0.15,
+      "source": {
+        "url": "https://example.com/capital-market-assumptions",
+        "verified": "2026-01-01",
+        "type": "estimate"
+      },
+      "notes": "Example figures for the format only.",
+      "rationale": "Example estimate: a blend of long-run bond and share returns, weighted 20/80; replace with a real source and period."
+    }
+  ],
+  "defaults": {
+    "item": "balanced"
+  },
+  "version": 1,
+  "buildLog": []
+}

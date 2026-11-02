@@ -2,13 +2,14 @@ import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
 import { listCalculators, readExample } from "@/lib/data";
 import { renderCalculatorHtml } from "@/lib/render";
-import { EstimateSpecSchema, ProjectionSpecSchema, SpecSchema, describeSpec } from "@/lib/spec";
+import { EstimateSpecSchema, ProbabilitySpecSchema, ProjectionSpecSchema, SpecSchema, describeSpec } from "@/lib/spec";
 
 // The page scripts are plain JS that also export for Node, so the tests run the same maths the pages do.
 const require = createRequire(import.meta.url);
 const common = require("../templates/common.js");
 const { estimate } = require("../templates/estimate-engine.js");
 const { project, requiredDeposit } = require("../templates/projection-engine.js");
+const { simulate, sustainableWithdrawal, lognormalParams, mulberry32, normals } = require("../templates/probability-engine.js");
 
 describe("clampInput", () => {
   const lim = { min: 1, max: 30, fallback: 10, label: "Years", unit: "years" };
@@ -68,6 +69,45 @@ describe("estimate engine", () => {
   });
 });
 
+describe("probability engine", () => {
+  const base = { savings: 300_000, contribution: 12_000, withdrawal: 40_000, yearsToStart: 20, yearsInRetirement: 30, inflation: 0.025, mean: 0.06, sd: 0.12, runs: 1000, seed: 1 };
+  it("gives the same answer for the same seed", () => {
+    expect(simulate(base).successRate).toBe(simulate(base).successRate);
+    expect(simulate(base).bands.p50).toEqual(simulate(base).bands.p50);
+  });
+  it("always lasts with no spending and never lasts with huge spending", () => {
+    expect(simulate({ ...base, withdrawal: 0 }).successRate).toBe(1);
+    expect(simulate({ ...base, withdrawal: 1_000_000 }).successRate).toBe(0);
+  });
+  it("with no volatility, follows the plain maths", () => {
+    const r = simulate({ ...base, sd: 0, contribution: 0, withdrawal: 0, yearsToStart: 10, yearsInRetirement: 0 + 1, mean: 0.05, inflation: 0 });
+    expect(r.medianFinal).toBeCloseTo(300_000 * 1.05 ** 11, 0);
+  });
+  it("lowers the chance when spending rises and raises it with more savings", () => {
+    expect(simulate({ ...base, withdrawal: 60_000 }).successRate).toBeLessThan(simulate(base).successRate);
+    expect(simulate({ ...base, savings: 600_000 }).successRate).toBeGreaterThan(simulate(base).successRate);
+  });
+  it("orders the percentile bands", () => {
+    const r = simulate(base);
+    for (let y = 0; y <= r.years; y++) {
+      expect(r.bands.p10[y]).toBeLessThanOrEqual(r.bands.p50[y]);
+      expect(r.bands.p50[y]).toBeLessThanOrEqual(r.bands.p90[y]);
+    }
+  });
+  it("keeps the simulated average return at the stated mean", () => {
+    const { mu, sigma } = lognormalParams(0.06, 0.12);
+    const z = normals(mulberry32(3), 200_000);
+    let sum = 0;
+    for (const x of z) sum += Math.exp(mu + sigma * x);
+    expect(sum / z.length).toBeCloseTo(1.06, 2);
+  });
+  it("finds a withdrawal that meets the target and is not too generous", () => {
+    const w = sustainableWithdrawal(base, 0.9);
+    expect(simulate({ ...base, withdrawal: w }).successRate).toBeGreaterThanOrEqual(0.9);
+    expect(simulate({ ...base, withdrawal: w * 1.2 }).successRate).toBeLessThan(0.9);
+  });
+});
+
 describe("projection engine", () => {
   const p = { start: 1000, deposit: 0, rate: 0.05, years: 10, compounding: "annual", inflation: 0, goal: 0 };
   it("compounds a price yearly", () => {
@@ -104,7 +144,9 @@ describe("spec kinds", () => {
   it("ships one seed for each new kind that passes its schema", () => {
     expect(EstimateSpecSchema.safeParse(readExample("estimate")).success).toBe(true);
     expect(ProjectionSpecSchema.safeParse(readExample("projection")).success).toBe(true);
+    expect(ProbabilitySpecSchema.safeParse(readExample("probability")).success).toBe(true);
     expect(describeSpec(readExample("estimate"))).toContain("Cost estimate");
+    expect(describeSpec(readExample("probability"))).toContain("Probability");
   });
   it("rejects mistakes the agent could make", () => {
     const est = JSON.parse(JSON.stringify(readExample("estimate")));
@@ -134,10 +176,10 @@ describe("spec kinds", () => {
 
 describe("rendering each kind", () => {
   it("fills every placeholder and uses the kind's own page", () => {
-    for (const s of [...listCalculators(), readExample("compare"), readExample("estimate"), readExample("projection")]) {
+    for (const s of [...listCalculators(), readExample("compare"), readExample("estimate"), readExample("projection"), readExample("probability")]) {
       const html = renderCalculatorHtml(s);
       for (const ph of ["__SPEC_JSON__", "__BASE_CSS__", "__COMMON_JS__", "__ENGINE_JS__", "__TITLE__"]) expect(html, `${s.id} ${ph}`).not.toContain(ph);
-      expect(html).toContain(s.kind === "compare" ? "calcPicker" : s.kind === "estimate" ? "Cost estimate" : "Projection");
+      expect(html).toContain(s.kind === "compare" ? "calcPicker" : s.kind === "estimate" ? "Cost estimate" : s.kind === "probability" ? "Probability" : "Projection");
       expect(html).toContain("function clampInput");
       expect(html).toContain('id="build-cost"');
     }

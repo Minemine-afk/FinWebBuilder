@@ -84,6 +84,18 @@ export function harvest(spec: Spec): CacheEntry[] {
       };
     });
   }
+  if (spec.kind === "probability") {
+    return spec.items.map((it) => ({
+      ...base,
+      id: it.id,
+      name: [it.name, it.option].filter(Boolean).join(", "),
+      tags,
+      figure: `expected return ${(it.expectedReturn * 100).toFixed(1)}% a year, volatility ${(it.volatility * 100).toFixed(1)}%`,
+      priceYear: undefined,
+      source: it.source,
+      rationale: short(it.rationale ?? it.notes),
+    }));
+  }
   return spec.items.map((it) => ({
     ...base,
     id: it.id,

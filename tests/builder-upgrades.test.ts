@@ -40,6 +40,7 @@ describe("scoping plan", () => {
   it("guesses a kind from the wording and falls back to the playbook", () => {
     expect(guessKind("dog vs cat")).toBe("compare");
     expect(guessKind("future price of a condo")).toBe("projection");
+    expect(guessKind("will my savings last in retirement")).toBe("probability");
     expect(guessKind("how much does a wedding cost")).toBe("estimate");
     expect(guessKind("holiday")).toBeNull();
     const plan = fallbackPlan("renovation");
@@ -235,7 +236,7 @@ describe("sample prompt", () => {
 
 describe("pages and runs", () => {
   it("add the suggest-a-change chat to every kind of page", () => {
-    for (const kind of ["compare", "estimate", "projection"] as const) {
+    for (const kind of ["compare", "estimate", "projection", "probability"] as const) {
       const html = renderCalculatorHtml(readExample(kind));
       expect(html).toContain('id="refine-root"');
       expect(html).toContain("Suggest a change");

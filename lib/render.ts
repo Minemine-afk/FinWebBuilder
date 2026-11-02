@@ -11,6 +11,7 @@ const KIND_FILES: Record<Spec["kind"], { template: string; engine?: string }> = 
   compare: { template: "calculator.html" },
   estimate: { template: "estimate.html", engine: "estimate-engine.js" },
   projection: { template: "projection.html", engine: "projection-engine.js" },
+  probability: { template: "probability.html", engine: "probability-engine.js" },
 };
 
 function esc(s: string) {
