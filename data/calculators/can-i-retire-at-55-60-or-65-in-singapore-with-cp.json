@@ -1,0 +1,146 @@
+{
+  "kind": "probability",
+  "id": "can-i-retire-at-55-60-or-65-in-singapore-with-cp",
+  "title": "Can I retire at 55, 60 or 65 in Singapore with CPF, CPF LIFE and investments?",
+  "currency": "SGD",
+  "scope": "The chance that your own investments (cash, shares, bonds, ETFs and CPF savings you can withdraw at 55) can pay the part of your retirement spending that CPF LIFE does not cover, every year until the end of retirement. Pick your retirement age by setting the years until you stop work (for example 15 years if you are 45 and want to retire at 60) and the years in retirement (to age 90 is 35 years from 55, 30 from 60, 25 from 65). Enter as yearly spending only the gap between what you plan to spend and your CPF LIFE payout. As a guide, CPF says that for a member turning 55 in 2026 the Standard Plan pays about S$950 a month from 65 with the Basic Retirement Sum (S$110,200), about S$1,780 with the Full Retirement Sum (S$220,400) and about S$3,440 with the Enhanced Retirement Sum (S$440,800). CPF LIFE pays nothing before 65, so if you stop work at 55 or 60 you pay the whole of your spending yourself until then. Add those bridge years to your yearly spending, or add to your savings figure the extra lump you set aside for them. All amounts are in today's money, and the calculator grows them with inflation.",
+  "limits": "This models a range of possible markets; it does not forecast what markets will do. Each portfolio uses one long-run average return and volatility, and real returns can be worse for many years in a row. Spending is assumed to stay the same in today's money every year, and the CPF LIFE payout is assumed to start at the same time as withdrawals. In reality it starts at 65 (or later, up to 70, if you defer; CPF says each year you defer raises the payout by up to 7%). The calculator also leaves out: the Standard Plan's payouts staying fixed in dollars while the Escalating Plan rises 2% a year; CPF Retirement Account interest (4% a year, with up to 2% extra on the first S$30,000 from 55); healthcare shocks, MediShield Life and CareShield Life premiums; fund, platform and adviser fees; currency moves on overseas funds; the Silver Support Scheme, rental income and other income; and property you could downsize or sell. Singapore does not tax capital gains, but dividends from overseas shares can be taxed at source. Inflation is set at 2% a year, matching MAS core inflation of 2.0% in September 2026 and MAS's 2026 forecast of 1.5% to 2.0%. CPF retirement sums and payout figures are CPF's own estimates for the 2026 cohort, checked on 2 November 2026.",
+  "version": 1,
+  "updated": "2026-11-02",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 806896,
+      "output": 46046,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 35,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 0.4537126,
+      "at": "2026-11-02T18:44:45.579Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 94,
+      "output": 33772,
+      "cacheRead": 775559,
+      "cacheWrite": 110889,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 1.4629977999999997,
+      "at": "2026-11-02T18:44:45.579Z"
+    }
+  ],
+  "subject": "portfolio",
+  "savings": {
+    "id": "savings",
+    "label": "Investments and withdrawable savings today",
+    "unit": "S$",
+    "default": 300000,
+    "min": 0,
+    "max": 5000000,
+    "step": 10000,
+    "rationale": "A mid-career balance in cash, shares, bonds and ETFs. Leave out the CPF money needed to set aside your retirement sum, because it pays the CPF LIFE income instead. Replace it with your own figure."
+  },
+  "contribution": {
+    "id": "contribution",
+    "label": "Invested each year until you retire",
+    "unit": "S$",
+    "default": 15000,
+    "min": 0,
+    "max": 200000,
+    "step": 1000,
+    "rationale": "S$1,250 a month invested outside CPF, which is about 15–20% of a median take-home pay. Replace it with your own figure."
+  },
+  "withdrawal": {
+    "id": "withdrawal",
+    "label": "Yearly spending not covered by CPF LIFE",
+    "unit": "S$",
+    "default": 24000,
+    "min": 1000,
+    "max": 500000,
+    "step": 1000,
+    "rationale": "S$2,000 a month, about what is left if you plan to spend about S$3,800 a month and CPF LIFE pays about S$1,780 a month with the 2026 Full Retirement Sum (CPF estimate, Standard Plan, from 65). For comparison, households of non-working people aged 65 and over spent S$2,349 a month on average in SingStat's 2023 Household Expenditure Survey, and the 2023 Minimum Income Standard put the basic needs of a single person aged 65 and over at S$1,492 a month. If you retire before 65, raise this figure to cover the years before CPF LIFE starts."
+  },
+  "yearsToStart": {
+    "default": 15,
+    "min": 0,
+    "max": 45
+  },
+  "yearsInRetirement": {
+    "default": 30,
+    "min": 5,
+    "max": 50
+  },
+  "inflation": 0.02,
+  "simulations": 1000,
+  "seed": 1,
+  "target": 0.9,
+  "items": [
+    {
+      "id": "cautious",
+      "name": "Cautious mix",
+      "option": "30% global shares, 70% bonds hedged to SGD (with SSBs and fixed deposits)",
+      "expectedReturn": 0.04,
+      "volatility": 0.065,
+      "source": {
+        "url": "https://www.capitalgroup.com/asia-other/en/investments/capabilities/capital-market-assumptions.html",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE. Capital Group's 2026 Capital Market Assumptions (data as of 31 Dec 2025, 20-year horizon) give 6.0% a year for All Country World equities and 4.3% for global aggregate bonds hedged to USD. Weighting them 30/70 gives 4.8% in USD; we took off about 0.8 points because SGD interest rates are lower than USD rates. As a check, the November 2026 Singapore Savings Bond (SBNOV26) pays a 2.45% 10-year average return (MAS). No source gave a volatility for this mix, so 6.5% is a reasoned figure. Researched on 2 November 2026.",
+      "rationale": "4% a year is a 30/70 blend of Capital Group's 2026 20-year assumptions (6.0% for shares, 4.3% for hedged bonds), less about 0.8 points for SGD hedging. The 6.5% volatility assumes about 16% for shares, about 5% for bonds and a 0.3 correlation between them. This is an ESTIMATE, because no single source gave both figures."
+    },
+    {
+      "id": "balanced",
+      "name": "Balanced mix",
+      "option": "60% global shares, 40% bonds",
+      "expectedReturn": 0.065,
+      "volatility": 0.108,
+      "source": {
+        "url": "https://am.jpmorgan.com/us/en/asset-management/institutional/about-us/media/press-releases/jp-morgan-releases-2027-long-term-capital-market-assumptions/",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE. J.P. Morgan's 2027 Long-Term Capital Market Assumptions (press release of 19 Oct 2026) expect 7.0% a year in USD for a 60/40 portfolio over 10 to 15 years; the 2026 edition (20 Oct 2025) said 6.4%. We used 6.5%, a little under the latest figure, to allow for lower SGD rates. The 10.8% volatility is PortfolioLab's historical figure for a global 60/40 portfolio (https://www.portfoliolab.app/portfolios/60-40-portfolio, undated). Northern Trust's 2026 report gives 11.6% for a historical 60/40. Researched on 2 November 2026.",
+      "rationale": "6.5% a year sits between J.P. Morgan's 60/40 forecasts of 6.4% (2026) and 7.0% (2027), for 10 to 15 years in USD, and is trimmed for SGD. The 10.8% volatility is PortfolioLab's historical 60/40 figure. This is an ESTIMATE, because the return and volatility come from different sources."
+    },
+    {
+      "id": "global-shares",
+      "name": "Global shares",
+      "option": "100% world shares (an MSCI World or MSCI ACWI index fund)",
+      "expectedReturn": 0.075,
+      "volatility": 0.149,
+      "source": {
+        "url": "https://investingintheweb.com/blog/msci-world-index-historical-data/",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "MSCI World net total return in USD was 7.53% a year from 29 Dec 2000 to 31 Aug 2026, and 10-year annualised volatility was 14.86% to 31 Aug 2026. Both are from Investing in the Web (updated 11 Sep 2026), which quotes MSCI's factsheet; an MSCI index page snippet showed 14.86–14.88. The 10-year return of 13.01% was left out because it is inflated by the recent rally. J.P. Morgan's 2027 assumptions expect 7.5% a year for US large-cap shares. Researched on 2 November 2026.",
+      "rationale": "7.5% a year is the MSCI World return since the end of 2000 (7.53% in USD), close to J.P. Morgan's 2027 forecast of 7.5%. The 14.9% volatility is the MSCI World 10-year figure to Aug 2026. Both come from Investing in the Web's MSCI World data."
+    },
+    {
+      "id": "sti",
+      "name": "Singapore shares",
+      "option": "100% Straits Times Index ETF (e.g. SPDR STI ETF ES3 or Nikko AM STI ETF G3B)",
+      "expectedReturn": 0.088,
+      "volatility": 0.176,
+      "source": {
+        "url": "https://www.ssga.com/sg/en/individual/etfs/spdr-straits-times-index-etf-es3",
+        "verified": "2026-11-02",
+        "type": "official"
+      },
+      "notes": "State Street's official SPDR STI ETF page gives the STI total return as 8.78% a year from 11 Apr 2002 to 30 Sep 2026 (8.59% for the fund after fees; 11.62% for the index over 10 years). That page shows no volatility, so the 17.6% comes from MSCI's Singapore index page (10-year volatility 17.63, undated, https://www.msci.com/indexes/index/998100/msci-singapore-index). Nikko AM reported 18.36% 3-year volatility for the STI in March 2022. In May 2024, the STI ETF's return since 2002 was reported at 6.2% a year, so recent years have lifted this long-run figure. Researched on 2 November 2026.",
+      "rationale": "8.8% a year is the STI's SGD total return since April 2002 (SSGA, to 30 Sep 2026). The 17.6% volatility is MSCI Singapore's 10-year figure, because the ETF page shows none. The two figures cover different periods, and the return has been lifted by the 2024–2026 rally."
+    }
+  ],
+  "defaults": {
+    "item": "balanced"
+  }
+}

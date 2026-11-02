@@ -1,0 +1,267 @@
+{
+  "kind": "compare",
+  "id": "owning-a-car-vs-using-grab-taxis-and-public-tran",
+  "title": "Owning a car vs using Grab, taxis and public transport",
+  "subject": "way to get around",
+  "currency": "SGD",
+  "periodLabel": "Year",
+  "scope": "Ten years of getting around Singapore, the life of one COE, at the same yearly distance for every option. Car options include the price with Cat A COE, loan interest on a 60% 7-year loan, fuel or public charging, road tax, insurance, servicing, HDB season parking and ERP. Grab, taxi and public transport options are fares only, scaled by distance travelled.",
+  "limits": "COE moves every fortnight (Cat A S$132,004 on 21 Oct 2026; next exercise closes 4 Nov 2026), so ask the dealer for today's price. The Corolla Altis price is an estimate built from undated list prices and the current COE. Car resale is not deducted: at the end of 10 years the COE rebate is S$0 and the PARF rebate for cars registered from Feb 2026 is only about 5% of ARF, roughly S$1,000. Grab fares are dynamic and surge is not included; the Grab per-km figure is an estimate from quoted trip fares. Car options exclude destination parking, accidents, tyres beyond normal servicing and the time cost of waiting or walking. Public transport fares rise by 13 cents a trip from 26 Dec 2026.",
+  "fx": {},
+  "minStartYear": 2026,
+  "defaultGrowth": 0.03,
+  "components": [
+    {
+      "id": "purchase",
+      "label": "Car price with COE",
+      "kind": "oneoff"
+    },
+    {
+      "id": "interest",
+      "label": "Car loan interest",
+      "kind": "oneoff"
+    },
+    {
+      "id": "travel",
+      "label": "Fuel, charging or fares",
+      "kind": "recurring",
+      "driver": "km"
+    },
+    {
+      "id": "upkeep",
+      "label": "Road tax, insurance and servicing",
+      "kind": "recurring"
+    },
+    {
+      "id": "parking",
+      "label": "Parking and ERP",
+      "kind": "recurring"
+    }
+  ],
+  "drivers": [
+    {
+      "id": "km",
+      "label": "Distance travelled",
+      "unit": "km a year",
+      "default": 12000,
+      "min": 0,
+      "max": 50000,
+      "step": 1000,
+      "note": "About 33 km a day. Fuel, charging and fares scale with distance; the car price, loan interest, road tax, insurance, servicing, parking and ERP do not."
+    }
+  ],
+  "groups": [
+    {
+      "id": "car",
+      "label": "Own a car",
+      "growth": 0.03
+    },
+    {
+      "id": "ridehail",
+      "label": "Grab and taxis",
+      "growth": 0.03
+    },
+    {
+      "id": "pt",
+      "label": "Public transport",
+      "growth": 0.02
+    }
+  ],
+  "items": [
+    {
+      "id": "petrol-corolla-altis",
+      "group": "car",
+      "name": "Petrol car: Toyota Corolla Altis",
+      "option": "1.6 Standard, Cat A, HDB parking",
+      "currency": "SGD",
+      "duration": 10,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 180000,
+          "interest": 21017,
+          "travel": 2765,
+          "upkeep": 2693,
+          "parking": 2140
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://marketplace.carbuyer.com.sg/new-cars-authorised-dealer/Toyota-Corolla-Altis.2c9083d17ce4021b017cef15ac3a00c5",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "Price ESTIMATE: Carbuyer lists S$147,888 and Oto S$144,888 with COE (both undated, apparently set when COE was near S$95,000 to 100,000); adding the gap to the 21 Oct 2026 Cat A COE of S$132,004 (Motorist, Mothership) gives about S$175,000 to 185,000, so S$180,000 is used. Interest: 60% loan (S$108,000) over 7 years at a 2.78% flat rate (Maybank, UOB, DBS, June 2026, themoneybees) = 108,000 x 0.0278 x 7 = S$21,017. Fuel: Toyota's 15.6 km/L (about 6.4 L/100 km) x 12,000 km = 768 L at S$3.60 per litre 95 octane (Motorist, week of 18 to 24 Oct 2026) = S$2,765. Upkeep: road tax S$743 ([500 + 0.75 x (cc - 1000)] x 0.782 for 1,598 cc, DirectAsia), insurance S$1,150 (midpoint of Carro's S$900 to 1,400), servicing S$800 (Revol 2026 guide, S$600 to 1,000) = S$2,693. Parking and ERP: HDB season parking S$95 a month (S$80 to 110, SmartCalculator 2026) = S$1,140 plus ERP about S$1,000 a year (estimate, ownershipguide) = S$2,140. All checked 2 Nov 2026."
+    },
+    {
+      "id": "ev-byd-atto-1",
+      "group": "car",
+      "name": "Electric car: BYD Atto 1",
+      "option": "Dynamic, Cat A, public charging, HDB parking",
+      "currency": "SGD",
+      "duration": 10,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 172888,
+          "interest": 20186,
+          "travel": 1209,
+          "upkeep": 3446,
+          "parking": 2140
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://littlebigreddot.com/byd-atto-1-guaranteed-coe-172888-coe-closes-23-sep-2026/",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Price: S$172,888 with guaranteed Cat A COE, after up to S$30,000 of VES Band A (S$22,500) and EEAI (S$7,500) rebates for 2026 registrations (dealer figure via LittleBigRedDot, 12 and 23 Sep 2026; rebate amounts from NEA). Interest: 60% loan (S$103,733) over 7 years at 2.78% flat = S$20,186. Charging ESTIMATE: about 15.5 kWh/100 km in real driving (WLTP 43.2 kWh / 322 km = 13.4) x 12,000 km = 1,860 kWh at about S$0.65 per kWh public AC charging (Charge+, Shell, Oct 2026, misslobang and Motorist) = S$1,209; home charging at the Q4 2026 tariff of 31.16 cents with GST would be about S$580 but needs a landed home or condo charger (about S$2,300 to 5,000). Upkeep ESTIMATE: road tax about S$1,296 (65 kW power formula x 0.782 plus S$700 EV surcharge), insurance S$1,750 (estimate S$1,500 to 2,000), servicing S$400 (secondary guides S$300 to 600) = S$3,446. Parking and ERP as for the petrol car, S$2,140. Checked 2 Nov 2026."
+    },
+    {
+      "id": "grab-all-trips",
+      "group": "ridehail",
+      "name": "Grab for every trip",
+      "option": "JustGrab, no surge",
+      "currency": "SGD",
+      "duration": 10,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 0,
+          "interest": 0,
+          "travel": 18600,
+          "upkeep": 0,
+          "parking": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://themoneybees.co/blog/car-sharing-singapore-grab-taxi",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE: Grab does not publish per-km rates. Moneybees (2026) quotes S$15 to 22 one way for Ang Mo Kio to Orchard, about 11 km, which works out to about S$1.40 to 1.75 per km including the S$1.20 platform fee charged from 1 Jan 2026 (Malay Mail, 24 Dec 2025). The midpoint, S$1.55 per km x 12,000 km = S$18,600 a year. Surge, ERP and airport surcharges would add to this. Checked 2 Nov 2026."
+    },
+    {
+      "id": "taxi-all-trips",
+      "group": "ridehail",
+      "name": "Metered taxi for every trip",
+      "option": "ComfortDelGro, mix of street-hail and booked",
+      "currency": "SGD",
+      "duration": 10,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 0,
+          "interest": 0,
+          "travel": 15000,
+          "upkeep": 0,
+          "parking": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://www.cdgtaxi.com.sg/fares/",
+        "verified": "2026-11-02",
+        "type": "official"
+      },
+      "notes": "From the official ComfortDelGro fare page (checked 2 Nov 2026): flag-down S$4.60 for the first 1 km, then S$0.27 per 400 m up to 10 km and per 350 m after; 25% peak and 50% late-night surcharges; booking fee S$2.30 off-peak or S$3.30 peak. A 10 km street-hail trip is S$10.81 (S$1.08 per km); booked off-peak S$13.11 (S$1.31 per km); booked peak S$16.81 (S$1.68 per km). A mix of these is taken as about S$1.25 per km x 12,000 km = S$15,000 a year. ERP and CBD or airport surcharges are extra. The S$0.27 rate may include a temporary 1 cent rise to 30 Nov 2026."
+    },
+    {
+      "id": "public-transport-only",
+      "group": "pt",
+      "name": "MRT and bus only",
+      "option": "Adult card fares",
+      "currency": "SGD",
+      "duration": 10,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 0,
+          "interest": 0,
+          "travel": 1860,
+          "upkeep": 0,
+          "parking": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://sbstransit.com.sg/fares-and-concessions",
+        "verified": "2026-11-02",
+        "type": "official"
+      },
+      "notes": "Adult card fares from 27 Dec 2025 (SBS Transit, official): S$1.86 for a 9.3 to 10.2 km journey (S$0.186 per km) and S$2.07 for 14.3 to 15.2 km (S$0.138 per km). About S$0.155 per km for a typical 12 km journey x 12,000 km = S$1,860 a year. Heavy users can cap this with the S$122 adult monthly pass (S$1,464 a year). Fares rise by 13 cents for trips over 3.2 km from 26 Dec 2026 (Land Transport Guru, 29 Sep 2026); the pass stays at S$122. Checked 2 Nov 2026."
+    },
+    {
+      "id": "public-transport-plus-grab",
+      "group": "pt",
+      "name": "MRT and bus, Grab now and then",
+      "option": "80% of distance by public transport, 20% by Grab",
+      "currency": "SGD",
+      "duration": 10,
+      "priceYear": 2026,
+      "locked": false,
+      "costs": {
+        "default": {
+          "purchase": 0,
+          "interest": 0,
+          "travel": 5208,
+          "upkeep": 0,
+          "parking": 0
+        }
+      },
+      "history": [],
+      "source": {
+        "url": "https://sbstransit.com.sg/fares-and-concessions",
+        "verified": "2026-11-02",
+        "type": "estimate"
+      },
+      "notes": "ESTIMATE combining the two options above: 9,600 km by MRT and bus at S$0.155 per km = S$1,488, plus 2,400 km by Grab at S$1.55 per km = S$3,720, total S$5,208 a year at 12,000 km. Public transport fares from SBS Transit (official, Dec 2025 fares); Grab per-km figure estimated from Moneybees' quoted Ang Mo Kio to Orchard fare (2026). The 80/20 split is an assumption. Checked 2 Nov 2026."
+    }
+  ],
+  "defaults": {
+    "slots": [
+      "petrol-corolla-altis",
+      "grab-all-trips",
+      "public-transport-plus-grab"
+    ]
+  },
+  "version": 1,
+  "updated": "2026-11-02",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 614755,
+      "output": 51111,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 34,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 0.427031,
+      "at": "2026-11-02T17:59:24.460Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 72,
+      "output": 31900,
+      "cacheRead": 751572,
+      "cacheWrite": 115690,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 1.4688904000000003,
+      "at": "2026-11-02T17:59:24.460Z"
+    }
+  ]
+}

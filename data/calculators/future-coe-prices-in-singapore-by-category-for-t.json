@@ -1,0 +1,295 @@
+{
+  "kind": "projection",
+  "id": "future-coe-prices-in-singapore-by-category-for-t",
+  "title": "Future COE prices in Singapore by category, next 5 years",
+  "currency": "SGD",
+  "scope": "Where the COE premium for each category (A: smaller cars, B: larger cars, C: goods vehicles and buses, D: motorcycles, E: open) could be in each of the next 5 years, starting from the 21 Oct 2026 bidding result and growing at a low, base or high yearly rate. History is the October 2nd-round premium for 2022 to 2026. A scenario tool, not a forecast.",
+  "limits": "The rates are assumptions, not predictions: premiums move with each bidding round and can swing 20% or more in a year (Cat B fell 24% between Oct 2023 and Oct 2024). It ignores future policy changes such as LTA's 2026 review of merging Categories A and B, the MOT review of Category C, changes in quota supply and the vehicle growth rate, and the prevailing quota premium used for COE renewal. Past figures are one bidding round per year, not annual averages, and come from motoring news sites rather than LTA's own tables. It shows the COE premium only, not the car price, ARF, road tax or other ownership costs.",
+  "version": 1,
+  "updated": "2026-11-02",
+  "buildLog": [
+    {
+      "round": "First build",
+      "label": "Reading fetched pages",
+      "model": "claude-haiku-5-5",
+      "input": 525648,
+      "output": 25223,
+      "cacheRead": 0,
+      "cacheWrite": 0,
+      "searches": 18,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 0.24517630000000007,
+      "at": "2026-11-02T18:11:02.268Z"
+    },
+    {
+      "round": "First build",
+      "label": "Planning, checking and writing",
+      "model": "claude-opus-5-5",
+      "input": 48,
+      "output": 25472,
+      "cacheRead": 449972,
+      "cacheWrite": 87085,
+      "searches": 0,
+      "fetches": 0,
+      "billing": "subscription",
+      "reportedUsd": 1.1277844,
+      "at": "2026-11-02T18:11:02.268Z"
+    }
+  ],
+  "subject": "COE",
+  "valueLabel": "COE premium, 21 Oct 2026 bidding",
+  "startMode": "item",
+  "years": {
+    "default": 5,
+    "min": 1,
+    "max": 10
+  },
+  "rateLimits": {
+    "min": -0.15,
+    "max": 0.2
+  },
+  "compounding": "annual",
+  "items": [
+    {
+      "id": "cat-a",
+      "name": "Category A COE",
+      "option": "Cars up to 1,600cc and 97kW (EVs up to 110kW)",
+      "value": 132004,
+      "rates": {
+        "low": -0.06,
+        "base": 0.01,
+        "high": 0.13
+      },
+      "rateBasis": "High: the compound yearly rise from S$81,089 (Oct 2022) to S$132,004 (Oct 2026), about 13% a year, continuing. Base: roughly flat (+1%), as quota supply is expected to peak in 2026-2027 and a dealer columnist expects prices to peak around Nov 2026 then dip. Low: a -6% a year cooling, similar in direction to the 2023-24 fall when supply rose.",
+      "priceYear": 2026,
+      "source": {
+        "url": "https://www.motorist.sg/article/6500/october-2026-coe-results-2nd-bidding-cat-a-and-b-premiums-both-increased-as-cat-a-closed-higher-than-cat-b-for-the-fourth-time-this-year",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Cat A closed at S$132,004 in the Oct 2026 2nd bidding (21 Oct 2026; quota 1,191, bids 1,574), per Motorist (21 Oct 2026) and Little Big Red Dot. Past October 2nd-round premiums from Motorist, Mothership and Singpromos articles dated on each exercise day. Quota for Nov 2026 to Jan 2027 is unchanged per exercise for Cat A (Motorist, The Independent SG, 29 Oct 2026). Researched 2 Nov 2026.",
+      "history": [
+        {
+          "year": 2022,
+          "value": 81089,
+          "label": "19 Oct 2022 bidding (Motorist)"
+        },
+        {
+          "year": 2023,
+          "value": 106000,
+          "label": "18 Oct 2023 bidding (Mothership, Motorist)"
+        },
+        {
+          "year": 2024,
+          "value": 102900,
+          "label": "23 Oct 2024 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2025,
+          "value": 122000,
+          "label": "23 Oct 2025 bidding (Motorist, Straits Times)"
+        },
+        {
+          "year": 2026,
+          "value": 132004,
+          "label": "21 Oct 2026 bidding (Motorist)"
+        }
+      ],
+      "rationale": "Today's value is the latest closed COE bidding result (21 Oct 2026). Rates span a continued 4-year trend (high), roughly flat (base) and a cooling as supply peaks (low); none is a published forecast."
+    },
+    {
+      "id": "cat-b",
+      "name": "Category B COE",
+      "option": "Cars above 1,600cc or 97kW (EVs above 110kW)",
+      "value": 131901,
+      "rates": {
+        "low": -0.06,
+        "base": 0.01,
+        "high": 0.05
+      },
+      "rateBasis": "High: the compound yearly rise from S$110,000 (Oct 2022) to S$131,901 (Oct 2026), about 4.6% a year, rounded to 5%. Base: roughly flat (+1%), with Cat B quota rising about 30 COEs per exercise for Nov 2026 to Jan 2027 and a dealer view that prices peak around Nov 2026. Low: -6% a year, a milder version of the 24% fall from Oct 2023 to Oct 2024.",
+      "priceYear": 2026,
+      "source": {
+        "url": "https://www.motorist.sg/article/6500/october-2026-coe-results-2nd-bidding-cat-a-and-b-premiums-both-increased-as-cat-a-closed-higher-than-cat-b-for-the-fourth-time-this-year",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Cat B closed at S$131,901 in the Oct 2026 2nd bidding (21 Oct 2026; quota 923, bids 1,149), per Motorist (21 Oct 2026) and Little Big Red Dot. Past October 2nd-round premiums from Motorist, Mothership and Singpromos articles dated on each exercise day. Researched 2 Nov 2026.",
+      "history": [
+        {
+          "year": 2022,
+          "value": 110000,
+          "label": "19 Oct 2022 bidding (Motorist)"
+        },
+        {
+          "year": 2023,
+          "value": 150001,
+          "label": "18 Oct 2023 bidding (Mothership, Motorist)"
+        },
+        {
+          "year": 2024,
+          "value": 113890,
+          "label": "23 Oct 2024 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2025,
+          "value": 131889,
+          "label": "23 Oct 2025 bidding (Motorist, Straits Times)"
+        },
+        {
+          "year": 2026,
+          "value": 131901,
+          "label": "21 Oct 2026 bidding (Motorist)"
+        }
+      ],
+      "rationale": "Today's value is the latest closed COE bidding result (21 Oct 2026). Cat B swung from S$150,001 (2023) to S$113,890 (2024), so the range is wide; rates are scenarios, not forecasts."
+    },
+    {
+      "id": "cat-c",
+      "name": "Category C COE",
+      "option": "Goods vehicles and buses",
+      "value": 92200,
+      "rates": {
+        "low": -0.04,
+        "base": 0.02,
+        "high": 0.07
+      },
+      "rateBasis": "High: the compound yearly rise from S$70,201 (Oct 2022) to S$92,200 (Oct 2026), about 7% a year, continuing. Base: +2% a year, below trend because Cat C is the only category allowed to grow (0.25% a year), its quota rose by 37 for Nov 2026 to Jan 2027 and MOT is reviewing the scheme. Low: -4% a year, if the review or more supply pushes premiums back toward 2024-25 levels.",
+      "priceYear": 2026,
+      "source": {
+        "url": "https://www.motorist.sg/article/6500/october-2026-coe-results-2nd-bidding-cat-a-and-b-premiums-both-increased-as-cat-a-closed-higher-than-cat-b-for-the-fourth-time-this-year",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Cat C closed at S$92,200 in the Oct 2026 2nd bidding (21 Oct 2026; quota 308, bids 481). Motorist's article shows both S$92,200 and S$92,900; S$92,200 matches the 1st-round S$91,889 plus the reported S$311 rise and is also given by Little Big Red Dot and Mothership. Cat C peaked near S$94,000 in June 2026 (Motorist). Researched 2 Nov 2026.",
+      "history": [
+        {
+          "year": 2022,
+          "value": 70201,
+          "label": "19 Oct 2022 bidding (Motorist)"
+        },
+        {
+          "year": 2023,
+          "value": 84790,
+          "label": "18 Oct 2023 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2024,
+          "value": 72939,
+          "label": "23 Oct 2024 bidding (Motorist, OneShift)"
+        },
+        {
+          "year": 2025,
+          "value": 76801,
+          "label": "23 Oct 2025 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2026,
+          "value": 92200,
+          "label": "21 Oct 2026 bidding (Motorist)"
+        }
+      ],
+      "rationale": "Today's value is the latest closed bidding result; a source clash (S$92,200 vs S$92,900) was settled by the reported change from the previous round. Rates bracket the 4-year trend and a correction."
+    },
+    {
+      "id": "cat-d",
+      "name": "Category D COE",
+      "option": "Motorcycles",
+      "value": 10778,
+      "rates": {
+        "low": -0.04,
+        "base": 0.01,
+        "high": 0.05
+      },
+      "rateBasis": "Low: the compound yearly change from S$12,801 (Oct 2022, then a record) to S$10,778 (Oct 2026), about -4.2% a year. Base: roughly flat (+1%). High: +5% a year, as Cat D is the only category whose quota fell for Nov 2026 to Jan 2027 (to 3,004, -61) and premiums rose about 15% from Oct 2025 to Oct 2026.",
+      "priceYear": 2026,
+      "source": {
+        "url": "https://www.motorist.sg/article/6500/october-2026-coe-results-2nd-bidding-cat-a-and-b-premiums-both-increased-as-cat-a-closed-higher-than-cat-b-for-the-fourth-time-this-year",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Cat D closed at S$10,778 in the Oct 2026 2nd bidding (21 Oct 2026; quota 539, bids 611), down S$234 on the 1st round. Quota for Nov 2026 to Jan 2027 from The Independent SG (29 Oct 2026). Past October 2nd-round premiums from Motorist, Malay Mail, Singpromos and OneShift. Researched 2 Nov 2026.",
+      "history": [
+        {
+          "year": 2022,
+          "value": 12801,
+          "label": "19 Oct 2022 bidding (Motorist, Malay Mail)"
+        },
+        {
+          "year": 2023,
+          "value": 11201,
+          "label": "18 Oct 2023 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2024,
+          "value": 9589,
+          "label": "23 Oct 2024 bidding (Motorist, OneShift)"
+        },
+        {
+          "year": 2025,
+          "value": 9389,
+          "label": "23 Oct 2025 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2026,
+          "value": 10778,
+          "label": "21 Oct 2026 bidding (Motorist)"
+        }
+      ],
+      "rationale": "Today's value is the latest closed bidding result. Motorcycle premiums fell from 2022 to 2025 then rebounded in 2026, so the rates run from the 4-year decline to a supply-squeeze rise."
+    },
+    {
+      "id": "cat-e",
+      "name": "Category E COE",
+      "option": "Open category (any vehicle except motorcycles)",
+      "value": 135790,
+      "rates": {
+        "low": -0.06,
+        "base": 0.01,
+        "high": 0.06
+      },
+      "rateBasis": "High: the compound yearly rise from S$108,003 (Oct 2022) to S$135,790 (Oct 2026), about 5.9% a year, continuing. Base: roughly flat (+1%), as Cat E premiums were almost unchanged from Oct 2025 (S$136,000) and its quota rose by 57 for Nov 2026 to Jan 2027. Low: -6% a year, in line with the car categories, since Cat E usually tracks Cat B.",
+      "priceYear": 2026,
+      "source": {
+        "url": "https://www.motorist.sg/article/6500/october-2026-coe-results-2nd-bidding-cat-a-and-b-premiums-both-increased-as-cat-a-closed-higher-than-cat-b-for-the-fourth-time-this-year",
+        "verified": "2026-11-02",
+        "type": "secondary"
+      },
+      "notes": "Cat E closed at S$135,790 in the Oct 2026 2nd bidding (21 Oct 2026; quota 270, bids 411), down S$1,210 on the 1st round. Quota for Nov 2026 to Jan 2027 from The Independent SG (29 Oct 2026). Past October 2nd-round premiums from Motorist and Singpromos; Oct 2023's S$158,004 was a record. Researched 2 Nov 2026.",
+      "history": [
+        {
+          "year": 2022,
+          "value": 108003,
+          "label": "19 Oct 2022 bidding (Motorist)"
+        },
+        {
+          "year": 2023,
+          "value": 158004,
+          "label": "18 Oct 2023 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2024,
+          "value": 114700,
+          "label": "23 Oct 2024 bidding (Motorist, OneShift)"
+        },
+        {
+          "year": 2025,
+          "value": 136000,
+          "label": "23 Oct 2025 bidding (Motorist, Singpromos)"
+        },
+        {
+          "year": 2026,
+          "value": 135790,
+          "label": "21 Oct 2026 bidding (Motorist)"
+        }
+      ],
+      "rationale": "Today's value is the latest closed bidding result. Open-category COEs can be used for cars, so the rates follow the car categories, bracketed by the 4-year trend and a cooling."
+    }
+  ],
+  "defaults": {
+    "item": "cat-a"
+  },
+  "filters": [],
+  "baseRateFrom": "judgement"
+}
