@@ -132,5 +132,23 @@ jobs:
           else
             git commit -m "Refine $NEW_SLUG: $PROMPT" -m "$SUMMARY"
           fi
-          git pull --rebase origin "$GITHUB_REF_NAME"
-          git push origin "HEAD:$GITHUB_REF_NAME"
+          # Another build may have published while this one ran. Rebase onto it; if only the price cache
+          # conflicts, keep both builds' entries (agent/merge-cache.ts). Retry the push if it loses a race.
+          for attempt in 1 2 3 4; do
+            git fetch origin "$GITHUB_REF_NAME"
+            if ! git rebase "origin/$GITHUB_REF_NAME"; then
+              if [ "$(git diff --name-only --diff-filter=U)" = "data/price-cache.json" ]; then
+                npx tsx agent/merge-cache.ts
+                git add data/price-cache.json
+                GIT_EDITOR=true git rebase --continue
+              else
+                git rebase --abort
+                echo "::error::The rebase conflicted in files other than the price cache."
+                exit 1
+              fi
+            fi
+            git push origin "HEAD:$GITHUB_REF_NAME" && exit 0
+            sleep $((attempt * 5))
+          done
+          echo "::error::Could not push after 4 attempts."
+          exit 1

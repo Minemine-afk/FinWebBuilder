@@ -124,10 +124,32 @@ const FREE_DATA = /data\.gov\.sg|singstat\.gov\.sg/;
 export function updateCache(spec: Spec, file = CACHE_FILE): CacheEntry[] {
   const fresh = harvest(spec).filter((e) => e.figure && e.source.verified && !FREE_DATA.test(e.source.url));
   const entries = [...readCache(file).filter((e) => e.calc !== spec.id), ...fresh].slice(-MAX_ENTRIES);
-  fs.mkdirSync(path.dirname(file), { recursive: true });
   // One entry per line keeps diffs readable.
-  fs.writeFileSync(file, `{"note":"Prices and sources from past builds; see lib/price-cache.ts.","entries":[\n${entries.map((e) => JSON.stringify(e)).join(",\n")}\n]}\n`);
+  writeCache(entries, file);
   return entries;
+}
+
+/**
+ * Merges two versions of the cache that grew from the same base, so two builds that finish close together
+ * both keep their prices. A calculator whose entries changed in `mine` (compared with `base`) takes `mine`'s
+ * entries; every other calculator keeps `remote`'s.
+ */
+export function mergeCaches(base: CacheEntry[], remote: CacheEntry[], mine: CacheEntry[]): CacheEntry[] {
+  const by = (list: CacheEntry[]) => {
+    const m = new Map<string, string>();
+    for (const e of list) m.set(e.calc, `${m.get(e.calc) ?? ""}${JSON.stringify(e)}\n`);
+    return m;
+  };
+  const baseBy = by(base);
+  const mineBy = by(mine);
+  const changed = new Set([...new Set([...baseBy.keys(), ...mineBy.keys()])].filter((c) => baseBy.get(c) !== mineBy.get(c)));
+  return [...remote.filter((e) => !changed.has(e.calc)), ...mine.filter((e) => changed.has(e.calc))].slice(-MAX_ENTRIES);
+}
+
+/** Writes the cache file in its one-entry-per-line layout. */
+export function writeCache(entries: CacheEntry[], file = CACHE_FILE) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, `{"note":"Prices and sources from past builds; see lib/price-cache.ts.","entries":[\n${entries.map((e) => JSON.stringify(e)).join(",\n")}\n]}\n`);
 }
 
 export interface Match {
